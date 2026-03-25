@@ -1,0 +1,2625 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 6
+/Kids [ 4 0 R 14 0 R 18 0 R 22 0 R 26 0 R 30 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Contents 5 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 7 0 R
+/F2 8 0 R
+/F2-0 9 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+5 0 obj
+<<
+/Length 6023
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 56.69291 595.1969 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 184 l 8 184 l 3.5776 184 0 180.4224 0 176 c 0 0 l h W* n
+%end table rect clip
+.101961 .227451 .360784 rg
+n 0 184 481.8898 -184 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 16 140 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 6 Tm /F2 24 Tf 30 TL 160.9249 0 Td (PySPEDAS) Tj T* -160.9249 0 Td ET
+Q
+Q
+q
+1 0 0 1 16 86 cm
+q
+BT 1 0 0 1 0 6 Tm 100.9249 0 Td 30 TL /F2 24 Tf 1 1 1 rg (Fix & Migration Guide) Tj T* -100.9249 0 Td ET
+Q
+Q
+q
+1 0 0 1 16 46 cm
+q
+.862745 .933333 1 rg
+BT 1 0 0 1 0 4 Tm /F1 12 Tf 16 TL 155.6629 0 Td (Version 1.x ) Tj /F3 12 Tf 16 TL (\256) Tj /F1 12 Tf 16 TL ( Version 2.x) Tj T* -155.6629 0 Td ET
+Q
+Q
+q
+1 0 0 1 16 10 cm
+q
+.862745 .933333 1 rg
+BT 1 0 0 1 0 2 Tm /F4 10 Tf 12 TL 98.78988 0 Td (How to Update Your Scripts to Work with PySPEDAS 2.x) Tj T* -98.78988 0 Td ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 581.0236 cm
+Q
+q
+1 0 0 1 56.69291 505.0236 cm
+q
+.862745 .933333 1 rg
+n 0 76 481.8898 -76 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 50 Tm 15 TL /F2 10 Tf .2 .2 .2 rg (Who is this guide for?) Tj /F1 10 Tf  T* 1.071235 Tw (Anyone who wrote Python scripts using PySPEDAS version 1.x and now wants to run them with the) Tj T* 0 Tw -0.041265 Tw (newly installed PySPEDAS 2.x. This guide tells you exactly what to change, why it needs changing, and) Tj T* 0 Tw (shows you step-by-step how to do it \227 with zero confusion.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1.5 w
+n 0 76 m 481.8898 76 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 76 l S
+n 481.8898 0 m 481.8898 76 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 496.5197 cm
+Q
+q
+1 0 0 1 56.69291 420.5197 cm
+q
+1 .952941 .878431 rg
+n 0 76 481.8898 -76 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 50 Tm 15 TL /F2 10 Tf .2 .2 .2 rg (Why do scripts break?) Tj /F1 10 Tf  T* .424597 Tw (PySPEDAS 2.x reorganised how missions \(Wind, THEMIS, MMS, etc.\) are accessed. The old shortcut) Tj T* 0 Tw 1.057485 Tw (paths no longer exist. Also, the data store moved inside pyspedas itself, so ) Tj /F5 10 Tf (get_data) Tj /F1 10 Tf ( must now be) Tj T* 0 Tw (imported from ) Tj /F5 10 Tf (pyspedas) Tj /F1 10 Tf (, not from ) Tj /F5 10 Tf (pytplot) Tj /F1 10 Tf (.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.901961 .360784 0 RG
+1.5 w
+n 0 76 m 481.8898 76 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 76 l S
+n 481.8898 0 m 481.8898 76 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 412.0157 cm
+Q
+q
+1 0 0 1 62.69291 388.0157 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (At a Glance \227 What Changed) Tj T* ET
+Q
+Q
+q
+1 0 0 1 56.69291 200.0157 cm
+q
+.101961 .227451 .360784 rg
+n 0 184 481.8898 -27 re f*
+1 1 1 rg
+n 0 157 481.8898 -38 re f*
+.960784 .960784 .960784 rg
+n 0 119 481.8898 -27 re f*
+1 1 1 rg
+n 0 92 481.8898 -27 re f*
+.960784 .960784 .960784 rg
+n 0 65 481.8898 -38 re f*
+1 1 1 rg
+n 0 27 481.8898 -27 re f*
+1 1 1 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 163 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (What) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 163 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (Old \(1.x\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 163 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (New \(2.x\)) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 8 130.5 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Mission import) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 131.5 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pyspedas import wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 125 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 17 Tm /F5 9 Tf 13 TL (from pyspedas.projects import) Tj T* (wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 98 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Mission call) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 99 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (pyspedas.wind.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 99 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (pyspedas.projects.wind.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 71 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (get_data import) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 72 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pytplot import get_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 72 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pyspedas import get_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 38.5 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (tplot_names import) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 33 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 17 Tm /F5 9 Tf 13 TL (from pytplot import) Tj T* (tplot_names) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 39.5 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pyspedas import tplot_names) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 6 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (tplot import) Tj T* ET
+Q
+Q
+q
+1 0 0 1 107.2126 7 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pytplot import tplot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 7 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (from pyspedas import tplot) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1 w
+n 0 184 m 481.8898 184 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 184 l S
+n 481.8898 0 m 481.8898 184 l S
+.8 .8 .8 RG
+.5 w
+n 0 157 m 481.8898 157 l S
+n 0 119 m 481.8898 119 l S
+n 0 92 m 481.8898 92 l S
+n 0 65 m 481.8898 65 l S
+n 0 27 m 481.8898 27 l S
+n 99.2126 0 m 99.2126 184 l S
+n 283.4646 0 m 283.4646 184 l S
+Q
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 357.0198 99.22 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 61.69 367.2698 Tm
+(What) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+155.91 357.0198 184.25 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 160.91 367.2698 Tm
+(Old \0501\056x\051) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+340.16 357.0198 198.42 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 345.16 367.2698 Tm
+(New \0502\056x\051) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 240.1953 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+6 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+7 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+8 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+9 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+10 0 obj
+<<
+/BaseFont /Symbol
+/Name /F3
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+11 0 obj
+<<
+/BaseFont /Helvetica-Oblique
+/Encoding /WinAnsiEncoding
+/Name /F4
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+12 0 obj
+<<
+/BaseFont /Courier
+/Encoding /WinAnsiEncoding
+/Name /F5
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+13 0 obj
+<<
+/BaseFont /Courier-Bold
+/Encoding /WinAnsiEncoding
+/Name /F6
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+14 0 obj
+<<
+/Contents 15 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 16 0 R
+/F2 8 0 R
+/F2-0 17 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+15 0 obj
+<<
+/Length 8899
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 56.69291 743.1969 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 36 l 6 36 l 2.6832 36 0 33.3168 0 30 c 0 0 l h W* n
+%end table rect clip
+.101961 .227451 .360784 rg
+n 0 36 481.8898 -36 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 5 Tm /F2 15 Tf 20 TL (STEP-BY-STEP: How to Fix Your Old Scripts) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 731.8583 cm
+Q
+q
+1 0 0 1 62.69291 707.8583 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (STEP 1 \227 Open Your Script in a Text Editor) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 688.8583 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Navigate to the folder where your script is saved, then open it using nano \(a simple terminal text editor\):) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 682.0236 cm
+Q
+q
+1 0 0 1 56.69291 600.0236 cm
+q
+.960784 .960784 .960784 rg
+n 0 82 481.8898 -82 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 10 66 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (# Go to your folder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 47 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (cd /path/to/your/folder) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 41 cm
+Q
+q
+1 0 0 1 10 22 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (# Open your script) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 3 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (nano your_script.py) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.8 .8 .8 RG
+1 w
+n 0 82 m 481.8898 82 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 82 l S
+n 481.8898 0 m 481.8898 82 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 594.3543 cm
+Q
+q
+1 0 0 1 56.69291 552.3543 cm
+q
+.901961 .956863 .917647 rg
+n 0 42 481.8898 -42 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 17 Tm 13 TL /F2 9 Tf .117647 .490196 .243137 rg (Nano tip: Use Ctrl+W to search for text inside nano. When done editing, press Ctrl+O then Enter to save,) Tj T* (then Ctrl+X to exit.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.117647 .490196 .243137 RG
+1.5 w
+n 0 42 m 481.8898 42 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 42 l S
+n 481.8898 0 m 481.8898 42 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 543.8504 cm
+Q
+q
+1 0 0 1 62.69291 519.8504 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (STEP 2 \227 Fix the Mission Import Line) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 485.8504 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL .071567 Tw (Look near the top of your script for any line that imports a mission name directly from pyspedas. Change it) Tj T* 0 Tw (as shown below:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 479.0157 cm
+Q
+q
+1 0 0 1 56.69291 132.0157 cm
+q
+.101961 .227451 .360784 rg
+n 0 347 481.8898 -25 re f*
+1 1 1 rg
+n 0 322 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 299 481.8898 -23 re f*
+1 1 1 rg
+n 0 276 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 253 481.8898 -23 re f*
+1 1 1 rg
+n 0 230 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 207 481.8898 -23 re f*
+1 1 1 rg
+n 0 184 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 161 481.8898 -23 re f*
+1 1 1 rg
+n 0 138 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 115 481.8898 -23 re f*
+1 1 1 rg
+n 0 92 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 69 481.8898 -23 re f*
+1 1 1 rg
+n 0 46 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 23 481.8898 -23 re f*
+1 1 1 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 327 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (FIND \(old line\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 327 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (REPLACE WITH \(new line\)) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 8 304 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 304 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 281 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import themis) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 281 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import themis) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 258 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import mms) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 258 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import mms) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 235 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import ace) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 235 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import ace) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 212 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import cluster) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 212 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import cluster) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 189 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import stereo) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 189 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import stereo) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 166 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import psp) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 166 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import psp) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 143 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import solo) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 143 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import solo) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 120 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import dscovr) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 120 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import dscovr) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 97 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import goes) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 97 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import goes) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 74 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import omni) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 74 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import omni) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 51 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import geotail) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 51 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import geotail) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 28 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import ulysses) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 28 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import ulysses) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 5 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import erg) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 5 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import erg) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1 w
+n 0 347 m 481.8898 347 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 347 l S
+n 481.8898 0 m 481.8898 347 l S
+.8 .8 .8 RG
+.5 w
+n 0 322 m 481.8898 322 l S
+n 0 299 m 481.8898 299 l S
+n 0 276 m 481.8898 276 l S
+n 0 253 m 481.8898 253 l S
+n 0 230 m 481.8898 230 l S
+n 0 207 m 481.8898 207 l S
+n 0 184 m 481.8898 184 l S
+n 0 161 m 481.8898 161 l S
+n 0 138 m 481.8898 138 l S
+n 0 115 m 481.8898 115 l S
+n 0 92 m 481.8898 92 l S
+n 0 69 m 481.8898 69 l S
+n 0 46 m 481.8898 46 l S
+n 0 23 m 481.8898 23 l S
+n 240.9449 0 m 240.9449 347 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 126.3465 cm
+Q
+q
+1 0 0 1 56.69291 97.34646 cm
+q
+.901961 .956863 .917647 rg
+n 0 29 481.8898 -29 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 4 Tm 13 TL /F2 9 Tf .117647 .490196 .243137 rg (Simple Rule: Just add ) Tj /F5 9 Tf (.projects) Tj /F2 9 Tf ( after ) Tj /F5 9 Tf (pyspedas) Tj /F2 9 Tf ( in every mission import line.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.117647 .490196 .243137 RG
+1.5 w
+n 0 29 m 481.8898 29 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 29 l S
+n 481.8898 0 m 481.8898 29 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 88.84252 cm
+Q
+q
+1 0 0 1 62.69291 64.84252 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (STEP 3 \227 Fix the Mission Function Calls) Tj T* ET
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 454.0198 240.95 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 61.69 463.2698 Tm
+(FIND \050old line\051) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+297.64 454.0198 240.94 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 302.64 463.2698 Tm
+(REPLACE WITH \050new line\051) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 240.1953 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+16 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+17 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+18 0 obj
+<<
+/Contents 19 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 20 0 R
+/F2 8 0 R
+/F2-0 21 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+19 0 obj
+<<
+/Length 3074
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 62.69291 749.1969 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL 6.39152 Tw (Search your script for any line that calls a mission function like pyspedas.wind.mfi\(...\) or) Tj T* 0 Tw (pyspedas.themis.fgm\(...\). Add .projects after pyspedas in those lines too:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 742.3622 cm
+Q
+q
+1 0 0 1 56.69291 602.3622 cm
+q
+.101961 .227451 .360784 rg
+n 0 140 481.8898 -25 re f*
+1 1 1 rg
+n 0 115 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 92 481.8898 -23 re f*
+1 1 1 rg
+n 0 69 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 46 481.8898 -23 re f*
+1 1 1 rg
+n 0 23 481.8898 -23 re f*
+1 1 1 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 120 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (FIND \(old\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 120 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (REPLACE WITH \(new\)) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 8 97 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.wind.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 97 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.projects.wind.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 74 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.wind.swe\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 74 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.projects.wind.swe\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 51 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.themis.fgm\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 51 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.projects.themis.fgm\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 28 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.mms.fgm\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 28 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.projects.mms.fgm\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 5 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.ace.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 5 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (pyspedas.projects.ace.mfi\(...\)) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1 w
+n 0 140 m 481.8898 140 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 140 l S
+n 481.8898 0 m 481.8898 140 l S
+.8 .8 .8 RG
+.5 w
+n 0 115 m 481.8898 115 l S
+n 0 92 m 481.8898 92 l S
+n 0 69 m 481.8898 69 l S
+n 0 46 m 481.8898 46 l S
+n 0 23 m 481.8898 23 l S
+n 240.9449 0 m 240.9449 140 l S
+Q
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 717.3598 240.95 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 61.69 726.6098 Tm
+(FIND \050old\051) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+297.64 717.3598 240.94 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 302.64 726.6098 Tm
+(REPLACE WITH \050new\051) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 240.1953 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+20 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+21 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+22 0 obj
+<<
+/Contents 23 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 24 0 R
+/F2 8 0 R
+/F2-0 25 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+23 0 obj
+<<
+/Length 8441
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 56.69291 743.1969 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 36 l 6 36 l 2.6832 36 0 33.3168 0 30 c 0 0 l h W* n
+%end table rect clip
+.101961 .227451 .360784 rg
+n 0 36 481.8898 -36 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 5 Tm /F2 15 Tf 20 TL (STEP-BY-STEP: How to Fix Your Old Scripts \(Continued\)) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 731.8583 cm
+Q
+q
+1 0 0 1 62.69291 707.8583 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (STEP 4 \227 Fix the get_data / tplot Imports \(MOST IMPORTANT\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 56.69291 642.8583 cm
+q
+.988235 .909804 .909804 rg
+n 0 61 481.8898 -61 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 35 Tm 1.246235 Tw 15 TL /F2 10 Tf .2 .2 .2 rg (This is the most common cause of errors!) Tj /F1 10 Tf ( In PySPEDAS 2.x, the data is stored inside pyspedas) Tj T* 0 Tw 1.791751 Tw (itself. If you import get_data from pytplot, it looks in the wrong place and finds nothing \227 causing) Tj T* 0 Tw (crashes.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.690196 0 .12549 RG
+1.5 w
+n 0 61 m 481.8898 61 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 61 l S
+n 481.8898 0 m 481.8898 61 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 637.189 cm
+Q
+q
+1 0 0 1 62.69291 622.189 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Find and replace ALL of these lines:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 56.69291 409.189 cm
+q
+.101961 .227451 .360784 rg
+n 0 209 481.8898 -25 re f*
+1 1 1 rg
+n 0 184 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 161 481.8898 -23 re f*
+1 1 1 rg
+n 0 138 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 115 481.8898 -23 re f*
+1 1 1 rg
+n 0 92 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 69 481.8898 -23 re f*
+1 1 1 rg
+n 0 46 481.8898 -23 re f*
+.960784 .960784 .960784 rg
+n 0 23 481.8898 -23 re f*
+1 1 1 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 189 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (FIND \(old\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 189 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (REPLACE WITH \(new\)) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 8 166 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import get_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 166 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import get_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 143 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import tplot_names) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 143 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import tplot_names) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 120 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import tplot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 120 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import tplot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 97 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import store_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 97 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import store_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 74 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import options) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 74 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import options) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 51 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import xlim) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 51 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import xlim) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 28 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import ylim) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 28 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import ylim) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 5 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pytplot import cdf_to_tplot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 248.9449 5 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import cdf_to_tplot) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1 w
+n 0 209 m 481.8898 209 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 209 l S
+n 481.8898 0 m 481.8898 209 l S
+.8 .8 .8 RG
+.5 w
+n 0 184 m 481.8898 184 l S
+n 0 161 m 481.8898 161 l S
+n 0 138 m 481.8898 138 l S
+n 0 115 m 481.8898 115 l S
+n 0 92 m 481.8898 92 l S
+n 0 69 m 481.8898 69 l S
+n 0 46 m 481.8898 46 l S
+n 0 23 m 481.8898 23 l S
+n 240.9449 0 m 240.9449 209 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 403.5197 cm
+Q
+q
+1 0 0 1 56.69291 374.5197 cm
+q
+.901961 .956863 .917647 rg
+n 0 29 481.8898 -29 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+BT 1 0 0 1 0 4 Tm 13 TL /F2 9 Tf .117647 .490196 .243137 rg (Simple Rule: Anything imported ) Tj /F5 9 Tf (from pytplot) Tj /F2 9 Tf ( ) Tj /F3 9 Tf 13 TL (\256) Tj /F2 9 Tf 13 TL ( change to ) Tj /F5 9 Tf (from pyspedas) Tj /F2 9 Tf (.) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.117647 .490196 .243137 RG
+1.5 w
+n 0 29 m 481.8898 29 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 29 l S
+n 481.8898 0 m 481.8898 29 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 366.0157 cm
+Q
+q
+1 0 0 1 62.69291 342.0157 cm
+q
+.101961 .227451 .360784 rg
+BT 1 0 0 1 0 4 Tm /F2 12 Tf 16 TL (STEP 5 \227 Save and Run Your Script) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 323.0157 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (After making all the changes in nano:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 56.69291 203.0157 cm
+q
+.862745 .933333 1 rg
+n 0 116 481.8898 -29 re f*
+1 1 1 rg
+n 0 87 481.8898 -29 re f*
+.862745 .933333 1 rg
+n 0 58 481.8898 -29 re f*
+1 1 1 rg
+n 0 29 481.8898 -29 re f*
+.101961 .227451 .360784 rg
+BT /F2 10 Tf 12 TL ET
+q
+1 0 0 1 10 94 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (1) Tj T* ET
+Q
+Q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 38.34646 94 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Press Ctrl + O then Enter to save the file) Tj T* ET
+Q
+Q
+.101961 .227451 .360784 rg
+BT /F2 10 Tf 12 TL ET
+q
+1 0 0 1 10 65 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (2) Tj T* ET
+Q
+Q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 38.34646 65 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Press Ctrl + X to close nano and return to terminal) Tj T* ET
+Q
+Q
+.101961 .227451 .360784 rg
+BT /F2 10 Tf 12 TL ET
+q
+1 0 0 1 10 36 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (3) Tj T* ET
+Q
+Q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 38.34646 36 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Make sure your virtual environment is active \(you should see \(pyspedas_env\) in your prompt\)) Tj T* ET
+Q
+Q
+.101961 .227451 .360784 rg
+BT /F2 10 Tf 12 TL ET
+q
+1 0 0 1 10 7 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (4) Tj T* ET
+Q
+Q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 38.34646 7 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Run your script:) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1 w
+n 0 116 m 481.8898 116 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 116 l S
+n 481.8898 0 m 481.8898 116 l S
+.8 .8 .8 RG
+.5 w
+n 0 87 m 481.8898 87 l S
+n 0 58 m 481.8898 58 l S
+n 0 29 m 481.8898 29 l S
+n 28.34646 0 m 28.34646 116 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 197.3465 cm
+Q
+q
+1 0 0 1 56.69291 115.3465 cm
+q
+.960784 .960784 .960784 rg
+n 0 82 481.8898 -82 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 10 66 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (# Activate environment \(do this every time you open a new terminal\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 47 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (source ~/pyspedas_env/bin/activate) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 41 cm
+Q
+q
+1 0 0 1 10 22 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (# Run your script) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 3 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (python3 your_script.py) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.8 .8 .8 RG
+1 w
+n 0 82 m 481.8898 82 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 82 l S
+n 481.8898 0 m 481.8898 82 l S
+Q
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 593.1898 240.95 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 61.69 602.4398 Tm
+(FIND \050old\051) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+297.64 593.1898 240.94 25 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 302.64 602.4398 Tm
+(REPLACE WITH \050new\051) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 240.1953 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+24 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+25 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+26 0 obj
+<<
+/Contents 27 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 28 0 R
+/F2 8 0 R
+/F2-0 29 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+27 0 obj
+<<
+/Length 7956
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 56.69291 743.1969 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 36 l 6 36 l 2.6832 36 0 33.3168 0 30 c 0 0 l h W* n
+%end table rect clip
+.180392 .427451 .643137 rg
+n 0 36 481.8898 -36 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 5 Tm /F2 15 Tf 20 TL (Standard Script Template for PySPEDAS 2.x) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 734.6929 cm
+Q
+q
+1 0 0 1 62.69291 704.6929 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL .760542 Tw (Copy this block at the top of every new script you write. Replace 'wind' with your mission name \(themis,) Tj T* 0 Tw (mms, ace, etc.\):) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 697.8583 cm
+Q
+q
+1 0 0 1 56.69291 539.8583 cm
+q
+.960784 .960784 .960784 rg
+n 0 158 481.8898 -158 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 10 142 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (import numpy as np) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 123 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (import matplotlib.pyplot as plt) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 104 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (import warnings) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 85 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (warnings.filterwarnings\('ignore'\)) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 79 cm
+Q
+q
+1 0 0 1 10 60 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 8 4 Tm /F5 9 Tf 13 TL (# PySPEDAS 2.x \227 correct imports) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 41 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (import pyspedas) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 22 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas.projects import wind # change mission name) Tj T* ET
+Q
+Q
+q
+1 0 0 1 10 3 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 4 Tm /F6 9 Tf 13 TL (from pyspedas import get_data, tplot_names, tplot) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.180392 .427451 .643137 RG
+1.5 w
+n 0 158 m 481.8898 158 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 158 l S
+n 481.8898 0 m 481.8898 158 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 528.5197 cm
+Q
+q
+1 0 0 1 56.69291 492.5197 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 36 l 6 36 l 2.6832 36 0 33.3168 0 30 c 0 0 l h W* n
+%end table rect clip
+.117647 .490196 .243137 rg
+n 0 36 481.8898 -36 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 5 Tm /F2 15 Tf 20 TL (Pre-Run Checklist \227 Before Running Any Old Script) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 484.0157 cm
+Q
+q
+1 0 0 1 62.69291 469.0157 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Every time you are about to run an old script, quickly check these 5 things:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 462.1811 cm
+Q
+q
+1 0 0 1 56.69291 297.1811 cm
+q
+.901961 .956863 .917647 rg
+n 0 165 481.8898 -33 re f*
+1 1 1 rg
+n 0 132 481.8898 -33 re f*
+.901961 .956863 .917647 rg
+n 0 99 481.8898 -33 re f*
+1 1 1 rg
+n 0 66 481.8898 -33 re f*
+.901961 .956863 .917647 rg
+n 0 33 481.8898 -33 re f*
+.117647 .490196 .243137 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 10 141 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL ([ ] 1) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 66.69291 141 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Virtual environment is active \227 you see \(pyspedas_env\) in your terminal prompt) Tj T* ET
+Q
+Q
+.117647 .490196 .243137 rg
+q
+1 0 0 1 10 108 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL ([ ] 2) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 66.69291 108 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Mission import uses from pyspedas.projects import) Tj T* ET
+Q
+Q
+.117647 .490196 .243137 rg
+q
+1 0 0 1 10 75 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL ([ ] 3) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 66.69291 75 cm
+q
+BT 1 0 0 1 0 5 Tm 15 TL /F1 10 Tf .2 .2 .2 rg (Mission calls use pyspedas.projects.) Tj (.) Tj (\(...\)) Tj T* ET
+Q
+Q
+.117647 .490196 .243137 rg
+q
+1 0 0 1 10 42 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL ([ ] 4) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 66.69291 42 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (get_data is imported from pyspedas \(NOT from pytplot\)) Tj T* ET
+Q
+Q
+.117647 .490196 .243137 rg
+q
+1 0 0 1 10 9 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL ([ ] 5) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 66.69291 9 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (All other pytplot imports \(tplot, tplot_names, etc.\) changed to from pyspedas) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.117647 .490196 .243137 RG
+1.5 w
+n 0 165 m 481.8898 165 l S
+n 0 0 m 481.8898 0 l S
+n 0 0 m 0 165 l S
+n 481.8898 0 m 481.8898 165 l S
+.8 .8 .8 RG
+.5 w
+n 0 132 m 481.8898 132 l S
+n 0 99 m 481.8898 99 l S
+n 0 66 m 481.8898 66 l S
+n 0 33 m 481.8898 33 l S
+n 56.69291 0 m 56.69291 165 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 285.8425 cm
+Q
+q
+1 0 0 1 56.69291 249.8425 cm
+q
+%begin table rect clip
+n 0 0 m 481.8898 0 l 481.8898 36 l 6 36 l 2.6832 36 0 33.3168 0 30 c 0 0 l h W* n
+%end table rect clip
+.482353 .121569 .635294 rg
+n 0 36 481.8898 -36 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 12 8 cm
+q
+1 1 1 rg
+BT 1 0 0 1 0 5 Tm /F2 15 Tf 20 TL (Common Errors and Their Fixes) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 241.3386 cm
+Q
+q
+1 0 0 1 56.69291 70.33858 cm
+q
+.482353 .121569 .635294 rg
+n 0 171 481.8898 -27 re f*
+1 1 1 rg
+n 0 144 481.8898 -51 re f*
+.960784 .960784 .960784 rg
+n 0 93 481.8898 -51 re f*
+1 1 1 rg
+n 0 42 481.8898 -42 re f*
+1 1 1 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 150 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (Error Message) Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 150 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (Cause) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 150 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F2 10 Tf 15 TL (Fix) Tj T* ET
+Q
+Q
+0 0 0 rg
+q
+1 0 0 1 8 99 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 30 Tm /F6 9 Tf 13 TL (ImportError: cannot) Tj T* (import name 'wind' from) Tj T* ('pyspedas') Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 111 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 5 Tm /F1 10 Tf 15 TL (Old mission import) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 105.5 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (Change to: from) Tj T* (pyspedas.projects import wind) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 48 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 30 Tm /F6 9 Tf 13 TL (TypeError: 'NoneType') Tj T* (object is not) Tj T* (subscriptable) Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 52.5 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL 5.089528 Tw (get_data imported from) Tj T* 0 Tw (pytplot \227 returns None) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 54.5 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (Change to: from pyspedas import) Tj T* (get_data) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 8 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (The name BGSE is) Tj T* (currently not in pytplot) Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 6 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL 8.396352 Tw (Same root cause \227) Tj T* 0 Tw (wrong get_data source) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 8 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (Change to: from pyspedas import) Tj T* (get_data) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.482353 .121569 .635294 RG
+1 w
+n 0 171 m 481.8898 171 l S
+n 0 0 m 0 171 l S
+n 481.8898 0 m 481.8898 171 l S
+.8 .8 .8 RG
+.5 w
+n 0 0 m 481.8898 0 l S
+n 0 144 m 481.8898 144 l S
+n 0 93 m 481.8898 93 l S
+n 0 42 m 481.8898 42 l S
+n 155.9055 0 m 155.9055 171 l S
+n 283.4646 0 m 283.4646 171 l S
+Q
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 214.3398 155.91 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 61.69 224.5898 Tm
+(Error Message) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+212.6 214.3398 127.56 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 217.6 224.5898 Tm
+(Cause) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+340.16 214.3398 198.42 27 re
+f*
+1 1 1 rg
+BT
+/F2-0 8.5 Tf
+10.2 TL
+ET
+BT
+1 0 0 1 345.16 224.5898 Tm
+(Fix) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 240.1953 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+28 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+29 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+30 0 obj
+<<
+/Contents 31 0 R
+/MediaBox [ 0 0 595.2756 841.8898 ]
+/Resources <<
+/Font <<
+/F1 6 0 R
+/F1-0 32 0 R
+/F2 8 0 R
+/F2-0 33 0 R
+/F3 10 0 R
+/F4 11 0 R
+/F5 12 0 R
+/F6 13 0 R
+>>
+/ProcSet [ /ImageB /ImageC /ImageI /PDF /Text ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ ]
+/Parent 2 0 R
+>>
+endobj
+31 0 obj
+<<
+/Length 2832
+>>
+stream
+q
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 56.69291 695.1969 cm
+q
+1 1 1 rg
+n 0 84 481.8898 -42 re f*
+.960784 .960784 .960784 rg
+n 0 42 481.8898 -42 re f*
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 8 50 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (ModuleNotFoundError: No) Tj T* (module named 'pytplot') Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 48 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL 22.41906 Tw (pytplot-mpl-temp not) Tj T* 0 Tw (installed) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 50 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (Run: pip install) Tj T* (pytplot-mpl-temp) Tj T* ET
+Q
+Q
+q
+1 0 0 1 8 8 cm
+q
+.690196 0 .12549 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL (FigureCanvasAgg is) Tj T* (non-interactive) Tj T* ET
+Q
+Q
+q
+1 0 0 1 163.9055 6 cm
+q
+.2 .2 .2 rg
+BT 1 0 0 1 0 20 Tm /F1 10 Tf 15 TL .879764 Tw (Terminal mode \227 not an) Tj T* 0 Tw (error) Tj T* ET
+Q
+Q
+q
+1 0 0 1 291.4646 8 cm
+q
+.117647 .490196 .243137 rg
+BT 1 0 0 1 8 17 Tm /F6 9 Tf 13 TL -0.253543 Tw (Plot is saved as .png file \227 open) Tj T* 0 Tw (with: xdg-open plot.png) Tj T* ET
+Q
+Q
+q
+1 J
+1 j
+.482353 .121569 .635294 RG
+1 w
+n 0 0 m 0 84 l S
+n 481.8898 0 m 481.8898 84 l S
+n 0 0 m 481.8898 0 l S
+.8 .8 .8 RG
+.5 w
+n 0 84 m 481.8898 84 l S
+n 0 42 m 481.8898 42 l S
+n 155.9055 0 m 155.9055 84 l S
+n 283.4646 0 m 283.4646 84 l S
+Q
+Q
+Q
+q
+1 0 0 1 62.69291 683.8583 cm
+Q
+q
+1 0 0 1 62.69291 681.8583 cm
+q
+1 w
+1 J
+.180392 .427451 .643137 RG
+n 0 0 m 469.8898 0 l S
+Q
+Q
+q
+1 0 0 1 62.69291 675.189 cm
+Q
+q
+1 0 0 1 62.69291 664.189 cm
+q
+.180392 .427451 .643137 rg
+BT 1 0 0 1 0 3 Tm /F4 8 Tf 11 TL 80.53288 0 Td (PySPEDAS 2.x Migration Guide | For Linux \(Ubuntu\) | Python 3.10+ | PySPEDAS 2.1.0) Tj T* -80.53288 0 Td ET
+Q
+Q
+ 
+
+Q
+
+q
+0.0 0.0 595.2756 841.8898 re
+W
+n
+1 0 0 1 0 0 cm
+BT
+/F1-0 12 Tf
+14.4 TL
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+56.69 737.1998 155.91 42 re
+f*
+1 1 1 rg
+BT
+/F2-0 7.5 Tf
+9 TL
+ET
+BT
+1 0 0 1 61.69 766.1998 Tm
+(ModuleNotFoundError\072) Tj
+T*
+ET
+BT
+1 0 0 1 61.69 756.1998 Tm
+(No module named \047pytplot\047) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+212.6 737.1998 127.56 42 re
+f*
+1 1 1 rg
+BT
+/F2-0 7.5 Tf
+9 TL
+ET
+BT
+1 0 0 1 217.6 766.1998 Tm
+(pytplot\055mpl\055temp) Tj
+T*
+ET
+BT
+1 0 0 1 217.6 756.1998 Tm
+(not installed) Tj
+T*
+ET
+0.101961 0.184314 0.305882 rg
+0.101961 0.184314 0.305882 RG
+n
+340.16 737.1998 198.42 42 re
+f*
+1 1 1 rg
+BT
+/F2-0 7.5 Tf
+9 TL
+ET
+BT
+1 0 0 1 345.16 766.1998 Tm
+(Run\072) Tj
+T*
+ET
+BT
+1 0 0 1 345.16 756.1998 Tm
+(pip install pytplot\055mpl\055temp) Tj
+T*
+ET
+BT
+/F1-0 7.5 Tf
+9 TL
+ET
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 40 18 Tm
+(Mani K Chettri  \174  Sikkim University) Tj
+T*
+ET
+BT
+/F1-0 7 Tf
+8.4 TL
+ET
+0.133333 0.333333 0.666667 rg
+BT
+1 0 0 1 435.4566 18 Tm
+(researchgate\056net\057profile\057Mani\055Chettri\0552) Tj
+T*
+ET
+Q
+
+
+endstream
+endobj
+32 0 obj
+<<
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+33 0 obj
+<<
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+xref
+0 34
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000148 00000 n 
+0000000197 00000 n 
+0000000496 00000 n 
+0000006571 00000 n 
+0000006678 00000 n 
+0000006785 00000 n 
+0000006897 00000 n 
+0000007009 00000 n 
+0000007087 00000 n 
+0000007203 00000 n 
+0000007309 00000 n 
+0000007420 00000 n 
+0000007723 00000 n 
+0000016675 00000 n 
+0000016783 00000 n 
+0000016896 00000 n 
+0000017199 00000 n 
+0000020326 00000 n 
+0000020434 00000 n 
+0000020547 00000 n 
+0000020850 00000 n 
+0000029344 00000 n 
+0000029452 00000 n 
+0000029565 00000 n 
+0000029868 00000 n 
+0000037877 00000 n 
+0000037985 00000 n 
+0000038098 00000 n 
+0000038401 00000 n 
+0000041286 00000 n 
+0000041394 00000 n 
+trailer
+<<
+/Size 34
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+41507
+%%EOF
