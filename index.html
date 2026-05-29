@@ -26,23 +26,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-:root{--clr-primary:#1e3a5f;--clr-accent:#c0392b;--clr-bg:#faf9f7;--clr-card:#ffffff;--clr-text:#2c2c2c;--clr-muted:#6b7280;--clr-border:#e5e2dd;--clr-tag-bg:#f0eeeb}
+/* Cool, clean palette: deep slate-navy + refined peacock-teal accent on cool paper.
+   To warm the accent instead, swap --clr-accent to a copper such as #b86a3a
+   and --clr-accent-soft to #f3e7dd. Everything else updates automatically. */
+:root{--clr-primary:#16324a;--clr-accent:#0e7c86;--clr-accent-deep:#0a5b63;--clr-accent-soft:#e4f0f1;--clr-bg:#f6f8f9;--clr-card:#ffffff;--clr-text:#273340;--clr-muted:#64727d;--clr-border:#e4e9ea;--clr-tag-bg:#eef3f3}
 body{font-family:'DM Sans',sans-serif;color:var(--clr-text);background:var(--clr-bg);-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Source Serif 4',Georgia,serif}
+/* Thin accent stripe across the very top */
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:linear-gradient(90deg,var(--clr-accent),var(--clr-primary))}
+h1,h2,h3,h4{font-family:'Source Serif 4',Georgia,serif;letter-spacing:-.01em}
 /* Keep paragraphs at a comfortable reading width on wide screens */
 .lead{max-width:68ch}
 .nav-link{position:relative;transition:color .2s}.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--clr-accent);transition:width .25s ease}.nav-link:hover::after,.nav-link.active::after{width:100%}.nav-link.active{color:var(--clr-primary);font-weight:600}
-main>section{display:none}main>section.visible{display:block}
-.card{background:var(--clr-card);border:1px solid var(--clr-border);border-radius:10px}
-.tag{display:inline-block;background:var(--clr-tag-bg);color:#555;font-size:.75rem;padding:3px 10px;border-radius:4px;font-weight:500}
+main>section{display:none}main>section.visible{display:block;animation:fadeUp .45s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--clr-card);border:1px solid var(--clr-border);border-radius:12px;box-shadow:0 1px 2px rgba(22,50,74,.04),0 10px 28px -16px rgba(22,50,74,.14);transition:box-shadow .2s,transform .2s}
+.tag{display:inline-block;background:var(--clr-tag-bg);color:var(--clr-accent-deep);font-size:.75rem;padding:3px 10px;border-radius:5px;font-weight:500}
 .section-title{font-size:1.75rem;font-weight:700;color:var(--clr-primary);margin-bottom:.25rem}
-.section-rule{width:50px;height:3px;background:var(--clr-accent);border:none;margin:.5rem 0 1.5rem 0}
-.pub-badge{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.05em}
-.stat-card{cursor:pointer;transition:transform .15s,box-shadow .15s}.stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.section-rule{width:52px;height:3px;background:linear-gradient(90deg,var(--clr-accent),rgba(14,124,134,.12));border:none;border-radius:2px;margin:.5rem 0 1.5rem 0}
+.pub-badge{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+.stat-card{cursor:pointer;transition:transform .15s,box-shadow .15s}.stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px -10px rgba(22,50,74,.22)}
 #mobile-menu{max-height:0;overflow:hidden;transition:max-height .3s ease}#mobile-menu.open{max-height:520px}
+/* Soft accent glow in the hero, kept very subtle */
+#home>.card:first-child{position:relative;overflow:hidden}
+#home>.card:first-child::after{content:'';position:absolute;top:-45%;right:-8%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(14,124,134,.12),transparent 70%);pointer-events:none}
 /* Visible focus ring for keyboard navigation */
 a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid var(--clr-accent);outline-offset:3px;border-radius:4px}
-@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -61,7 +70,7 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <a href="#resources" onclick="showPage('resources')" class="nav-link" data-page="resources">Resources</a>
 <a href="#activities" onclick="showPage('activities')" class="nav-link" data-page="activities">Activities</a>
 <a href="#contact" onclick="showPage('contact')" class="nav-link" data-page="contact">Contact</a>
-<a href="mailto:mkchettri8@gmail.com?subject=CV%20Request" class="ml-2 px-4 py-2 text-white text-sm font-semibold rounded" style="background:var(--clr-primary)">Request CV &#8599;</a>
+<a href="mani_CV.pdf" target="_blank" rel="noopener noreferrer" class="ml-2 px-4 py-2 text-white text-sm font-semibold rounded" style="background:var(--clr-primary)">CV &#8599;</a>
 </div>
 <button id="menu-btn" class="md:hidden p-2 text-gray-600" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
 </div>
@@ -74,7 +83,7 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <a href="#resources" onclick="showPage('resources')" class="nav-link-m px-3 py-2 rounded hover:bg-gray-50" data-page="resources">Resources</a>
 <a href="#activities" onclick="showPage('activities')" class="nav-link-m px-3 py-2 rounded hover:bg-gray-50" data-page="activities">Activities</a>
 <a href="#contact" onclick="showPage('contact')" class="nav-link-m px-3 py-2 rounded hover:bg-gray-50" data-page="contact">Contact</a>
-<a href="mailto:mkchettri8@gmail.com?subject=CV%20Request" class="mx-3 mt-1 px-4 py-2 text-white text-center text-sm font-semibold rounded" style="background:var(--clr-primary)">Request CV &#8599;</a>
+<a href="mani_CV.pdf" target="_blank" rel="noopener noreferrer" class="mx-3 mt-1 px-4 py-2 text-white text-center text-sm font-semibold rounded" style="background:var(--clr-primary)">CV &#8599;</a>
 </div>
 </div>
 </nav>
@@ -184,10 +193,10 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:#dce6f0;border:1px solid #c2d2e4" onclick="showPage('research')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Research</div></div>
-<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:#dce6f0;border:1px solid #c2d2e4" onclick="showPage('publications')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Publications</div></div>
-<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:#dce6f0;border:1px solid #c2d2e4" onclick="showPage('activities')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Activities</div></div>
-<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:#dce6f0;border:1px solid #c2d2e4" onclick="showPage('contact')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Contact</div></div>
+<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:var(--clr-accent-soft);border:1px solid #cfe5e6" onclick="showPage('research')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Research</div></div>
+<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:var(--clr-accent-soft);border:1px solid #cfe5e6" onclick="showPage('publications')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Publications</div></div>
+<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:var(--clr-accent-soft);border:1px solid #cfe5e6" onclick="showPage('activities')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Activities</div></div>
+<div class="stat-card p-4 text-center rounded-lg cursor-pointer" style="background:var(--clr-accent-soft);border:1px solid #cfe5e6" onclick="showPage('contact')" role="button" tabindex="0"><div class="text-sm font-semibold" style="color:var(--clr-primary)">Contact</div></div>
 </div>
 </section>
 
@@ -289,7 +298,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">KAW&ndash;IAW Coupling</span><span class="tag">Inner Heliosphere</span><span class="tag">Nonlinear Dynamics</span></div>
 <div class="flex items-center gap-4 text-sm mt-3">
 <a href="https://doi.org/10.1088/1674-4527/ad76ee" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">DOI: 10.1088/1674-4527/ad76ee &#8599;</a>
-<span class="text-xs px-2 py-0.5 rounded" style="background:#e8eef4;color:#2d4a6a">Cited by 4</span>
+<span class="text-xs px-2 py-0.5 rounded" style="background:var(--clr-accent-soft);color:var(--clr-accent-deep)">Cited by 4</span>
 </div>
 </div>
 
@@ -313,7 +322,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <h4 class="text-lg font-bold leading-snug mb-2">Damped kinetic Alfv&eacute;n waves in Earth's magnetosheath: numerical simulations and MMS observations</h4>
 <p class="text-base mb-3"><strong>Chettri, M. K.</strong>, Singh, H. D., Shrivastav, V., Singh, B., &amp; Mukherjee, R. (2025). arXiv:2512.09828.</p>
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">KAW Damping</span><span class="tag">Magnetosheath</span><span class="tag">MMS</span><span class="tag">Simulation</span></div>
-<div class="flex items-center gap-4 text-sm"><a href="https://arxiv.org/abs/2512.09828" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2512.09828 &#8599;</a><span class="text-xs px-2 py-0.5 rounded" style="background:#e8eef4;color:#2d4a6a">Cited by 3</span></div>
+<div class="flex items-center gap-4 text-sm"><a href="https://arxiv.org/abs/2512.09828" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2512.09828 &#8599;</a><span class="text-xs px-2 py-0.5 rounded" style="background:var(--clr-accent-soft);color:var(--clr-accent-deep)">Cited by 3</span></div>
 </div>
 
 <div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
@@ -324,7 +333,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="flex flex-wrap items-center gap-4 text-sm">
 <a href="https://arxiv.org/abs/2603.07969" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2603.07969 &#8599;</a>
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6447726" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">SSRN 6447726 &#8599;</a>
-<span class="text-xs px-2 py-0.5 rounded" style="background:#e8eef4;color:#2d4a6a">Cited by 1</span>
+<span class="text-xs px-2 py-0.5 rounded" style="background:var(--clr-accent-soft);color:var(--clr-accent-deep)">Cited by 1</span>
 </div>
 </div>
 
@@ -333,7 +342,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <h4 class="text-lg font-bold leading-snug mb-2">Suppression of two stream instability in relativistic electron-ion plasmas</h4>
 <p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., &amp; Mukherjee, R. (2025). arXiv:2508.14362.</p>
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Plasma Instabilities</span><span class="tag">Relativistic Plasmas</span><span class="tag">Two-Stream</span></div>
-<div class="flex items-center gap-4 text-sm"><a href="https://arxiv.org/abs/2508.14362" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2508.14362 &#8599;</a><span class="text-xs px-2 py-0.5 rounded" style="background:#e8eef4;color:#2d4a6a">Cited by 2</span></div>
+<div class="flex items-center gap-4 text-sm"><a href="https://arxiv.org/abs/2508.14362" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2508.14362 &#8599;</a><span class="text-xs px-2 py-0.5 rounded" style="background:var(--clr-accent-soft);color:var(--clr-accent-deep)">Cited by 2</span></div>
 </div>
 
 <div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
@@ -499,7 +508,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="card p-6 sm:p-8">
 <h3 class="text-xl font-bold mb-4" style="color:var(--clr-primary)">Profiles</h3>
 <div class="space-y-3 text-base">
-<a href="https://scholar.google.com/citations?user=qWjavTgAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-lg hover:shadow-sm transition-shadow" style="background:var(--clr-tag-bg)"><span class="w-8 h-8 rounded flex items-center justify-center text-white font-bold text-xs" style="background:#c0392b">GS</span><div><p class="font-semibold">Google Scholar</p><p class="text-xs" style="color:var(--clr-muted)">Publications and citations</p></div></a>
+<a href="https://scholar.google.com/citations?user=qWjavTgAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-lg hover:shadow-sm transition-shadow" style="background:var(--clr-tag-bg)"><span class="w-8 h-8 rounded flex items-center justify-center text-white font-bold text-xs" style="background:var(--clr-accent)">GS</span><div><p class="font-semibold">Google Scholar</p><p class="text-xs" style="color:var(--clr-muted)">Publications and citations</p></div></a>
 <a href="https://orcid.org/0009-0000-1368-9263" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-lg hover:shadow-sm transition-shadow" style="background:var(--clr-tag-bg)"><span class="w-8 h-8 rounded flex items-center justify-center text-white font-bold text-xs" style="background:#a6ce39">ID</span><div><p class="font-semibold">ORCID</p><p class="text-xs" style="color:var(--clr-muted)">0009-0000-1368-9263</p></div></a>
 <a href="https://github.com/mkchettri8" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-lg hover:shadow-sm transition-shadow" style="background:var(--clr-tag-bg)"><span class="w-8 h-8 rounded flex items-center justify-center text-white font-bold text-xs" style="background:#333">GH</span><div><p class="font-semibold">GitHub</p><p class="text-xs" style="color:var(--clr-muted)">PLASMAform and research code</p></div></a>
 <a href="https://x.com/manikchettri1" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 rounded-lg hover:shadow-sm transition-shadow" style="background:var(--clr-tag-bg)"><span class="w-8 h-8 rounded flex items-center justify-center text-white font-bold text-xs" style="background:#333">X</span><div><p class="font-semibold">X (Twitter)</p><p class="text-xs" style="color:var(--clr-muted)">Research updates</p></div></a>
