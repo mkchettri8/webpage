@@ -45,6 +45,9 @@ main>section{display:none}main>section.visible{display:block;animation:fadeUp .4
 .section-rule{width:52px;height:3px;background:linear-gradient(90deg,var(--clr-accent),rgba(14,124,134,.12));border:none;border-radius:2px;margin:.5rem 0 1.5rem 0}
 .pub-badge{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
 .stat-card{cursor:pointer;transition:transform .15s,box-shadow .15s}.stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px -10px rgba(22,50,74,.22)}
+.activity-highlight{background:linear-gradient(90deg,var(--clr-accent-soft),rgba(255,255,255,.72));border:1px solid #cfe5e6;border-left:4px solid var(--clr-accent);border-radius:10px;padding:14px 14px 14px 10px;box-shadow:0 8px 22px -18px rgba(22,50,74,.28)}
+.activity-status{display:inline-block;margin-top:2px;padding:2px 8px;border-radius:999px;background:var(--clr-accent);color:white;font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.activity-status.secondary{background:var(--clr-primary)}
 #mobile-menu{max-height:0;overflow:hidden;transition:max-height .3s ease}#mobile-menu.open{max-height:520px}
 /* Soft accent glow in the hero, kept very subtle */
 #home>.card:first-child{position:relative;overflow:hidden}
@@ -116,14 +119,14 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
 <div class="card stat-card p-4 text-center" style="border-left:3px solid var(--clr-primary)" onclick="showPage('publications')" role="button" tabindex="0" aria-label="View publications">
-<div class="text-2xl font-bold" style="color:var(--clr-primary)">12</div>
+<div class="text-2xl font-bold" style="color:var(--clr-primary)">11</div>
 <div class="text-sm mt-1" style="color:var(--clr-muted)">Publications</div>
-<div class="text-xs mt-0.5" style="color:var(--clr-accent)">3 journals + 9 preprints</div>
+<div class="text-xs mt-0.5" style="color:var(--clr-accent)">5 journals + 6 preprints</div>
 </div>
 <div class="card stat-card p-4 text-center" style="border-left:3px solid var(--clr-primary)" onclick="showPage('activities')" role="button" tabindex="0" aria-label="View conferences and workshops">
-<div class="text-2xl font-bold" style="color:var(--clr-primary)">6</div>
+<div class="text-2xl font-bold" style="color:var(--clr-primary)">8</div>
 <div class="text-sm mt-1" style="color:var(--clr-muted)">Conf. &amp; Workshops</div>
-<div class="text-xs mt-0.5" style="color:var(--clr-accent)">4 conf. + 2 workshops</div>
+<div class="text-xs mt-0.5" style="color:var(--clr-accent)">Listed recent first</div>
 </div>
 <div class="card stat-card p-4 text-center" style="border-left:3px solid var(--clr-primary)" onclick="showPage('research')" role="button" tabindex="0" aria-label="View research and missions">
 <div class="text-2xl font-bold" style="color:var(--clr-primary)">4</div>
@@ -140,11 +143,20 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="card p-6 sm:p-8">
 <h2 class="section-title">Recent Work</h2>
 <hr class="section-rule">
-<div class="space-y-4 text-base">
-<div class="flex gap-4 items-start">
-<span class="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full" style="background:var(--clr-accent)"></span>
-<div><p class="font-semibold">Electromagnetic Signatures of KAW Turbulence at Ion Inertial Scales in Earth&apos;s High-&beta; Magnetosheath</p>
-<p class="text-sm" style="color:var(--clr-muted)">New preprint, submitted to <em>Advances in Space Research</em> (2026). <a href="https://arxiv.org/abs/2605.25199" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">arXiv:2605.25199 &#8599;</a></p></div>
+<div class="space-y-3 text-base">
+<div class="flex gap-4 items-start p-3 -mx-3 rounded-lg" style="background:var(--clr-accent-soft);border-left:3px solid var(--clr-primary)">
+<span class="flex-shrink-0 mt-2 w-2 h-2 rounded-full" style="background:var(--clr-primary)"></span>
+<div>
+<div class="flex flex-wrap items-center gap-2 mb-1"><p class="font-semibold">Suppression of Two-Stream and Weibel Instabilities in Ultra-Relativistic Electron&ndash;Positron Plasma</p><span class="pub-badge text-white" style="background:var(--clr-primary)">Published</span></div>
+<p class="text-sm" style="color:var(--clr-muted)">Published in <em>Journal of Subatomic Particles and Cosmology</em> (2026). <a href="https://doi.org/10.1016/j.jspc.2026.100421" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">DOI: 10.1016/j.jspc.2026.100421 &#8599;</a></p>
+</div>
+</div>
+<div class="flex gap-4 items-start p-3 -mx-3 rounded-lg" style="background:var(--clr-accent-soft);border-left:3px solid var(--clr-primary)">
+<span class="flex-shrink-0 mt-2 w-2 h-2 rounded-full" style="background:var(--clr-primary)"></span>
+<div>
+<div class="flex flex-wrap items-center gap-2 mb-1"><p class="font-semibold">Weibel Instability in Collisionless Plasmas across Astrophysical and Laboratory Shocks</p><span class="pub-badge text-white" style="background:var(--clr-primary)">Published</span></div>
+<p class="text-sm" style="color:var(--clr-muted)">Published in <em>Contributions to Plasma Physics</em> (2026). <a href="https://onlinelibrary.wiley.com/doi/10.1002/ctpp.70147" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">Wiley article &#8599;</a></p>
+</div>
 </div>
 <div class="flex gap-4 items-start">
 <span class="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full" style="background:var(--clr-accent)"></span>
@@ -153,8 +165,13 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 </div>
 <div class="flex gap-4 items-start">
 <span class="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full" style="background:var(--clr-accent)"></span>
+<div><p class="font-semibold">Electromagnetic Signatures of KAW Turbulence at Ion Inertial Scales in Earth&apos;s High-&beta; Magnetosheath</p>
+<p class="text-sm" style="color:var(--clr-muted)">New preprint, submitted to <em>Advances in Space Research</em> (2026). <a href="https://arxiv.org/abs/2605.25199" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">arXiv:2605.25199 &#8599;</a></p></div>
+</div>
+<div class="flex gap-4 items-start">
+<span class="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full" style="background:var(--clr-accent)"></span>
 <div><p class="font-semibold">How Big Is the Sun? A Measurement from India&apos;s Aditya-L1 Spacecraft</p>
-<p class="text-sm" style="color:var(--clr-muted)">Accepted in <em>PANE Journal of Physics Education</em> (2026). <a href="https://journals.paneindia.org/index.php/pjpe" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">View Article &#8599;</a></p></div>
+<p class="text-sm" style="color:var(--clr-muted)">Published in <em>PANE Journal of Physics Education</em> (2026). <a href="https://journals.paneindia.org/index.php/pjpe" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-accent)">View Article &#8599;</a></p></div>
 </div>
 <div class="flex gap-4 items-start">
 <span class="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full" style="background:var(--clr-accent)"></span>
@@ -263,12 +280,23 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="card p-6 sm:p-8">
 <h2 class="section-title">Publications</h2>
 <hr class="section-rule">
-<p class="text-base" style="color:var(--clr-muted)">12 publications &middot; 10 citations &middot; h-index: 2 &middot; <a href="https://scholar.google.com/citations?user=qWjavTgAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-primary)">Google Scholar &#8599;</a></p>
+<p class="text-base" style="color:var(--clr-muted)">11 publications &middot; 10 citations &middot; h-index: 2 &middot; <a href="https://scholar.google.com/citations?user=qWjavTgAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="underline decoration-1 underline-offset-2" style="color:var(--clr-primary)">Google Scholar &#8599;</a></p>
 </div>
 
 <div>
 <h3 class="text-xl font-bold mb-4 px-1" style="color:var(--clr-primary)">Journal Articles</h3>
 <div class="space-y-4">
+
+<div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-primary);background:var(--clr-accent-soft)">
+<div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-primary)">Journal&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">Journal of Subatomic Particles and Cosmology</span></div>
+<h4 class="text-lg font-bold leading-snug mb-2">Suppression of Two-Stream and Weibel Instabilities in Ultra-Relativistic Electron&ndash;Positron Plasma</h4>
+<p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., Singh, B., &amp; Mukherjee, R. (2026). <em>J. Subat. Part. Cosmol.</em>, 100421.</p>
+<div class="flex flex-wrap gap-2 mb-3"><span class="tag">Two-Stream Instability</span><span class="tag">Weibel Instability</span><span class="tag">Ultra-relativistic</span><span class="tag">Electron&ndash;Positron Plasma</span></div>
+<div class="flex flex-wrap items-center gap-4 text-sm mt-3">
+<a href="https://doi.org/10.1016/j.jspc.2026.100421" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">DOI: 10.1016/j.jspc.2026.100421 &#8599;</a>
+<a href="https://www.sciencedirect.com/science/article/abs/pii/S305048052600138X" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">ScienceDirect &#8599;</a>
+</div>
+</div>
 
 <div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-primary)">
 <div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-primary)">Journal&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">Journal of Subatomic Particles and Cosmology</span></div>
@@ -277,7 +305,6 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">PSBL Turbulence</span><span class="tag">Ponderomotive Effects</span><span class="tag">NLSE Simulation</span><span class="tag">Inertial-Range</span></div>
 <div class="flex flex-wrap items-center gap-4 text-sm mt-3">
 <a href="https://doi.org/10.1016/j.jspc.2026.100383" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">DOI: 10.1016/j.jspc.2026.100383 &#8599;</a>
-<a href="https://arxiv.org/abs/2603.14436" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-muted)">arXiv:2603.14436 &#8599;</a>
 </div>
 </div>
 
@@ -288,6 +315,16 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Solar Radius</span><span class="tag">Aditya-L1</span><span class="tag">SUIT</span><span class="tag">Physics Education</span></div>
 <div class="flex flex-wrap items-center gap-4 text-sm mt-3">
 <a href="https://journals.paneindia.org/index.php/pjpe" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">View Article &#8599;</a>
+</div>
+</div>
+
+<div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-primary)">
+<div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-primary)">Journal&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">Contributions to Plasma Physics</span></div>
+<h4 class="text-lg font-bold leading-snug mb-2">Weibel Instability in Collisionless Plasmas across Astrophysical and Laboratory Shocks</h4>
+<p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., Singh, B., &amp; Mukherjee, R. (2026). <em>Contrib. Plasma Phys.</em>, Early View.</p>
+<div class="flex flex-wrap gap-2 mb-3"><span class="tag">Weibel Instability</span><span class="tag">Collisionless Shocks</span><span class="tag">Astrophysical Plasmas</span></div>
+<div class="flex flex-wrap items-center gap-4 text-sm mt-3">
+<a href="https://doi.org/10.1002/ctpp.70147" target="_blank" rel="noopener noreferrer" class="font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">DOI: 10.1002/ctpp.70147 &#8599;</a>
 </div>
 </div>
 
@@ -347,35 +384,12 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 
 <div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
 <div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-accent)">Preprint&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">arXiv</span></div>
-<h4 class="text-lg font-bold leading-snug mb-2">Weibel instability in collisionless plasmas across astrophysical and laboratory shocks</h4>
-<p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., Singh, B., &amp; Mukherjee, R. (2026). arXiv:2603.12747.</p>
-<div class="flex flex-wrap gap-2 mb-3"><span class="tag">Weibel Instability</span><span class="tag">Collisionless Shocks</span><span class="tag">Astrophysical Plasmas</span></div>
-<a href="https://arxiv.org/abs/2603.12747" target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2603.12747 &#8599;</a>
-</div>
-
-<div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
-<div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-accent)">Preprint&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">arXiv</span></div>
 <h4 class="text-lg font-bold leading-snug mb-2">Ion channel dynamics in temperature-dependent Weibel instability saturation</h4>
 <p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., Singh, B., &amp; Mukherjee, R. (2026). arXiv:2604.21875.</p>
 <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Weibel Instability</span><span class="tag">Ion Channels</span><span class="tag">Temperature Dependence</span><span class="tag">Saturation</span></div>
 <a href="https://arxiv.org/abs/2604.21875" target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2604.21875 &#8599;</a>
 </div>
 
-<div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
-<div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-accent)">Preprint&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">arXiv</span></div>
-<h4 class="text-lg font-bold leading-snug mb-2">Linear-wave bound on electromagnetic energy equipartition at sub-electron scales in non-relativistic plasmas</h4>
-<p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, B., Singh, H. D., &amp; Mukherjee, R. (2026). arXiv:2604.18472.</p>
-<div class="flex flex-wrap gap-2 mb-3"><span class="tag">Energy Equipartition</span><span class="tag">Sub-electron Scales</span><span class="tag">Linear Wave Theory</span><span class="tag">Non-relativistic Plasmas</span></div>
-<a href="https://arxiv.org/abs/2604.18472" target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">arXiv:2604.18472 &#8599;</a>
-</div>
-
-<div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
-<div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-accent)">Preprint&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">SSRN</span></div>
-<h4 class="text-lg font-bold leading-snug mb-2">Suppression of two-stream and Weibel instabilities in ultra-relativistic electron&ndash;positron plasma</h4>
-<p class="text-base mb-3">Shrivastav, V., <strong>Chettri, M. K.</strong>, Singh, H. D., Singh, B., &amp; Mukherjee, R. (2026). SSRN 6502757.</p>
-<div class="flex flex-wrap gap-2 mb-3"><span class="tag">Two-Stream Instability</span><span class="tag">Weibel Instability</span><span class="tag">Ultra-relativistic</span><span class="tag">Electron&ndash;Positron Plasma</span></div>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6502757" target="_blank" rel="noopener noreferrer" class="text-sm font-medium underline underline-offset-2 decoration-1" style="color:var(--clr-accent)">View on SSRN &#8599;</a>
-</div>
 
 <div class="card p-5 sm:p-6" style="border-left:3px solid var(--clr-accent)">
 <div class="flex items-center gap-3 mb-2"><span class="pub-badge text-white" style="background:var(--clr-accent)">Preprint&nbsp;&middot;&nbsp;2026</span><span class="text-xs" style="color:var(--clr-muted)">SSRN</span></div>
@@ -450,11 +464,15 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <section id="activities" class="space-y-8">
 <div class="card p-6 sm:p-8"><h2 class="section-title">Activities</h2><hr class="section-rule"></div>
 <div class="card p-6 sm:p-8">
-<h3 class="text-2xl font-bold mb-5" style="color:var(--clr-primary)">Conference Presentations</h3>
+<h3 class="text-2xl font-bold mb-5" style="color:var(--clr-primary)">Conferences &amp; Workshops</h3>
 <div class="space-y-5 text-base">
-<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">2026</p><p class="text-xs" style="color:var(--clr-muted)">Upcoming</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-primary)"><p class="font-semibold">European Physical Society Conference on Plasma Physics (EPS-2026)</p><p class="text-sm" style="color:var(--clr-muted)">Abstract accepted</p></div></div>
-<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">2026</p><p class="text-xs" style="color:var(--clr-muted)">Oral</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">Trends in Science and Space Technology (TIST-2026)</p><p class="text-sm" style="color:var(--clr-muted)">Salesian College, Siliguri</p><p class="mt-1 text-sm">Oral presentation: Damped Kinetic Alfv&eacute;n Waves in Earth's Magnetosheath: Numerical Simulations and MMS Observations.</p></div></div>
+<div class="flex gap-4 activity-highlight"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold" style="color:var(--clr-primary)">Jul 2026</p><span class="activity-status">Will attend</span></div><div class="pl-4"><p class="font-semibold" style="color:var(--clr-primary)">13th Aditya-L1 Support Cell Workshop</p><p class="text-sm" style="color:var(--clr-muted)">ARIES, Nainital, India &middot; 6&ndash;15 July 2026</p><p class="mt-1 text-sm">Will be attending the workshop focused on Aditya-L1 data products and analysis.</p></div></div>
+<div class="flex gap-4 activity-highlight"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold" style="color:var(--clr-primary)">Jun&ndash;Jul 2026</p><span class="activity-status secondary">Presenting</span></div><div class="pl-4"><p class="font-semibold" style="color:var(--clr-primary)">52nd EPS Conference on Plasma Physics (EPS-2026)</p><p class="text-sm" style="color:var(--clr-muted)">EICC, Edinburgh, United Kingdom &middot; 29 June&ndash;3 July 2026</p><p class="mt-1 text-sm">Attending and presenting the poster: <em>Ponderomotive generation of density cavities from kinetic Alfv&eacute;n wave&ndash;slow-mode coupling</em>.</p></div></div>
+<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">May 2026</p><p class="text-xs" style="color:var(--clr-muted)">Training</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">Elsevier Researcher Academy</p><p class="text-sm" style="color:var(--clr-muted)">Certificates of Excellence &middot; Online</p><p class="mt-1 text-sm">Successfully completed modules in Research Ethics and Authorship.</p></div></div>
+<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Feb 2026</p><p class="text-xs" style="color:var(--clr-muted)">Training</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">Training Programme on AI &amp; ML in Space Exploration</p><p class="text-sm" style="color:var(--clr-muted)">India Space Academy (ISA), Viksit Bharat Abhiyan &middot; 23&ndash;28 February 2026 &middot; Online</p><p class="mt-1 text-sm">Six-day online training programme on artificial intelligence and machine learning applications in space exploration, conducted under the Skill India initiative. Certificate No. ISA-1003033.</p></div></div>
+<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Feb 2026</p><p class="text-xs" style="color:var(--clr-muted)">Oral</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">Trends in Science and Technology (TIST-2026)</p><p class="text-sm" style="color:var(--clr-muted)">Salesian College, Siliguri &middot; 27&ndash;28 February 2026</p><p class="mt-1 text-sm">Oral presentation: Damped Kinetic Alfv&eacute;n Waves in Earth's Magnetosheath: Numerical Simulations and MMS Observations.</p></div></div>
 <div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Jan 2026</p><p class="text-xs" style="color:var(--clr-muted)">Poster</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">5th Conference on Plasma Simulation (CPS-2026)</p><p class="text-sm" style="color:var(--clr-muted)">IPS Academy and IIT Indore, India</p><p class="mt-1 text-sm">Poster on KAW turbulence simulations in the plasma sheet boundary layer with MMS comparison.</p></div></div>
+<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Dec 2025</p><p class="text-xs" style="color:var(--clr-muted)">Workshop</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">Aditya-L1 Support Cell Workshop</p><p class="text-sm" style="color:var(--clr-muted)">IIT Jammu, India &middot; Organised by ISRO</p><p class="mt-1 text-sm">Three-day workshop on solar wind data analysis using Aditya-L1 data products (ASPEX, PAPA, MAG) through ISSDC/PRADAN.</p></div></div>
 <div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Dec 2025</p><p class="text-xs" style="color:var(--clr-muted)">Oral</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-accent)"><p class="font-semibold">XV PANE Conference 2025</p><p class="text-sm" style="color:var(--clr-muted)">Nagaland University, Lumami, India</p><p class="mt-1 text-sm">Oral presentation: <em>Turbulent Signatures of Kinetic Alfv&eacute;n Waves in Earth's Plasma Sheet Boundary Layer.</em></p></div></div>
 </div>
 </div>
@@ -464,14 +482,6 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right font-medium" style="color:var(--clr-muted)">2026&ndash;27</div><div><p class="font-semibold">American Physical Society (APS)</p><p class="text-sm" style="color:var(--clr-muted)">Division of Plasma Physics</p></div></div>
 <div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right font-medium" style="color:var(--clr-muted)">2026</div><div><p class="font-semibold">European Geosciences Union (EGU)</p><p class="text-sm" style="color:var(--clr-muted)">Solar-Terrestrial Sciences (ST) Division</p></div></div>
 <div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right font-medium" style="color:var(--clr-muted)">2026</div><div><p class="font-semibold">European Physical Society (EPS)</p><p class="text-sm" style="color:var(--clr-muted)">Individual Member</p></div></div>
-</div>
-</div>
-<div class="card p-6 sm:p-8">
-<h3 class="text-2xl font-bold mb-5" style="color:var(--clr-primary)">Workshops &amp; Training</h3>
-<div class="space-y-5 text-base">
-<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">May 2026</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-primary)"><p class="font-semibold">Elsevier Researcher Academy</p><p class="text-sm" style="color:var(--clr-muted)">Certificates of Excellence &middot; Online</p><p class="mt-1 text-sm">Successfully completed modules in Research Ethics and Authorship.</p></div></div>
-<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Feb 2026</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-primary)"><p class="font-semibold">Training Programme on AI &amp; ML in Space Exploration</p><p class="text-sm" style="color:var(--clr-muted)">India Space Academy (ISA), Viksit Bharat Abhiyan &middot; 23&ndash;28 February 2026 &middot; Online</p><p class="mt-1 text-sm">Six-day online training programme on artificial intelligence and machine learning applications in space exploration, conducted under the Skill India initiative. Certificate No. ISA-1003033.</p></div></div>
-<div class="flex gap-4"><div class="flex-shrink-0 w-20 text-right"><p class="font-semibold">Dec 2025</p></div><div class="border-l-2 pl-4" style="border-color:var(--clr-primary)"><p class="font-semibold">Aditya-L1 Support Cell Workshop</p><p class="text-sm" style="color:var(--clr-muted)">IIT Jammu, India &middot; Organised by ISRO</p><p class="mt-1 text-sm">Three-day workshop on solar wind data analysis using Aditya-L1 data products (ASPEX, PAPA, MAG) through ISSDC/PRADAN.</p></div></div>
 </div>
 </div>
 <div class="card p-6 sm:p-8">
@@ -528,7 +538,7 @@ PhD Scholar at <a href="https://cus.ac.in/" target="_blank" rel="noopener norefe
 <a href="https://github.com/mkchettri8" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--clr-primary)">GitHub</a> &middot;
 <a href="https://x.com/manikchettri1" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--clr-primary)">X</a>
 </p>
-<p class="text-xs mt-2">Last updated: May 2026</p>
+<p class="text-xs mt-2">Last updated: July 2026</p>
 </div>
 </footer>
 
