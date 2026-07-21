@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PLASMAform: a unit-explicit, browser-based space-plasma calculator using CODATA 2022 constants and NRL 2023 benchmarks.">
+<meta name="theme-color" content="#0c1219">
+<meta name="color-scheme" content="dark">
 <title>PLASMAform — Space Plasma Formulary</title>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['$$','$$']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']},startup:{typeset:false}};</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" async></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" async></script>
+<script src="./plasma-physics.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════════
@@ -38,6 +42,9 @@
   --mono: 'IBM Plex Mono', monospace;
 }
 
+/* ── Animated background grid (ported from v2) ── */
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(30,42,54,0.22) 1px,transparent 1px),linear-gradient(90deg,rgba(30,42,54,0.22) 1px,transparent 1px);background-size:52px 52px;animation:gridPulse 8s ease-in-out infinite}
+@keyframes gridPulse{0%,100%{opacity:.6}50%{opacity:.35}}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
 body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);display:flex;flex-direction:column;font-size:15px;line-height:1.55}
@@ -46,7 +53,7 @@ sup{font-size:.65em;vertical-align:super}sub{font-size:.65em;vertical-align:sub}
 
 /* ── Header ── */
 .hdr{flex-shrink:0;height:52px;background:var(--s1);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 18px;gap:12px;z-index:200}
-.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:pointer}
+.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:pointer;background:none;border:0;color:inherit;font:inherit}
 .logo-orb{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--brd2);display:flex;align-items:center;justify-content:center;background:var(--s2)}
 .logo-orb svg{width:11px;height:11px;stroke:var(--acc);fill:none;stroke-width:1.8}
 .logo-text{font-size:1rem;font-weight:600;color:var(--t1)}
@@ -55,14 +62,14 @@ sup{font-size:.65em;vertical-align:super}sub{font-size:.65em;vertical-align:sub}
 .hsi:focus{border-color:var(--acc)}.hsi::placeholder,.lsi::placeholder{color:var(--t3)}
 .hsi-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:.8rem;pointer-events:none}
 .hdr-r{margin-left:auto;display:flex;align-items:center;gap:7px;flex-shrink:0}
-.hpill{font-family:var(--mono);font-size:.66rem;color:var(--t3);border:1px solid var(--brd);padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .12s}
+.hpill{font-family:var(--mono);font-size:.66rem;color:var(--t3);border:1px solid var(--brd);padding:3px 8px;border-radius:4px;cursor:pointer;transition:all .12s;background:transparent;appearance:none}
 .hpill:hover{border-color:var(--brd2);color:var(--t1)}
 .kbdh{font-family:var(--mono);font-size:.62rem;color:var(--t3);border:1px solid var(--brd);padding:2px 5px;border-radius:3px}
 .ocnt{font-family:var(--mono);font-size:.66rem;color:var(--acc);background:rgba(106,171,181,.08);border:1px solid rgba(106,171,181,.18);padding:3px 8px;border-radius:4px}
 .utog{display:flex;border:1px solid var(--brd);border-radius:4px;overflow:hidden}
-.utog span{font-family:var(--mono);font-size:.66rem;padding:3px 8px;cursor:pointer;color:var(--t3);transition:all .1s}
-.utog span.act{background:var(--acc);color:#fff}
-.utog span:hover:not(.act){color:var(--t1)}
+.utog button{font-family:var(--mono);font-size:.66rem;padding:3px 8px;cursor:pointer;color:var(--t3);transition:all .1s;background:transparent;border:0}
+.utog button.act{background:var(--acc);color:#071014}
+.utog button:hover:not(.act){color:var(--t1)}
 
 /* ── Calculator Main View ── */
 .land{flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 18px 50px;overflow-y:auto}
@@ -99,7 +106,7 @@ sup{font-size:.65em;vertical-align:super}sub{font-size:.65em;vertical-align:sub}
 .rstg{font-family:var(--mono);font-size:.62rem;padding:2px 7px;border-radius:3px;background:rgba(106,171,181,.07);border:1px solid rgba(106,171,181,.12);color:var(--acc)}
 .rssb{font-size:.74rem;color:var(--t3)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:8px}
-.pcard{border-radius:var(--r);padding:12px 11px 10px;cursor:pointer;border:1px solid var(--brd);background:var(--s1);transition:all .12s}
+.pcard{border-radius:var(--r);padding:12px 11px 10px;cursor:pointer;border:1px solid var(--brd);background:var(--s1);transition:all .12s;text-align:left;font:inherit;color:inherit;width:100%}
 .pcard:hover{border-color:var(--brd2);background:var(--s2);transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.2)}
 .pmis{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
 .penv{font-size:.84rem;font-weight:500;margin-bottom:7px;line-height:1.3;color:var(--t1)}
@@ -113,7 +120,7 @@ sup{font-size:.65em;vertical-align:super}sub{font-size:.65em;vertical-align:sub}
 .ppsbl .pmis{color:#5a9ad4}.pmsh .pmis{color:var(--grn)}.psw .pmis{color:var(--warm)}.ppsp .pmis{color:#c47050}.pl1 .pmis{color:var(--purple)}
 
 .cpls{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;max-width:740px;margin-bottom:16px}
-.cpl{display:flex;align-items:center;gap:4px;padding:4px 11px;border-radius:4px;cursor:pointer;border:1px solid var(--brd);background:var(--s1);font-size:.8rem;color:var(--t2);transition:all .1s}
+.cpl{display:flex;align-items:center;gap:4px;padding:4px 11px;border-radius:4px;cursor:pointer;border:1px solid var(--brd);background:var(--s1);font:inherit;font-size:.8rem;color:var(--t2);transition:all .1s}
 .cpl:hover{border-color:var(--brd2);color:var(--t1)}.cpl.kpl{color:var(--purple);border-color:rgba(155,142,196,.25)}.cpl.kpl:hover{border-color:var(--purple)}
 .cpl.ipl{color:var(--warm);border-color:rgba(212,165,74,.2)}.cpl.ipl:hover{border-color:var(--warm)}
 .cpl-ct{font-family:var(--mono);font-size:.6rem;color:var(--t3)}
@@ -152,6 +159,7 @@ sup{font-size:.65em;vertical-align:super}sub{font-size:.65em;vertical-align:sub}
 .fcb:hover{border-color:var(--brd2);color:var(--t1)}.fcb.ltx:hover{border-color:var(--warm);color:var(--warm)}.fcb.xb:hover{border-color:var(--err);color:var(--err)}
 .fcf{padding:7px 12px;border-bottom:1px solid var(--brd);background:rgba(212,165,74,.02)}
 .fcm{font-family:var(--mono);font-size:.8rem;color:var(--warm);line-height:1.85}
+.fcmeta{font-size:.64rem;color:var(--t3);line-height:1.45;margin-top:3px}.fcmeta strong{color:var(--t2);font-weight:500}
 .fccls{display:flex;flex:1;min-width:0;overflow-x:auto}
 .fccl{flex:1;min-width:200px;border-right:1px solid var(--brd);display:flex;flex-direction:column}.fccl:last-child{border-right:none}
 .fcdl{flex:0 0 80px;min-width:80px;border-left:1px solid var(--brd);background:rgba(98,201,168,.02)}
@@ -360,15 +368,35 @@ table.wet tr:last-child td{border-bottom:none}
 .const-table tr:last-child td{border-bottom:none}
 .const-table td:first-child{color:var(--warm)}.const-table td:nth-child(2){color:var(--t1)}.const-table td:nth-child(3){color:var(--acc)}.const-table td:nth-child(4){color:var(--t2);font-size:.61rem}
 
+/* ── Kinetic Scale Ruler ── */
+.kscale-wrap{width:100%;max-width:740px;margin-bottom:22px;background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:14px 16px 12px}
+.kscale-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.kscale-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--brd2),transparent)}
+.kscale-bar{position:relative;height:28px;background:var(--s2);border-radius:4px;border:1px solid var(--brd);overflow:visible;margin-bottom:10px}
+.kscale-track{position:absolute;top:50%;left:2%;right:2%;height:2px;background:linear-gradient(90deg,var(--acc),var(--grn));transform:translateY(-50%);border-radius:2px;opacity:.35}
+.kscale-pin{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:default}
+.kscale-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid;flex-shrink:0}
+.kscale-lbl{position:absolute;top:14px;font-family:var(--mono);font-size:.58rem;white-space:nowrap;transform:translateX(-50%)}
+.kscale-val{position:absolute;bottom:14px;font-family:var(--mono);font-size:.55rem;white-space:nowrap;transform:translateX(-50%);color:var(--t3)}
+.kscale-legend{display:flex;flex-wrap:wrap;gap:6px 14px}
+.kleg{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.6rem;color:var(--t3)}
+.kleg-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid;flex-shrink:0}
+.kleg-val{color:var(--t2);margin-left:1px}
+/* Physical Significance pills */
+.fsig-pills{display:flex;flex-wrap:wrap;gap:.26rem;margin-top:.42rem}
+.fsig-pill{font-family:var(--mono);font-size:.53rem;letter-spacing:.06em;text-transform:uppercase;padding:.09rem .42rem;border-radius:20px;border:1px solid var(--brd2);color:var(--t3)}
 @media(max-width:860px){.two-col,.f2col,.basis-grid{grid-template-columns:1fr}.basis-wide{grid-column:auto}.fr-layout{grid-template-columns:1fr}.fr-aside{position:static;height:auto;border-right:none;border-bottom:1px solid var(--brd)}.score-strip{grid-template-columns:1fr 1fr}.event-banner{grid-template-columns:1fr}}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.bg-grid{animation:none}}
 </style>
 </head>
 <body>
+<div class="bg-grid"></div>
 <header class="hdr">
-  <div class="logo" onclick="navToCalc()">
+  <button class="logo" type="button" onclick="navToCalc()" aria-label="Open PLASMAform calculator home">
     <div class="logo-orb"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="3.5"/><ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(60,12,12)"/><ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(120,12,12)"/></svg></div>
     <div class="logo-text">PLASMAform</div>
-  </div>
+  </button>
   <div style="display:flex;gap:2px;flex-shrink:0">
     <button id="mtab-calc" class="hpill" onclick="showMainTab('calc',this)" style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;background:rgba(106,171,181,.08);border-color:rgba(106,171,181,.3);color:var(--acc)">Calculator</button>
     <button id="mtab-val"  class="hpill" onclick="showMainTab('val',this)"  style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.07em;text-transform:uppercase">Validation</button>
@@ -377,29 +405,37 @@ table.wet tr:last-child td{border-bottom:none}
   </div>
   <div class="hdr-sw" id="hdrSW" style="display:none">
     <span class="hsi-ic">&#8981;</span>
-    <input class="hsi" id="hdrI" type="text" placeholder="Search formulas..." autocomplete="off"
+    <input class="hsi" id="hdrI" type="search" aria-label="Search formulas" placeholder="Search formulas..." autocomplete="off"
       oninput="onSI(this,'hdrD')" onkeydown="onSK(event,'hdrD','hdrI')"
       onfocus="onSI(this,'hdrD')" onblur="setTimeout(()=>cDrop('hdrD'),180)">
     <div class="sdrop" id="hdrD"></div>
   </div>
   <div class="hdr-r">
-    <div class="utog" id="utog"><span class="act" onclick="setUnit('cgs')">CGS</span><span onclick="setUnit('si')">SI</span></div>
+    <div class="utog" id="utog" aria-label="Magnetic-field input unit"><button type="button" class="act" data-unit="cgs" onclick="setUnit('cgs')" title="Enter magnetic field in gauss">B: G</button><button type="button" data-unit="si" onclick="setUnit('si')" title="Enter magnetic field in nanotesla">B: nT</button></div>
     <span class="kbdh" id="kbdSlash">/</span>
     <div class="ocnt" id="oCnt" style="display:none">0</div>
-    <div class="hpill" id="hpillClear" onclick="clearWS()" style="display:none">Clear</div>
+    <button type="button" class="hpill" id="hpillClear" onclick="clearWS()" style="display:none;background:transparent">Clear</button>
   </div>
 </header>
 
 <div id="panel-calc" style="display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden">
   <div class="land" id="land">
     <div class="ltit">Space Plasma <span>Formulary</span></div>
-    <p class="lsub">50 formulas, 10 categories. KAW diagnostics, instability thresholds, reconnection, turbulence, and spacecraft presets for MMS, PSP, Wind, and Aditya-L1.</p>
+    <p class="lsub">23 formulas across 6 categories: frequencies, lengths, velocities, dimensionless parameters, KAW diagnostics, and instability thresholds. Spacecraft presets for MMS, PSP, Wind, and Aditya-L1.</p>
     <div class="lswrap">
       <span class="lsi-ic">&#8981;</span>
-      <input class="lsi" id="landI" type="text" placeholder="Search for any space plasma formulas: plasma beta, KAW...." autocomplete="off" oninput="onSI(this,'landD')" onkeydown="onSK(event,'landD','landI')" onfocus="onSI(this,'landD')" onblur="setTimeout(()=>cDrop('landD'),180)">
+      <input class="lsi" id="landI" type="search" aria-label="Search space-plasma formulas" placeholder="Search formulas: plasma beta, KAW…" autocomplete="off" oninput="onSI(this,'landD')" onkeydown="onSK(event,'landD','landI')" onfocus="onSI(this,'landD')" onblur="setTimeout(()=>cDrop('landD'),180)">
       <span class="lkbd">/</span><div class="ldrop" id="landD"></div>
     </div>
     <div class="ltbar"><div class="ltbtn" onclick="openValidation()">Validation Table</div></div>
+    <!-- Live Kinetic Scale Ruler -->
+    <div class="kscale-wrap" id="kscale-wrap">
+      <div class="kscale-title">Live Kinetic Scale Ruler</div>
+      <div class="kscale-bar" id="kscale-bar">
+        <div class="kscale-track"></div>
+      </div>
+      <div class="kscale-legend" id="kscale-legend"></div>
+    </div>
     <div class="rss">
       <div class="rsh"><span class="rstg">Presets</span><div class="rst">Spacecraft Environments</div><div class="rsdv"></div><div class="rssb">Click to load</div></div>
       <div class="pgrid" id="pgrid"></div>
@@ -409,18 +445,19 @@ table.wet tr:last-child td{border-bottom:none}
     <div class="hrow" id="hchps"></div>
     <div class="cft">
       <div class="cft-h">References</div>
-      <p class="cl">[1] Huba, J.D. (2016). <em>NRL Plasma Formulary</em>. Naval Research Laboratory.</p>
-      <p class="cl">[2] Stasiewicz, K. et al. (2000). Small scale Alfvenic structure in the aurora. <em>Rev. Geophys.</em> <strong>38</strong>, 291.</p>
+      <p class="cl">[1] Naval Research Laboratory (2023). <a href="https://www.nrl.navy.mil/Portals/38/PDF%20Files/NRL_Plasma_Formulary_2023.pdf" target="_blank" rel="noopener"><em>NRL Plasma Formulary</em></a>.</p>
+      <p class="cl">[2] Stasiewicz, K. et al. (2000). Small scale Alfvenic structure in the aurora. <em>Space Sci. Rev.</em> <strong>92</strong>, 423.</p>
       <p class="cl">[3] Gary, S.P. (1993). <em>Theory of Space Plasma Microinstabilities</em>. Cambridge University Press.</p>
       <p class="cl">[4] Goldreich, P. &amp; Sridhar, S. (1995). Toward a theory of interstellar turbulence. <em>ApJ</em> <strong>438</strong>, 763.</p>
       <p class="cl">[5] Hollweg, J.V. (1999). Kinetic Alfven wave revisited. <em>JGR</em> <strong>104</strong>, 14811.</p>
       <p class="cl">[6] Hasegawa, A. (1976). Particle acceleration by MHD surface wave. <em>JGR</em> <strong>81</strong>, 5083.</p>
-      <p class="cl">[7] Chettri, M.K. et al. (2025). arXiv:2603.14436.</p>
+      <p class="cl">[7] Chettri, M.K. et al. (2026). arXiv:2603.14436.</p>
+      <p class="cl">[8] Tiesinga, E. et al. (2025). <a href="https://physics.nist.gov/cuu/pdf/JPCRD2022CODATA.pdf" target="_blank" rel="noopener">CODATA recommended values of the fundamental physical constants: 2022</a>. <em>J. Phys. Chem. Ref. Data</em> <strong>54</strong>, 033105.</p>
       <div class="cft-h" style="margin-top:14px">Acknowledgements</div>
-      <p class="cl">PLASMAform was developed by <a href="https://mkchettri.in" target="_blank">Mani K. Chettri</a>, Department of Physics, Sikkim University, under the supervision of Dr. Hemam Dinesh Singh (NSUT) and Dr. Rupak Mukherjee (Sikkim University, IUCAA Visiting Associate).</p>
+      <p class="cl">PLASMAform was developed by <a href="https://mkchettri.in" target="_blank" rel="noopener">Mani K. Chettri</a>, Department of Physics, Sikkim University, under the supervision of Dr. Hemam Dinesh Singh (NSUT) and Dr. Rupak Mukherjee (Sikkim University, IUCAA Visiting Associate).</p>
       <div class="ccopy">
-        &copy; 2025 Mani K Chettri. If this tool contributes to your research, please cite:<br>
-        <em>Chettri, M.K. (2025). PLASMAform: An interactive space plasma formulary. <a href="https://mkchettri.in/plasmaform" target="_blank">mkchettri.in/plasmaform</a></em><br>
+        &copy; 2026 Mani K Chettri. If this tool contributes to your research, please cite:<br>
+        <em>Chettri, M.K. (2026). PLASMAform: An interactive space plasma formulary. <a href="https://mkchettri.in/plasmaform" target="_blank" rel="noopener">mkchettri.in/plasmaform</a></em><br>
       </div>
     </div>
   </div>
@@ -428,21 +465,22 @@ table.wet tr:last-child td{border-bottom:none}
     <div class="wstb"><span class="wstbl">Workspace</span><div class="wsbtn" onclick="showLand()">+ Add</div><div class="wsbtn" onclick="openValidation()">Validate</div><div class="wsbtn d" onclick="clearWS()">Clear</div></div>
     <div class="wsc" id="wsc"></div>
   </div>
-  <div class="modal-bg" id="valModal">
-    <div class="modal"><div class="modal-h"><span class="modal-t">Validation: Solar Wind at 1 AU</span><span class="modal-x" onclick="closeModal()">Close</span></div>
+  <div class="modal-bg" id="valModal" role="dialog" aria-modal="true" aria-labelledby="val-modal-title">
+    <div class="modal"><div class="modal-h"><span class="modal-t" id="val-modal-title">Validation: Solar Wind at 1 AU</span><button type="button" class="modal-x" onclick="closeModal()" style="background:transparent">Close</button></div>
       <div class="modal-b"><table class="vtbl" id="vtbl"><thead><tr><th>Parameter</th><th>Formula</th><th>PLASMAform</th><th>NRL Ref</th><th>Match</th></tr></thead><tbody></tbody></table>
-        <div class="vnote"><strong>Conditions:</strong> n=5 cm&#8315;&sup3;, B=5 nT, T<sub>e</sub>=12 eV, T<sub>i</sub>=10 eV, V<sub>sw</sub>=400 km/s, H<sup>+</sup> plasma. <strong>All values computed live.</strong></div></div></div>
+        <div class="vnote"><strong>Conditions:</strong> n<sub>i</sub>=n<sub>e</sub>=5 cm&#8315;&sup3;, B=5 nT, T<sub>e</sub>=12 eV, T<sub>i</sub>=10 eV, V<sub>sw</sub>=400 km/s, H<sup>+</sup> plasma. The SI engine is compared with independently coded NRL 2023 rounded coefficients; a 0.5% tolerance accommodates their three-significant-figure prefactors.</div></div></div>
   </div>
 </div>
 
 <div class="g-bar" id="supp-g-bar" style="display:none; border-radius: 0; margin-bottom: 0;">
-  <div><label>n (cm⁻³)</label><input type="number" id="gn" value="5" oninput="gUpdate()"/></div>
-  <div><label>B (nT)</label><input type="number" id="gB" value="5" oninput="gUpdate()"/></div>
-  <div><label>Te (eV)</label><input type="number" id="gTe" value="12" oninput="gUpdate()"/></div>
-  <div><label>Ti (eV)</label><input type="number" id="gTi" value="10" oninput="gUpdate()"/></div>
-  <div><label>Vsw (km/s)</label><input type="number" id="gVsw" value="400" oninput="gUpdate()"/></div>
-  <div><label>Z</label><input type="number" id="gZ" value="1" oninput="gUpdate()"/></div>
-  <div><label>μ</label><input type="number" id="gmu" value="1" oninput="gUpdate()"/></div>
+  <div><label>nᵢ (cm⁻³)</label><input type="number" id="gn" value="5" min="0" step="any" oninput="gUpdate()"/></div>
+  <div><label>B (nT)</label><input type="number" id="gB" value="5" min="0" step="any" oninput="gUpdate()"/></div>
+  <div><label>Te (eV)</label><input type="number" id="gTe" value="12" min="0" step="any" oninput="gUpdate()"/></div>
+  <div><label>Ti (eV)</label><input type="number" id="gTi" value="10" min="0" step="any" oninput="gUpdate()"/></div>
+  <div><label>Vsw (km/s)</label><input type="number" id="gVsw" value="400" min="0" step="any" oninput="gUpdate()"/></div>
+  <div><label>Z</label><input type="number" id="gZ" value="1" min="1" step="1" oninput="gUpdate()"/></div>
+  <div><label>μ = mᵢ/mₚ</label><input type="number" id="gmu" value="1" min="0" step="any" oninput="gUpdate()"/></div>
+  <div id="g-error" role="alert" style="display:none;color:var(--err);font-family:var(--mono);font-size:.65rem;max-width:220px"></div>
   <div style="margin-left: auto;">
     <label>Presets</label>
     <div class="env-presets">
@@ -458,14 +496,14 @@ table.wet tr:last-child td{border-bottom:none}
   <div class="pg-hero">
     <div class="tag">Benchmarking &amp; Validation</div>
     <h2>Formula Validation Report</h2>
-    <p>All PLASMAform formulas verified against three independent authoritative sources. Unit consistency and edge-case behaviour documented.</p>
+    <p>Foundational quantities are cross-checked against the rounded coefficients published in the NRL Plasma Formulary 2023. The calculation engine independently evaluates their SI definitions using CODATA 2022 constants.</p>
   </div>
 
   <div class="val-layout">
     <div class="score-strip">
-      <div class="score-c" style="--sc:var(--grn)"><div class="score-n" id="sc-pass">—</div><div class="score-l">Passing (&lt;0.3%)</div></div>
-      <div class="score-c" style="--sc:var(--acc)"><div class="score-n" id="sc-tot">—</div><div class="score-l">Total Verified</div></div>
-      <div class="score-c" style="--sc:var(--purple)"><div class="score-n">3</div><div class="score-l">Independent Sources</div></div>
+      <div class="score-c" style="--sc:var(--grn)"><div class="score-n" id="sc-pass">—</div><div class="score-l">Passing (&lt;0.5%)</div></div>
+      <div class="score-c" style="--sc:var(--acc)"><div class="score-n" id="sc-tot">—</div><div class="score-l">Benchmarked</div></div>
+      <div class="score-c" style="--sc:var(--purple)"><div class="score-n">2</div><div class="score-l">Reference Standards</div></div>
       <div class="score-c" style="--sc:var(--warm)"><div class="score-n" id="sc-pct">—</div><div class="score-l">Pass Rate</div></div>
     </div>
 
@@ -479,16 +517,16 @@ table.wet tr:last-child td{border-bottom:none}
     <div class="spane on" id="sv-main">
       <div class="vtable-wrap" style="margin-bottom:1.2rem">
         <table class="vt">
-          <thead><tr><th>Parameter</th><th>Formula</th><th>PLASMAform</th><th>NRL [1]</th><th>B&amp;T [2]</th><th>G&amp;R [3]</th><th>Δ max</th><th>Status</th></tr></thead>
+          <thead><tr><th>Parameter</th><th>NRL coefficient</th><th>SI engine</th><th>NRL [1]</th><th>Difference</th><th>Status</th></tr></thead>
           <tbody id="val-tbody"></tbody>
         </table>
       </div>
     </div>
 
     <div class="spane" id="sv-unit">
-      <div class="info-box">Same physical inputs in CGS and SI must agree to floating-point precision (&lt;0.01%). This verifies that unit-system switching introduces no conversion errors.</div>
+      <div class="info-box">The same physical state is evaluated from SI definitions and independent Gaussian-CGS expressions. Agreement is checked numerically; the calculator header toggle changes only the magnetic-field input between gauss and nanotesla.</div>
       <div id="unit-cards" class="two-col"></div>
-      <p style="font-family:var(--mono);font-size:.7rem;color:var(--grn);margin-top:1rem">✓ All CGS ↔ SI conversions verified — no unit inconsistencies detected</p>
+      <p style="font-family:var(--mono);font-size:.7rem;color:var(--t2);margin-top:1rem">Results are generated live. A green check means the relative difference is below 10⁻⁶ for the current valid inputs.</p>
     </div>
 
     <div class="spane" id="sv-edge">
@@ -502,14 +540,14 @@ table.wet tr:last-child td{border-bottom:none}
     <div class="spane" id="sv-lim">
       <div class="limit-wrap">
         <h4>Documented Scope Restrictions</h4>
-        <div class="lim-row"><span class="lim-tag">Fluid</span><span class="lim-txt">All formulas assume quasi-neutral, collisionless or weakly collisional plasma. Results are not valid for dense laboratory plasmas where ν<sub>ei</sub> &gt; Ω<sub>ci</sub>.</span></div>
+        <div class="lim-row"><span class="lim-tag">Model scope</span><span class="lim-txt">Each card states its own basis and scope. Do not apply the fluid, cold-plasma, or reduced-KAW expressions outside their stated assumptions.</span></div>
         <div class="lim-row"><span class="lim-tag">Non-relativistic</span><span class="lim-txt">Valid for T<sub>e</sub> ≪ 511 keV (electrons) and v<sub>A</sub> ≪ c. Relativistic corrections to gyrofrequency and Debye length become significant above these limits.</span></div>
-        <div class="lim-row"><span class="lim-tag">Single species</span><span class="lim-txt">Assumes single-ion-species plasma (H⁺ or user-selected μ). Multi-species corrections (He²⁺, O⁺) for frequencies and speeds are not included.</span></div>
-        <div class="lim-row"><span class="lim-tag">KAW regime</span><span class="lim-txt">Kinetic Alfvén wave diagnostics valid for k<sub>⊥</sub>ρ<sub>i</sub> ~ 1, β<sub>i</sub> ∈ [0.01, 10]. Results outside this range should be interpreted with caution.</span></div>
-        <div class="lim-row"><span class="lim-tag">Instability thresholds</span><span class="lim-txt">Gary (1993) parameterised threshold fits are valid for β<sub>i</sub> ∈ [0.01, 10]. Extrapolation beyond this range may be inaccurate.</span></div>
+        <div class="lim-row"><span class="lim-tag">Single species</span><span class="lim-txt">The global engine takes ion density n<sub>i</sub>, derives n<sub>e</sub>=Zn<sub>i</sub>, and assumes one ion species with mass μm<sub>p</sub>. It does not sum a measured multi-species mass density.</span></div>
+        <div class="lim-row"><span class="lim-tag">KAW diagnostics</span><span class="lim-txt">The implemented dispersion relation is a reduced two-fluid approximation. A β regime condition or a single scale match cannot identify a measured wave; polarization, propagation, compressibility, and uncertainties are also needed.</span></div>
+        <div class="lim-row"><span class="lim-tag">Instabilities</span><span class="lim-txt">Firehose and mirror cards are simplified fluid/single-species criteria. The EMIC card is an empirical proton fit. None computes a kinetic growth rate or a universal stability boundary.</span></div>
         <div class="lim-row"><span class="lim-tag">Temperature isotropy</span><span class="lim-txt">Formulas using T assume isotropic temperature (T<sub>⊥</sub> = T<sub>‖</sub>). For anisotropic plasmas, refer to the β–anisotropy diagram.</span></div>
-        <div class="lim-row"><span class="lim-tag">Landau damping</span><span class="lim-txt">γ/ω formula is the linear, collisionless, weak-damping approximation. Valid only when v<sub>ph</sub>/v<sub>Te</sub> ≲ 1. Satisfied for KAW in solar wind where v<sub>ph</sub> ~ v<sub>A</sub> ≪ v<sub>Te</sub>.</span></div>
-        <div class="lim-row"><span class="lim-tag">Ponderomotive</span><span class="lim-txt">δn/n₀ formula applies in the weakly nonlinear KAW regime. CGS and SI forms differ: denominator is 16π n₀kT in CGS and 2ε₀⁻¹n₀kT in SI.</span></div>
+        <div class="lim-row"><span class="lim-tag">Landau resonance</span><span class="lim-txt">The resonance card reports v<sub>ph</sub>/v<sub>Te</sub> and the Maxwellian population factor. It deliberately does not report a damping rate; quantitative γ/ω requires a kinetic dispersion solution.</span></div>
+        <div class="lim-row"><span class="lim-tag">Presets</span><span class="lim-txt">Spacecraft environment presets are representative starting points, not event data or climatological models. Always replace them with documented measurements for research use.</span></div>
       </div>
     </div>
   </div>
@@ -517,17 +555,17 @@ table.wet tr:last-child td{border-bottom:none}
 
 <div id="panel-wex" class="main-panel">
   <div class="pg-hero">
-    <div class="tag">Worked Example — Real Event Reproduction</div>
+    <div class="tag">Worked Example — Event Context</div>
     <h2>MMS Magnetopause Crossing<br/><em style="font-family:var(--serif);font-weight:400;color:var(--acc)">16 October 2015</em></h2>
-    <p>Step-by-step reproduction of published plasma parameters from an MMS dayside magnetopause crossing, demonstrating PLASMAform accuracy against peer-reviewed measurements.</p>
+    <p>An illustrative calculation in the context of a well-studied MMS dayside magnetopause crossing. It demonstrates parameter sensitivity; it is not a reproduction of timestamped MMS data.</p>
   </div>
 
   <div class="we-layout">
     <div class="event-banner">
       <div>
         <div class="ev-name">MMS1 — Dayside Magnetopause Crossing · 16 Oct 2015 · ~13:07 UT</div>
-        <div class="ev-desc">During MMS Phase 1 science operations, all four spacecraft crossed the dayside magnetopause in a tightly-separated tetrahedron configuration. This event is among the most-studied in MMS literature for electron-scale magnetic reconnection. We reproduce the magnetosheath-side plasma parameters from published MMS burst-mode data.</div>
-        <div class="ev-ref">Burch et al. (2016) <em>Science</em> 352, aaf2939 &nbsp;·&nbsp; <a href="https://doi.org/10.1126/science.aaf2939" target="_blank">doi:10.1126/science.aaf2939</a></div>
+        <div class="ev-desc">During MMS Phase 1 science operations, all four spacecraft encountered the dayside magnetopause in a tightly separated tetrahedron. The editable values below are representative teaching inputs, not quoted event averages. A reproducible event study must state spacecraft, time interval, coordinate frame, data products, averaging, and uncertainty.</div>
+        <div class="ev-ref">Burch et al. (2016) <em>Science</em> 352, aaf2939 &nbsp;·&nbsp; <a href="https://doi.org/10.1126/science.aaf2939" target="_blank" rel="noopener">doi:10.1126/science.aaf2939</a></div>
       </div>
       <div class="ev-meta">
         <span class="meta-chip">MMS Burst Mode</span>
@@ -541,8 +579,8 @@ table.wet tr:last-child td{border-bottom:none}
       <div class="step">
         <div class="step-n">1</div>
         <div>
-          <div class="step-title">Load Published Plasma Parameters</div>
-          <div class="step-body">Input values from MMS1 FPI burst-mode measurements. Magnetic field from FGM; densities and temperatures from FPI-DIS/DES. Adjust inputs to explore the published parameter ranges.</div>
+          <div class="step-title">Choose Representative Plasma States</div>
+          <div class="step-body">Adjust the illustrative magnetosheath and magnetosphere inputs to explore how characteristic scales change. Do not cite these defaults as measurements.</div>
         </div>
       </div>
     </div>
@@ -552,10 +590,10 @@ table.wet tr:last-child td{border-bottom:none}
         <div class="card-head"><div class="card-title">Magnetosheath Inputs</div></div>
         <div class="card-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">n (cm⁻³)</label><input type="number" id="we-n1" value="15" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Published: ~10–20 cm⁻³</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">B (nT)</label><input type="number" id="we-B1" value="40" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Published: ~30–50 nT</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Ti (eV)</label><input type="number" id="we-Ti1" value="300" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Published: ~200–400 eV</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Te (eV)</label><input type="number" id="we-Te1" value="30" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Published: ~20–50 eV</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">nᵢ (cm⁻³)</label><input type="number" id="we-n1" value="15" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">B (nT)</label><input type="number" id="we-B1" value="40" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Ti (eV)</label><input type="number" id="we-Ti1" value="300" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Te (eV)</label><input type="number" id="we-Te1" value="30" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--grn);margin-top:.2rem">Illustrative input only</div></div>
           </div>
         </div>
       </div>
@@ -563,10 +601,10 @@ table.wet tr:last-child td{border-bottom:none}
         <div class="card-head"><div class="card-title">Magnetosphere Reference</div></div>
         <div class="card-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">n (cm⁻³)</label><input type="number" id="we-n2" value="1" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Published: ~0.5–2 cm⁻³</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">B (nT)</label><input type="number" id="we-B2" value="55" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Published: ~40–60 nT</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Ti (eV)</label><input type="number" id="we-Ti2" value="1000" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Published: ~800–2000 eV</div></div>
-            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Te (eV)</label><input type="number" id="we-Te2" value="100" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Published: ~50–200 eV</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">nᵢ (cm⁻³)</label><input type="number" id="we-n2" value="1" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">B (nT)</label><input type="number" id="we-B2" value="55" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Ti (eV)</label><input type="number" id="we-Ti2" value="1000" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Illustrative input only</div></div>
+            <div><label style="font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:.18rem">Te (eV)</label><input type="number" id="we-Te2" value="100" min="0" step="any" style="background:var(--s2);border:1px solid var(--brd2);color:var(--t1);font-family:var(--mono);font-size:.76rem;padding:.3rem .5rem;border-radius:4px;width:100%;outline:none" oninput="weCompute()"/><div style="font-family:var(--mono);font-size:.6rem;color:var(--purple);margin-top:.2rem">Illustrative input only</div></div>
           </div>
         </div>
       </div>
@@ -577,19 +615,19 @@ table.wet tr:last-child td{border-bottom:none}
         <div class="step-n">2</div>
         <div>
           <div class="step-title">Computed Characteristic Parameters</div>
-          <div class="step-body">PLASMAform computes the following from input values using standard NRL Formulary formulas. Published reference values shown for comparison. ✓ = within accepted uncertainty range.</div>
+          <div class="step-body">PLASMAform derives characteristic parameters from each chosen state using the documented CODATA/NRL conventions.</div>
         </div>
       </div>
     </div>
 
     <div class="two-col" style="margin-bottom:1.2rem">
       <div>
-        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.5rem">Magnetosheath — PLASMAform vs Published</div>
-        <div class="we-table-wrap"><table class="wet"><thead><tr><th>Parameter</th><th>PLASMAform</th><th>Published</th><th>✓</th></tr></thead><tbody id="we-t1"></tbody></table></div>
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.5rem">Illustrative Magnetosheath State</div>
+        <div class="we-table-wrap"><table class="wet"><thead><tr><th>Parameter</th><th>Calculated value</th><th>Unit</th><th>Basis</th></tr></thead><tbody id="we-t1"></tbody></table></div>
       </div>
       <div>
-        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem">Magnetosphere — PLASMAform vs Published</div>
-        <div class="we-table-wrap"><table class="wet"><thead><tr><th>Parameter</th><th>PLASMAform</th><th>Published</th><th>✓</th></tr></thead><tbody id="we-t2"></tbody></table></div>
+        <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem">Illustrative Magnetosphere State</div>
+        <div class="we-table-wrap"><table class="wet"><thead><tr><th>Parameter</th><th>Calculated value</th><th>Unit</th><th>Basis</th></tr></thead><tbody id="we-t2"></tbody></table></div>
       </div>
     </div>
 
@@ -599,9 +637,9 @@ table.wet tr:last-child td{border-bottom:none}
         <div>
           <div class="step-title">Reconnection Scale Diagnostic</div>
           <div class="step-body">
-            In Burch et al. (2016), the observed current sheet thickness was ~5–10 km.
+            These are theoretical characteristic lengths for the selected state; they are not measurements of current-sheet thickness.
             <span class="eq">Ion inertial length d<sub>i</sub> (magnetosheath) = <span id="we-di" class="val-box">—</span> km</span>
-            The electron diffusion region thickness (~1 km) is comparable to the electron inertial length
+            Electron inertial length
             <span class="eq">Electron inertial length d<sub>e</sub> (magnetosheath) = <span id="we-de" class="val-box">—</span> km</span>
           </div>
         </div>
@@ -609,10 +647,10 @@ table.wet tr:last-child td{border-bottom:none}
       <div class="step">
         <div class="step-n">4</div>
         <div>
-          <div class="step-title">KAW Regime Verification</div>
+          <div class="step-title">Kinetic-Scale Context</div>
           <div class="step-body">
-            For kinetic Alfvén waves to operate: β<sub>i</sub> ~ 1 and k<sub>⊥</sub>ρ<sub>i</sub> ~ 1.
-            <span class="eq">β<sub>i</sub> (magnetosheath) = <span id="we-beta" class="val-box">—</span> &nbsp; [KAW active when β<sub>i</sub> ~ 0.5–5]</span>
+            β<sub>i</sub> and ρ<sub>i</sub> provide scale context, but neither quantity alone identifies a kinetic Alfvén wave.
+            <span class="eq">β<sub>i</sub> (magnetosheath) = <span id="we-beta" class="val-box">—</span></span>
             <span class="eq">ρ<sub>i</sub> (magnetosheath) = <span id="we-rhoi" class="val-box">—</span> km</span>
           </div>
         </div>
@@ -620,11 +658,12 @@ table.wet tr:last-child td{border-bottom:none}
       <div class="step">
         <div class="step-n">5</div>
         <div>
-          <div class="step-title">Alfvén Speed Asymmetry</div>
+          <div class="step-title">Alfvén-Speed Contrast</div>
           <div class="step-body">
-            Reconnection outflow speed scales as the geometric mean:
+            Side-specific classical Alfvén speeds are:
             <span class="eq">v<sub>A</sub> (magnetosheath) = <span id="we-vA1" class="val-box">—</span> km/s &nbsp;·&nbsp; v<sub>A</sub> (magnetosphere) = <span id="we-vA2" class="val-box">—</span> km/s</span>
-            <span class="eq">Geometric mean v<sub>A</sub> = <span id="we-vAgeo" class="val-box">—</span> km/s &nbsp; [Observed jet ~500–800 km/s ✓]</span>
+            <span class="eq">Geometric mean (descriptive only) = <span id="we-vAgeo" class="val-box">—</span> km/s</span>
+            An asymmetric reconnection outflow estimate requires an explicit Cassak–Shay-type model and is not the simple geometric mean shown here.
           </div>
         </div>
       </div>
@@ -636,8 +675,8 @@ table.wet tr:last-child td{border-bottom:none}
     </div>
 
     <div class="verdict-box">
-      <h4>✓ Validation Verdict</h4>
-      <p>PLASMAform successfully reproduces all characteristic plasma parameters for the <strong>MMS 16 October 2015 magnetopause crossing event</strong> to within 5–35% of published values. The computed ion inertial length (<span id="we-v-di" class="val-box">—</span> km), ion gyroradius (<span id="we-v-rho" class="val-box">—</span> km), and proton beta (<span id="we-v-beta" class="val-box">—</span>) are all consistent with the kinetic reconnection regime reported in <strong>Burch et al. (2016)</strong>.</p>
+      <h4>Interpretation Boundary</h4>
+      <p>For the selected illustrative magnetosheath inputs, d<sub>i</sub>=<span id="we-v-di" class="val-box">—</span> km, ρ<sub>i</sub>=<span id="we-v-rho" class="val-box">—</span> km, and β<sub>i</sub>=<span id="we-v-beta" class="val-box">—</span>. These are model-derived quantities, not validation against the MMS event. A publishable reproduction must ingest calibrated, timestamped FGM/FPI data and propagate measurement and interval-selection uncertainty.</p>
     </div>
   </div>
 </div>
@@ -646,13 +685,13 @@ table.wet tr:last-child td{border-bottom:none}
   <div class="fr-layout">
     <aside class="fr-aside">
       <div class="aside-lbl">Formula Sections</div>
-      <a class="aside-a on" href="#fr-freq" onclick="frScroll('fr-freq',this)">§1 Frequencies</a>
-      <a class="aside-a" href="#fr-len"  onclick="frScroll('fr-len',this)">§2 Length Scales</a>
-      <a class="aside-a" href="#fr-vel"  onclick="frScroll('fr-vel',this)">§3 Velocities</a>
-      <a class="aside-a" href="#fr-dim"  onclick="frScroll('fr-dim',this)">§4 Dimensionless</a>
-      <a class="aside-a" href="#fr-kaw"  onclick="frScroll('fr-kaw',this)">§5 KAW Physics</a>
-      <a class="aside-a" href="#fr-con"  onclick="frScroll('fr-con',this)">§6 Constants</a>
-      <a class="aside-a" href="#fr-sci"  onclick="frScroll('fr-sci',this)">§7 Scientific Basis</a>
+      <a class="aside-a on" href="#fr-freq" onclick="frScroll('fr-freq',this,event)">§1 Frequencies</a>
+      <a class="aside-a" href="#fr-len"  onclick="frScroll('fr-len',this,event)">§2 Length Scales</a>
+      <a class="aside-a" href="#fr-vel"  onclick="frScroll('fr-vel',this,event)">§3 Velocities</a>
+      <a class="aside-a" href="#fr-dim"  onclick="frScroll('fr-dim',this,event)">§4 Dimensionless</a>
+      <a class="aside-a" href="#fr-kaw"  onclick="frScroll('fr-kaw',this,event)">§5 KAW Physics</a>
+      <a class="aside-a" href="#fr-con"  onclick="frScroll('fr-con',this,event)">§6 Constants</a>
+      <a class="aside-a" href="#fr-sci"  onclick="frScroll('fr-sci',this,event)">§7 Scientific Basis</a>
       <div class="aside-lbl" style="margin-top:1.2rem">Live Values</div>
       <div id="fr-sidebar-vals" style="padding:0 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--t3);line-height:2.1"></div>
     </aside>
@@ -661,82 +700,86 @@ table.wet tr:last-child td{border-bottom:none}
       <div class="pg-hero" style="padding:0 0 1.8rem">
         <div class="tag">Formula Reference — PLASMAform v1.0</div>
         <h2 style="font-size:2rem">Space Plasma <em>Formulary</em></h2>
-        <p>Every formula implemented in PLASMAform with symbolic derivation, CGS and SI numerical coefficients verified against CODATA 2018, validity regimes, and live computed values.</p>
+        <p>Reference notes for the foundational formulas, with explicit conventions, validity regimes, and live values from the CODATA 2022 calculation engine.</p>
       </div>
 
       <section id="fr-freq" style="margin-bottom:2.5rem">
         <div class="sec-hd"><span class="sec-num">§ 01</span><span class="sec-ttl">Frequencies</span></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Cyclotron Frequency</div><div class="fsym">\(f_{ce},\;\omega_{ce}\)</div></div><div class="flive" id="lv-fce">— Hz</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{ce} = \dfrac{eB}{2\pi m_e} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.800\times10^6\,B\) Hz &nbsp;(B in G)</span><br/><span class="si-c"> SI: &nbsp;\(2.800\times10^{10}\,B\) Hz &nbsp;(B in T)</span><br/><span class="cgs-c">CGS: \(\omega_{ce}=1.759\times10^7\,B\) rad/s</span></div></div></div>
-        <div class="vld"><strong>Validity:</strong> Non-relativistic electrons (T<sub>e</sub> ≪ 511 keV).</div>
-        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>ce</sub> is the fastest fundamental timescale in non-relativistic plasma physics</strong>.</div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{ce} = \dfrac{eB}{2\pi m_e} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">\(2.79925\times10^6\,B[\mathrm{G}]\) Hz</span><br/><span class="si-c">\(2.79925\times10^{10}\,B[\mathrm{T}]\) Hz</span><br/><span class="cgs-c">\(\omega_{ce}=1.75882\times10^7\,B[\mathrm{G}]\) rad/s</span></div></div></div>
+        <div class="vld"><strong>Validity:</strong> Non-relativistic electrons (T<sub>e</sub> ≪ 511 keV). Valid for all standard space plasma environments.</div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>ce</sub> is the fastest fundamental timescale in non-relativistic plasma physics</strong> — electrons complete ~1836 gyrations for every single ion gyration in an H⁺ plasma. Electromagnetic whistler waves propagate in the band <em>f<sub>ci</sub> &lt; f &lt; f<sub>ce</sub></em> and are observed in the solar wind and ionosphere. In the solar wind at 1 AU with B ≈ 5 nT, f<sub>ce</sub> ≈ 140 Hz — well above typical MHD frequencies.<div class="fsig-pills"><span class="fsig-pill">Whistler waves</span><span class="fsig-pill">R-wave cutoff</span><span class="fsig-pill">Electron heating</span><span class="fsig-pill">Wave-particle resonance</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Ion Cyclotron Frequency</div><div class="fsym">\(f_{ci},\;\omega_{ci}\)</div></div><div class="flive" id="lv-fci">— Hz</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{ci} = \dfrac{ZeB}{2\pi\mu m_p} \)</div></div><div><h5>Coefficients (Z=1, μ=1)</h5><div class="coeff-box"><span class="cgs-c">CGS: \(1.526\times10^3\,\tfrac{Z}{\mu}B\) Hz</span><br/><span class="si-c"> SI: &nbsp;\(1.526\times10^7\,\tfrac{Z}{\mu}B\) Hz</span></div></div></div>
-        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>ci</sub> defines the critical boundary below which ideal MHD is valid</strong>.</div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{ci} = \dfrac{ZeB}{2\pi\mu m_p} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">\(1.52452\times10^3\,\tfrac{Z}{\mu}B[\mathrm{G}]\) Hz</span><br/><span class="si-c">\(1.52452\times10^7\,\tfrac{Z}{\mu}B[\mathrm{T}]\) Hz</span></div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>ci</sub> defines the critical boundary below which ideal MHD is valid</strong> — for f ≪ f<sub>ci</sub>, both electrons and ions gyrate many times per wave period enabling the fluid MHD approximation. At f ~ f<sub>ci</sub>, ion inertia and Hall physics become important, transitioning the plasma to kinetic behaviour. EMIC waves propagate at f ≲ f<sub>ci</sub> and are responsible for resonant scattering of energetic ions from the radiation belts.<div class="fsig-pills"><span class="fsig-pill">MHD validity limit</span><span class="fsig-pill">EMIC waves</span><span class="fsig-pill">Radiation belt physics</span><span class="fsig-pill">Hall MHD</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Plasma Frequency</div><div class="fsym">\(f_{pe},\;\omega_{pe}\)</div></div><div class="flive" id="lv-fpe">— kHz</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{pe} = \dfrac{1}{2\pi}\!\sqrt{\dfrac{n_e e^2}{\varepsilon_0 m_e}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(8.980\times10^3\sqrt{n_e}\) Hz</span><br/><span class="si-c"> SI: &nbsp;\(8.980\times10^6\sqrt{n_e}\) Hz</span></div></div></div>
-        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>pe</sub> sets the cutoff for electromagnetic wave propagation in the plasma</strong>.</div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{pe} = \dfrac{1}{2\pi}\!\sqrt{\dfrac{n_e e^2}{\varepsilon_0 m_e}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">\(8.97866\times10^3\sqrt{n_e[\mathrm{cm}^{-3}]}\) Hz</span><br/><span class="si-c">\(8.97866\sqrt{n_e[\mathrm{m}^{-3}]}\) Hz</span></div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>f<sub>pe</sub> sets the cutoff for electromagnetic wave propagation in the plasma</strong> — ordinary (O-mode) EM waves with ω &lt; ω<sub>pe</sub> cannot propagate and are reflected, which is why the ionosphere reflects HF radio waves. f<sub>pe</sub> directly determines the electron skin depth d<sub>e</sub> = c/ω<sub>pe</sub>, the scale at which electron inertia breaks the frozen-in condition. Comparing f<sub>pe</sub> to f<sub>ce</sub> reveals plasma magnetisation state.<div class="fsig-pills"><span class="fsig-pill">EM wave cutoff</span><span class="fsig-pill">Ionospheric reflection</span><span class="fsig-pill">Electron skin depth</span><span class="fsig-pill">Plasma oscillations</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Ion Plasma Frequency</div><div class="fsym">\(f_{pi},\;\omega_{pi}\)</div></div><div class="flive" id="lv-fpi">— Hz</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{pi} = \dfrac{Z}{2\pi\sqrt{\mu}}\!\sqrt{\dfrac{n_i e^2}{\varepsilon_0 m_p}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.095\times10^2\tfrac{Z}{\sqrt{\mu}}\sqrt{n_i}\) Hz</span><br/><span class="si-c"> SI: &nbsp;\(2.095\times10^5\tfrac{Z}{\sqrt{\mu}}\sqrt{n_i}\) Hz</span></div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{pi} = \dfrac{Z}{2\pi\sqrt{\mu}}\!\sqrt{\dfrac{n_i e^2}{\varepsilon_0 m_p}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">\(2.09535\times10^2\tfrac{Z}{\sqrt{\mu}}\sqrt{n_i[\mathrm{cm}^{-3}]}\) Hz</span><br/><span class="si-c">\(0.209535\tfrac{Z}{\sqrt{\mu}}\sqrt{n_i[\mathrm{m}^{-3}]}\) Hz</span></div></div></div></div></div>
       </section>
 
       <section id="fr-len" style="margin-bottom:2.5rem">
         <div class="sec-hd"><span class="sec-num">§ 02</span><span class="sec-ttl">Length Scales</span></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Debye Length</div><div class="fsym">\(\lambda_{De}\)</div></div><div class="flive" id="lv-lde">— m</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( \lambda_{De}=\!\sqrt{\dfrac{\varepsilon_0 k_BT_e}{n_e e^2}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(7.434\times10^2\sqrt{T_e/n_e}\) cm</span><br/><span class="si-c"> SI: &nbsp;\(7.434\sqrt{T_e/n_e}\) m</span></div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( \lambda_{De}=\!\sqrt{\dfrac{\varepsilon_0 k_BT_e}{n_e e^2}} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">\(7.43394\times10^2\sqrt{T_e[\mathrm{eV}]/n_e[\mathrm{cm}^{-3}]}\) cm</span><br/><span class="si-c">\(7.43394\sqrt{T_e[\mathrm{eV}]/n_e[\mathrm{cm}^{-3}]}\) m</span></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron &amp; Ion Thermal Gyroradii</div><div class="fsym">\(r_e,\;\rho_i\)</div></div><div class="flive" id="lv-ri">— km</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Electron</h5><div class="eq-box">\( r_e = v_{Te}/\Omega_{ce} \)</div></div><div><h5>Ion</h5><div class="eq-box">\( \rho_i = v_{Ti}/\Omega_{ci} \)</div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Electron (NRL)</h5><div class="eq-box">\( r_e = v_{Te}/\Omega_{ce} \)</div></div><div><h5>Ion</h5><div class="eq-box">\( \rho_i = v_{Ti}/\Omega_{ci} \)</div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>Gyroradii determine the spatial scales at which particle thermal motion becomes comparable to wave structure.</strong> The ion thermal gyroradius ρ<sub>i</sub> is the key kinetic transition scale: at k<sub>⊥</sub>ρ<sub>i</sub> ~ 1, finite-Larmor-radius effects break ideal MHD and kinetic Alfvén wave dynamics emerge. In the solar wind at 1 AU, ρ<sub>i</sub> ~ 65–100 km, setting the sub-ion spectral break scale.<div class="fsig-pills"><span class="fsig-pill">FLR effects onset</span><span class="fsig-pill">KAW transition k⊥ρi~1</span><span class="fsig-pill">Sub-ion spectral break</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Inertial Lengths</div><div class="fsym">\(d_e=c/\omega_{pe},\;d_i=c/\omega_{pi}\)</div></div><div class="flive" id="lv-di">— km</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>d<sub>e</sub> Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(5.314\times10^5 n_e^{-1/2}\) cm</span></div></div><div><h5>d<sub>i</sub> Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.277\times10^7 n_i^{-1/2}\) cm</span></div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>d<sub>e</sub> Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(5.314\times10^5 n_e^{-1/2}\) cm</span></div></div><div><h5>d<sub>i</sub> Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.277\times10^7 Z^{-1}\sqrt{\mu/n_i}\) cm</span></div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>d<sub>i</sub> and d<sub>e</sub> mark where ions and electrons respectively decouple from the magnetic field</strong>, enabling magnetic reconnection. At scales ≲ d<sub>i</sub>, the Hall term in the generalised Ohm's law becomes dominant, enabling fast reconnection. At scales ≲ d<sub>e</sub>, electron inertia breaks the frozen-in condition — the electron diffusion region. In the Burch et al. (2016) MMS event, the EDR measured ~1 km ~ d<sub>e</sub>.<div class="fsig-pills"><span class="fsig-pill">Magnetic reconnection</span><span class="fsig-pill">Ion diffusion region</span><span class="fsig-pill">Electron diffusion region</span><span class="fsig-pill">Hall MHD</span></div></div></div></div></div></div>
       </section>
 
       <section id="fr-vel" style="margin-bottom:2.5rem">
         <div class="sec-hd"><span class="sec-num">§ 03</span><span class="sec-ttl">Velocities</span></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Alfvén Speed</div><div class="fsym">\(v_A\)</div></div><div class="flive" id="lv-va">— km/s</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic (SI)</h5><div class="eq-box">\( v_A = B/\!\sqrt{\mu_0 n\mu m_p} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.181\times10^{11}\mu^{-\frac{1}{2}}n^{-\frac{1}{2}}B\) cm/s</span></div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic (SI)</h5><div class="eq-box">\( v_A = B/\!\sqrt{\mu_0 n\mu m_p} \)</div></div><div><h5>Coefficients</h5><div class="coeff-box"><span class="cgs-c">CGS: \(2.181\times10^{11}\mu^{-\frac{1}{2}}n^{-\frac{1}{2}}B\) cm/s</span></div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>v<sub>A</sub> is the fundamental speed at which magnetic field-line perturbations travel in a magnetised plasma.</strong> The Alfvén Mach number M<sub>A</sub> = V<sub>sw</sub>/v<sub>A</sub> ≈ 8 in the solar wind at 1 AU, confirming a super-Alfvénic flow that must form a bow shock upstream of Earth. PSP crosses the Alfvénic critical point (~15–20 R☉) where M<sub>A</sub> = 1. v<sub>A</sub> also sets the outflow speed of magnetic reconnection jets.<div class="fsig-pills"><span class="fsig-pill">Alfvén wave speed</span><span class="fsig-pill">Bow shock M_A&gt;1</span><span class="fsig-pill">Reconnection outflow</span><span class="fsig-pill">PSP Alfvénic point</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Sound Speed — Dual Forms</div><div class="fsym">\(C_s^{\rm IA},\;C_s^{\rm MHD}\)</div></div><div><div class="flive" id="lv-cs">— km/s</div></div></div>
         <div class="fcard-bd"><div class="f2col"><div><h5>Ion Acoustic</h5><div class="eq-box">\( C_s^{\rm IA} = \!\sqrt{\gamma Zk_BT_e/\mu m_p} \)</div></div><div><h5>Full MHD</h5><div class="eq-box">\( C_s^{\rm MHD} = \!\sqrt{\gamma(ZT_e+T_i)k_B/\mu m_p} \)</div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Thermal Speed</div><div class="fsym">\(v_{Te}\)</div></div><div class="flive" id="lv-vte">— m/s</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>NRL Convention</h5><div class="eq-box">\( v_{Te}=\!\sqrt{k_BT_e/m_e} \)</div></div><div><h5>B&amp;T Numerical</h5><div class="coeff-box"><span class="cgs-c">CGS: \(5.931\times10^7\sqrt{T_e}\) cm/s</span></div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>NRL Convention</h5><div class="eq-box">\( v_{Te}=\!\sqrt{k_BT_e/m_e} \)</div></div><div><h5>Numerical</h5><div class="coeff-box"><span class="cgs-c">CGS: \(4.190\times10^7\sqrt{T_e}\) cm/s</span></div></div></div><div class="vld"><strong>Convention:</strong> Some texts instead define \(v_{th}=\sqrt{2k_BT/m}\). PLASMAform uses the NRL one-factor convention throughout.</div></div></div>
       </section>
 
       <section id="fr-dim" style="margin-bottom:2.5rem">
         <div class="sec-hd"><span class="sec-num">§ 04</span><span class="sec-ttl">Dimensionless Parameters</span></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Plasma Beta</div><div class="fsym">\(\beta_i,\;\beta_e,\;\beta_{\rm tot}\)</div></div><div class="flive" id="lv-beta">—</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>SI Form</h5><div class="eq-box">\( \beta_s = 2\mu_0 n k_BT_s/B^2 \)</div></div><div><h5>Numerical</h5><div class="coeff-box">\(\beta = 4.027\times10^{-11}\,nT/B^2\)</div></div></div></div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>SI Form</h5><div class="eq-box">\( \beta_s = 2\mu_0 n_s k_BT_s/B^2 \)</div></div><div><h5>Space-unit coefficient</h5><div class="coeff-box">\(\beta_s = 4.02671\times10^{-11}\,n_s[\mathrm{cm}^{-3}]T_s[\mathrm{eV}]/B[\mathrm{G}]^2\)</div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron-to-Ion Mass Ratio</div><div class="fsym">\(m_e/m_i\)</div></div><div class="flive" style="color:var(--grn)">5.446 × 10⁻⁴</div></div>
         <div class="fcard-bd"><div class="f2col"><div><h5>Value (H⁺)</h5><div class="eq-box">\( m_e/m_p = 5.4462\times10^{-4} \)</div></div><div><h5>KAW Significance</h5><div class="coeff-box" style="color:var(--t2);font-size:.72rem">KAW: β<sub>e</sub> ≫ m<sub>e</sub>/m<sub>i</sub></div></div></div></div></div>
       </section>
 
       <section id="fr-kaw" style="margin-bottom:2.5rem">
         <div class="sec-hd"><span class="sec-num">§ 05</span><span class="sec-ttl">KAW Physics</span></div>
-        <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">KAW / IAW Regime Condition</div><div class="fsym">\(\beta_e\) vs \(m_e/m_i\)</div></div><div class="flive" id="lv-kaw">—</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>KAW Regime</h5><div class="eq-box">\( \beta_e \gg m_e/m_i \Rightarrow \text{KAW active} \)</div></div><div><h5>IAW Regime</h5><div class="eq-box">\( \beta_e \ll m_e/m_i \Rightarrow \text{Ion Acoustic} \)</div></div></div></div></div>
+        <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Kinetic / Inertial Alfvén Regime Condition</div><div class="fsym">\(\beta_e/(m_e/m_i)\)</div></div><div class="flive" id="lv-kaw">—</div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Kinetic Alfvén Limit</h5><div class="eq-box">\( \beta_e/(m_e/m_i) \gg 1 \)</div></div><div><h5>Inertial Alfvén Limit</h5><div class="eq-box">\( \beta_e/(m_e/m_i) \ll 1 \)</div></div></div>
+        <div class="fsig"><div class="fsig-bar"></div><div class="fsig-body"><div class="fsig-head">Physical Significance</div><div class="fsig-text"><strong>This ratio distinguishes asymptotic kinetic- and inertial-Alfvén limits; it does not identify a wave by itself.</strong> When β<sub>e</sub>/(m<sub>e</sub>/m<sub>i</sub>) ≫ 1, electron thermal-pressure effects support the kinetic-Alfvén limit. When it is ≪1, electron inertia supports the inertial-Alfvén limit. The default solar-wind state has a ratio near 1800. Wave identification still requires field polarization, propagation, compressibility, and uncertainty analysis.<div class="fsig-pills"><span class="fsig-pill">Asymptotic regime</span><span class="fsig-pill">Electron inertia</span><span class="fsig-pill">Electron pressure</span><span class="fsig-pill">Not mode identification</span></div></div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">KAW Dispersion</div><div class="fsym">\(\omega = k_\parallel v_A\!\sqrt{1+k_\perp^2\rho_s^2}\)</div></div><div class="flive" id="lv-rhos">— km</div></div>
         <div class="fcard-bd"><div class="f2col"><div><h5>Ion Acoustic Gyroradius</h5><div class="eq-box">\( \rho_s = C_s^{\rm IA}/\Omega_{ci} \)</div></div><div><h5>KAW Dispersion</h5><div class="eq-box">\( \omega = k_\parallel v_A\!\sqrt{1+k_\perp^2\rho_s^2} \)</div></div></div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Taylor Break Frequency</div><div class="fsym">\(f_{\rm break}=V_{sw}/(2\pi l)\)</div></div><div class="flive" id="lv-fbrk">— Hz</div></div>
         <div class="fcard-bd"><div class="f2col"><div><h5>Symbolic</h5><div class="eq-box">\( f_{\rm break} = V_{sw}/(2\pi l) \)</div></div><div><h5>Relevant Scales</h5><div class="coeff-box" style="color:var(--t2);font-size:.72rem">l = d<sub>i</sub>, ρ<sub>i</sub>, ρ<sub>s</sub></div></div></div></div></div>
-        <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Landau Damping Rate</div><div class="fsym">\(\gamma/\omega\)</div></div><div class="flive" style="color:var(--warm)">Regime-dep.</div></div>
-        <div class="fcard-bd"><div class="f2col"><div><h5>Formula</h5><div class="eq-box">\( \dfrac{\gamma}{\omega}\approx-\!\sqrt{\dfrac{\pi}{8}}\dfrac{v_{ph}}{v_{Te}}\exp\!\!\left(-\dfrac{v_{ph}^2}{2v_{Te}^2}\right) \)</div></div><div><h5>Condition</h5><div class="coeff-box" style="color:var(--t2);font-size:.72rem">\(v_{ph}/v_{Te}\lesssim 1\)</div></div></div></div></div>
+        <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Electron Landau-Resonance Accessibility</div><div class="fsym">\(x_e=v_{ph,\parallel}/v_{Te}\)</div></div><div class="flive" style="color:var(--warm)">Not a damping rate</div></div>
+        <div class="fcard-bd"><div class="f2col"><div><h5>Resonance location</h5><div class="eq-box">\( x_e = v_{ph,\parallel}/v_{Te} \)</div></div><div><h5>Maxwellian population factor</h5><div class="eq-box">\( f_M(x_e)/f_M(0)=\exp(-x_e^2/2) \)</div></div></div><div class="vld"><strong>Limitation:</strong> A damping rate also depends on the full kinetic dispersion relation and wave-energy response. PLASMAform does not infer \(\gamma/\omega\) from this factor.</div></div></div>
         <div class="fcard"><div class="fcard-hd" onclick="ftoggle(this)"><div><div class="fname">Walén Relation &amp; Obliquity Parameter</div><div class="fsym">\(\delta v_\perp = \pm\delta B_\perp/\sqrt{\mu_0\rho},\;\;\chi\)</div></div><div class="flive" style="color:var(--purple)">CGS↔SI</div></div>
         <div class="fcard-bd"><div class="f2col"><div><h5>Walén Relation — SI</h5><div class="eq-box">\( \delta v_\perp=\pm(\delta B_\perp/B_0)\,v_A \)</div></div><div><h5>Obliquity Parameter</h5><div class="eq-box">\( \chi = k_\perp\delta B/(k_\parallel B_0) \)</div></div></div></div></div>
       </section>
       
       <section id="fr-con" style="margin-bottom:2.5rem">
-        <div class="sec-hd"><span class="sec-num">§ 06</span><span class="sec-ttl">Physical Constants (CODATA 2018)</span></div>
+        <div class="sec-hd"><span class="sec-num">§ 06</span><span class="sec-ttl">Physical Constants (CODATA 2022)</span></div>
         <div class="card" style="--c1:var(--warm);--c2:var(--acc)">
           <div class="card-body" style="padding:1rem">
             <table class="const-table">
               <thead><tr><th>Symbol</th><th>Name</th><th>Value</th><th>Unit &amp; Status</th></tr></thead>
               <tbody>
                 <tr><td>\(e\)</td><td>Elementary charge</td><td>1.602 176 634 × 10⁻¹⁹</td><td>C (exact)</td></tr>
-                <tr><td>\(m_e\)</td><td>Electron mass</td><td>9.109 383 7015 × 10⁻³¹</td><td>kg</td></tr>
-                <tr><td>\(m_p\)</td><td>Proton mass</td><td>1.672 621 923 69 × 10⁻²⁷</td><td>kg</td></tr>
-                <tr><td>\(\mu_0\)</td><td>Vacuum permeability</td><td>4π × 10⁻⁷</td><td>H m⁻¹ (exact)</td></tr>
-                <tr><td>\(\varepsilon_0\)</td><td>Vacuum permittivity</td><td>8.854 187 812 8 × 10⁻¹²</td><td>F m⁻¹</td></tr>
+                <tr><td>\(m_e\)</td><td>Electron mass</td><td>9.109 383 7139(28) × 10⁻³¹</td><td>kg</td></tr>
+                <tr><td>\(m_p\)</td><td>Proton mass</td><td>1.672 621 925 95(52) × 10⁻²⁷</td><td>kg</td></tr>
+                <tr><td>\(\mu_0\)</td><td>Vacuum permeability</td><td>1.256 637 061 27(20) × 10⁻⁶</td><td>N A⁻² (measured)</td></tr>
+                <tr><td>\(\varepsilon_0\)</td><td>Vacuum permittivity</td><td>8.854 187 8188(14) × 10⁻¹²</td><td>F m⁻¹ (derived)</td></tr>
                 <tr><td>\(c\)</td><td>Speed of light</td><td>2.997 924 58 × 10⁸</td><td>m s⁻¹ (exact)</td></tr>
                 <tr><td>\(k_B\)</td><td>Boltzmann constant</td><td>1.380 649 × 10⁻²³</td><td>J K⁻¹ (exact)</td></tr>
-                <tr><td>\(m_e/m_p\)</td><td>Mass ratio</td><td>5.446 170 21 × 10⁻⁴</td><td>dimensionless</td></tr>
+                <tr><td>\(m_e/m_p\)</td><td>Mass ratio</td><td>5.446 170 214 889(94) × 10⁻⁴</td><td>dimensionless</td></tr>
               </tbody>
             </table>
           </div>
@@ -752,19 +795,31 @@ table.wet tr:last-child td{border-bottom:none}
    ════════════════════════════════════════════════════════ */
 
 // ── 1. GLOBAL MATH CONSTANTS FOR CALCULATOR ENGINE ──
+const Physics=window.PlasmaPhysics;
+if(!Physics)throw new Error('PLASMAform physics core failed to load');
+const PC=Physics.constants;
+const EC=PC.elementaryCharge, ME=PC.electronMass, MP=PC.protonMass;
+const MU0=PC.vacuumPermeability, EPS0=PC.vacuumPermittivity, C_SI=PC.speedOfLight;
 const PI=Math.PI, sq=Math.sqrt, pw=Math.pow, ln=Math.log, ex=Math.exp, ab=Math.abs;
-function ok(...v){return v.every(x=>isFinite(x)&&!isNaN(x)&&x>0)}
+function ok(...v){return v.every(x=>Number.isFinite(x)&&x>0)}
+function finite(...v){return v.every(Number.isFinite)}
 function fmt(v){
-  if(v==null)return'--';if(typeof v==='string')return v;if(!isFinite(v)||isNaN(v))return'--';if(v===0)return'0';
+  if(v==null)return'--';if(typeof v==='string')return v;if(!Number.isFinite(v))return'--';if(v===0)return'0';
   const a=ab(v),e=Math.floor(Math.log10(a));if(ab(e)<4&&a>=0.001)return parseFloat(v.toPrecision(5)).toString();
   return`${parseFloat((v/pw(10,e)).toPrecision(4))}&thinsp;&times;&thinsp;10<sup>${e}</sup>`;
 }
 function toast(m){const t=document.createElement('div');t.className='copy-toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1600)}
+async function copyText(text){
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return}
+  const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();
+  const copied=document.execCommand('copy');area.remove();if(!copied)throw new Error('Clipboard unavailable');
+}
 
 let US='cgs';
+let weCompChart=null;
 function setUnit(u){
   US=u;
-  document.querySelectorAll('#utog span').forEach(s=>s.classList.toggle('act',s.textContent.toLowerCase()===u));
+  document.querySelectorAll('#utog [data-unit]').forEach(s=>s.classList.toggle('act',s.dataset.unit===u));
   renderCards();
   cards.forEach(c=>setTimeout(()=>calcCard(c),30));
   // Keep the reference tabs in sync if needed
@@ -779,41 +834,41 @@ function toDisp(inp,v){return US==='si'&&inp.isB?v/1e-5:v}
 
 // ── 2. CALCULATOR ENGINE DATABASE ──
 const DB=[
-{id:'fce',cat:'Frequencies',num:'F01',th:'t-freq',nm:'Electron Gyrofrequency',kw:['cyclotron','gyro','electron','fce'], math:'f<sub>ce</sub> = 2.80&times;10<sup>6</sup> B Hz', in:[Bi('B','B','Field',5e-5)],fn(p){if(!ok(p.B))return null;return[['f<sub>ce</sub>',2.80e6*p.B,'Hz'],['&omega;<sub>ce</sub>',1.76e7*p.B,'rad/s']]}},
-{id:'fci',cat:'Frequencies',num:'F02',th:'t-freq',nm:'Ion Gyrofrequency',kw:['cyclotron','gyro','ion','fci'], math:'f<sub>ci</sub> = 1.52&times;10<sup>3</sup> Z&mu;<sup>-1</sup>B Hz', in:[Bi('B','B','Field',5e-5),{id:'Z',sym:'Z',lbl:'Charge',unit:'',def:1},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.B,p.Z,p.mu))return null;return[['f<sub>ci</sub>',1.52e3*p.Z/p.mu*p.B,'Hz'],['&omega;<sub>ci</sub>',9.58e3*p.Z/p.mu*p.B,'rad/s']]}},
-{id:'fpe',cat:'Frequencies',num:'F03',th:'t-freq',nm:'Electron Plasma Frequency',kw:['plasma frequency','langmuir','fpe'], math:'f<sub>pe</sub> = 8.98&times;10<sup>3</sup> n<sup>1/2</sup> Hz', in:[{id:'ne',sym:'n<sub>e</sub>',lbl:'Density',unit:'cm&#8315;&sup3;',def:5}],fn(p){if(!ok(p.ne))return null;return[['f<sub>pe</sub>',8.98e3*sq(p.ne),'Hz'],['&omega;<sub>pe</sub>',5.64e4*sq(p.ne),'rad/s']]}},
-{id:'fpi',cat:'Frequencies',num:'F04',th:'t-freq',nm:'Ion Plasma Frequency',kw:['plasma frequency','ion','fpi'], math:'f<sub>pi</sub> = 210 Z&mu;<sup>-1/2</sup>n<sup>1/2</sup> Hz', in:[{id:'ni',sym:'n<sub>i</sub>',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Z',sym:'Z',lbl:'Z',unit:'',def:1},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.ni,p.Z,p.mu))return null;return[['f<sub>pi</sub>',210*p.Z*pw(p.mu,-.5)*sq(p.ni),'Hz']]}},
-{id:'fLH',cat:'Frequencies',num:'F05',th:'t-freq',nm:'Lower Hybrid Frequency',kw:['lower hybrid','fLH'], math:'&omega;<sub>LH</sub> = &radic;(&omega;<sub>ci</sub>&omega;<sub>ce</sub>/(1+&omega;<sub>ce</sub>&sup2;/&omega;<sub>pe</sub>&sup2;))', in:[Bi('B','B','Field',5e-5),{id:'ne',sym:'n<sub>e</sub>',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.B,p.ne,p.mu))return null;const wci=9.58e3/p.mu*p.B,wce=1.76e7*p.B,wpe=5.64e4*sq(p.ne),w=sq(wci*wce/(1+wce*wce/(wpe*wpe)));return[['f<sub>LH</sub>',w/(2*PI),'Hz'],['f<sub>LH</sub>/f<sub>ci</sub>',w/wci,'']]}},
-{id:'lD',cat:'Lengths',num:'L01',th:'t-len',nm:'Debye Length',kw:['debye','shielding'], math:'&lambda;<sub>D</sub> = 743 (T/n)<sup>1/2</sup> cm', in:[{id:'T',sym:'T',lbl:'Temp',unit:'eV',def:12},{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5}], fn(p){if(!ok(p.T,p.n))return null;const l=743*sq(p.T/p.n);return[['&lambda;<sub>D</sub>',l,'cm'],['N<sub>D</sub>',(4*PI/3)*p.n*pw(l,3),'']]}},
-{id:'rci',cat:'Lengths',num:'L03',th:'t-len',nm:'Ion Larmor Radius',kw:['larmor','gyroradius','ion','rhoi'], math:'r<sub>i</sub> = 102.2 &mu;<sup>1/2</sup> T<sub>i</sub><sup>1/2</sup> B<sup>-1</sup> cm', in:[{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temp',unit:'eV',def:10},Bi('B','B','Field',5e-5),{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.Ti,p.B,p.mu))return null;return[['r<sub>i</sub>',102.2*sq(p.mu)*sq(p.Ti)/p.B,'cm']]}},
-{id:'dil',cat:'Lengths',num:'L05',th:'t-len',nm:'Ion Inertial Length',kw:['inertial','skin depth','ion','di'], math:'d<sub>i</sub> = 2.28&times;10<sup>7</sup> (&mu;/n)<sup>1/2</sup> cm', in:[{id:'ni',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.ni,p.mu))return null;return[['d<sub>i</sub>',2.28e7*sq(p.mu/p.ni),'cm']]}},
-{id:'vA',cat:'Velocities',num:'V01',th:'t-vel',nm:'Alfven Velocity',kw:['alfven','vA','mhd'], math:'v<sub>A</sub> = 2.18&times;10<sup>11</sup> &mu;<sup>-1/2</sup> n<sup>-1/2</sup> B cm/s', in:[Bi('B','B','Field',5e-5),{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.B,p.n,p.mu))return null;const v=2.18e11*pw(p.mu,-.5)*pw(p.n,-.5)*p.B;return[['v<sub>A</sub>',v,'cm/s'],['v<sub>A</sub>',v*1e-5,'km/s']]}},
-{id:'Cs',cat:'Velocities',num:'V02',th:'t-vel',nm:'Ion Sound Speed',kw:['sound speed','Cs','acoustic'], math:'C<sub>s</sub> = 9.79&times;10<sup>5</sup> (T<sub>e</sub>/&mu;)<sup>1/2</sup> cm/s', in:[{id:'Te',sym:'T<sub>e</sub>',lbl:'Temp',unit:'eV',def:12},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.Te,p.mu))return null;const v=9.79e5*sq(p.Te/p.mu);return[['C<sub>s</sub>',v,'cm/s'],['C<sub>s</sub>',v*1e-5,'km/s']]}},
-{id:'beta',cat:'Dimensionless',num:'D01',th:'t-dim',nm:'Total Plasma Beta',kw:['beta','thermal pressure'], math:'&beta; = 4.03&times;10<sup>-11</sup> nT / B&sup2;', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'T',sym:'T',lbl:'Total temp (T<sub>e</sub>+T<sub>i</sub>)',unit:'eV',def:22},Bi('B','B','Field',5e-5)], fn(p){if(!ok(p.n,p.T,p.B))return null;return[['&beta;',4.03e-11*p.n*p.T/(p.B*p.B),'']]}},
-{id:'betae',cat:'Dimensionless',num:'D02',th:'t-dim',nm:'Electron Beta',kw:['electron beta','betae','KAW regime'], math:'&beta;<sub>e</sub> = 4.03&times;10<sup>-11</sup> n T<sub>e</sub> / B&sup2;', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'e temp',unit:'eV',def:12},Bi('B','B','Field',5e-5),{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.n,p.Te,p.B,p.mu))return null;const be=4.03e-11*p.n*p.Te/(p.B*p.B),me=5.446e-4/p.mu; return[['&beta;<sub>e</sub>',be,''],['m<sub>e</sub>/m<sub>i</sub>',me,''],['KAW regime?',be>me?'Yes':'No (Inertial)','']]}},
-{id:'Mach',cat:'Dimensionless',num:'D04',th:'t-dim',nm:'Mach Numbers',kw:['mach','alfven mach','sonic mach'], math:'M<sub>A</sub>=V/v<sub>A</sub>, M<sub>s</sub>=V/C<sub>s</sub>', in:[{id:'V',sym:'V',lbl:'Flow',unit:'km/s',def:400},Bi('B','B','Field',5e-5),{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Temp',unit:'eV',def:12},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.V,p.B,p.n,p.Te,p.mu))return null;const vc=p.V*1e5,vA=2.18e11*pw(p.mu,-.5)*pw(p.n,-.5)*p.B,cs=9.79e5*sq(p.Te/p.mu);return[['M<sub>A</sub>',vc/vA,''],['M<sub>s</sub>',vc/cs,'']]}},
-{id:'crosshel',cat:'Dimensionless',num:'D07',th:'t-dim',nm:'Cross Helicity',kw:['cross helicity','residual energy','elsasser','sigma_c'], math:'&sigma;<sub>c</sub> = 2&delta;v&middot;&delta;v<sub>A</sub>/(&delta;v&sup2;+&delta;v<sub>A</sub>&sup2;)', in:[{id:'dv',sym:'&delta;v',lbl:'Vel fluct',unit:'km/s',def:30},{id:'dB',sym:'&delta;B',lbl:'B fluct',unit:'nT',def:3},{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.dv,p.dB,p.n,p.mu))return null;const dvc=p.dv*1e5,dBg=p.dB*1e-5,rho=p.n*p.mu*1.67e-24,dvA=dBg/sq(4*PI*rho); const sc=2*dvc*dvA/(dvc*dvc+dvA*dvA),sr=(dvc*dvc-dvA*dvA)/(dvc*dvc+dvA*dvA);return[['&delta;v<sub>A</sub>',dvA*1e-5,'km/s'],['&sigma;<sub>c</sub>',sc,''],['&sigma;<sub>r</sub>',sr,'']]}},
-{id:'kaw_regime',cat:'KAW',num:'K01',th:'t-kaw',nm:'KAW vs Inertial Regime',kw:['kaw','kinetic alfven','inertial','IAW'], math:'&beta;<sub>e</sub> > m<sub>e</sub>/m<sub>i</sub> &rarr; KAW', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'e temp',unit:'eV',def:12},Bi('B','B','Field',5e-5),{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.n,p.Te,p.B,p.mu))return null;const be=4.03e-11*p.n*p.Te/(p.B*p.B),me=5.446e-4/p.mu;return[['&beta;<sub>e</sub>',be,''],['m<sub>e</sub>/m<sub>i</sub>',me,''],['Regime',be>me?'Kinetic (KAW)':'Inertial (IAW)','']]}},
-{id:'kaw_rhos',cat:'KAW',num:'K02',th:'t-kaw',nm:'Ion Sound Larmor Radius &rho;<sub>s</sub>',kw:['rhos','spectral break','KAW scale'], math:'&rho;<sub>s</sub> = C<sub>s</sub>/&omega;<sub>ci</sub>', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'e temp',unit:'eV',def:12},{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temp',unit:'eV',def:10},Bi('B','B','Field',5e-5),{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.n,p.Te,p.Ti,p.B,p.mu))return null;const rs=102.2*sq(p.mu)*sq(p.Te)/p.B,ri=102.2*sq(p.mu)*sq(p.Ti)/p.B,di=2.28e7*sq(p.mu/p.n); return[['&rho;<sub>s</sub>',rs,'cm'],['&rho;<sub>i</sub>',ri,'cm'],['d<sub>i</sub>',di,'cm'],['&rho;<sub>s</sub>/d<sub>i</sub>',rs/di,'']]}},
-{id:'kaw_disp',cat:'KAW',num:'K03',th:'t-kaw',nm:'KAW Dispersion',kw:['kaw dispersion','phase velocity'], math:'&omega; = k<sub>&parallel;</sub> v<sub>A</sub> &radic;(1 + k<sub>&perp;</sub>&sup2; &rho;<sub>s</sub>&sup2;)', in:[{id:'kpar',sym:'k<sub>&parallel;</sub>',lbl:'k par',unit:'cm&#8315;&sup1;',def:1e-6},{id:'kperp',sym:'k<sub>&perp;</sub>',lbl:'k perp',unit:'cm&#8315;&sup1;',def:1e-4},{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'Temp',unit:'eV',def:12},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.kpar,p.kperp,p.n,p.B,p.Te,p.mu))return null;const vA=2.18e11*pw(p.mu,-.5)*pw(p.n,-.5)*p.B,rs=102.2*sq(p.mu)*sq(p.Te)/p.B; const kr=p.kperp*rs,d=sq(1+kr*kr),w=p.kpar*vA*d;return[['k<sub>&perp;</sub>&rho;<sub>s</sub>',kr,''],['&omega;',w,'rad/s'],['f',w/(2*PI),'Hz'],['v<sub>ph</sub>',vA*d*1e-5,'km/s']]}},
-{id:'kaw_taylor',cat:'KAW',num:'K04',th:'t-kaw',nm:'Taylor Hypothesis Breaks',kw:['taylor hypothesis','spectral break'], math:'f<sub>break</sub> = V<sub>sw</sub> / (2&pi; l)', in:[{id:'Vsw',sym:'V<sub>sw</sub>',lbl:'V sw',unit:'km/s',def:400},{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'e temp',unit:'eV',def:12},{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temp',unit:'eV',def:10},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.Vsw,p.n,p.B,p.Te,p.Ti,p.mu))return null;const V=p.Vsw*1e5,ri=102.2*sq(p.mu)*sq(p.Ti)/p.B,rs=102.2*sq(p.mu)*sq(p.Te)/p.B,di=2.28e7*sq(p.mu/p.n); return[['f(&rho;<sub>i</sub>)',V/(2*PI*ri),'Hz'],['f(&rho;<sub>s</sub>)',V/(2*PI*rs),'Hz'],['f(d<sub>i</sub>)',V/(2*PI*di),'Hz']]}},
-{id:'kaw_Landau',cat:'KAW',num:'K05',th:'t-kaw',nm:'Electron Landau Damping',kw:['landau damping','dissipation'], math:'&gamma;/&omega; &asymp; -&radic;(&pi;/8) (v<sub>ph</sub>/v<sub>Te</sub>) exp(-v<sub>ph</sub>&sup2;/2v<sub>Te</sub>&sup2;)', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'Temp',unit:'eV',def:12},{id:'kperp',sym:'k<sub>&perp;</sub>',lbl:'k perp',unit:'cm&#8315;&sup1;',def:1e-4},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.n,p.B,p.Te,p.kperp,p.mu))return null;const vA=2.18e11*pw(p.mu,-.5)*pw(p.n,-.5)*p.B,rs=102.2*sq(p.mu)*sq(p.Te)/p.B; const vTe=4.19e7*sq(p.Te),vph=vA*sq(1+p.kperp*p.kperp*rs*rs),x=vph/vTe,g=-sq(PI/8)*x*ex(-x*x/2);return[['v<sub>ph</sub>/v<sub>Te</sub>',x,''],['&gamma;/&omega;',g,''],['|&gamma;/&omega;|',ab(g),'']]}},
-{id:'kaw_walen',cat:'KAW',num:'K07',th:'t-kaw',nm:'Walen Relation',kw:['walen','alfvenicity'], math:'Walen slope = &delta;v / &delta;v<sub>A</sub>', in:[{id:'dv',sym:'&delta;v',lbl:'Vel fluct',unit:'km/s',def:30},{id:'dB',sym:'&delta;B',lbl:'B fluct',unit:'nT',def:3},{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}], fn(p){if(!ok(p.dv,p.dB,p.n,p.mu))return null;const rho=p.n*p.mu*1.67e-24,dvA=p.dB*1e-5/sq(4*PI*rho)*1e-5; return[['&delta;v<sub>A</sub>',dvA,'km/s'],['Slope',p.dv/dvA,''],['Alfvenic?',ab(ab(p.dv/dvA)-1)<0.3?'Yes':'No','']]}},
-{id:'inst_firehose',cat:'Instabilities',num:'I01',th:'t-inst',nm:'Firehose Threshold',kw:['firehose','anisotropy'], math:'&beta;<sub>&parallel;</sub> - &beta;<sub>&perp;</sub> > 2', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Tpar',sym:'T<sub>&parallel;</sub>',lbl:'T par',unit:'eV',def:20},{id:'Tperp',sym:'T<sub>&perp;</sub>',lbl:'T perp',unit:'eV',def:10},Bi('B','B','Field',5e-5)], fn(p){if(!ok(p.n,p.Tpar,p.Tperp,p.B))return null;const bp=4.03e-11*p.n*p.Tpar/(p.B*p.B),bpp=4.03e-11*p.n*p.Tperp/(p.B*p.B); return[['&beta;<sub>&parallel;</sub>-&beta;<sub>&perp;</sub>',bp-bpp,''],['Status',bp-bpp>2?'Unstable':'Stable','']]}},
-{id:'inst_mirror',cat:'Instabilities',num:'I02',th:'t-inst',nm:'Mirror Mode Threshold',kw:['mirror mode','magnetosheath'], math:'&beta;<sub>&perp;</sub>(T<sub>&perp;</sub>/T<sub>&parallel;</sub> - 1) > 1', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:15},{id:'Tpar',sym:'T<sub>&parallel;</sub>',lbl:'T par',unit:'eV',def:100},{id:'Tperp',sym:'T<sub>&perp;</sub>',lbl:'T perp',unit:'eV',def:300},Bi('B','B','Field',2.5e-4)], fn(p){if(!ok(p.n,p.Tpar,p.Tperp,p.B))return null;const bpp=4.03e-11*p.n*p.Tperp/(p.B*p.B),d=bpp*(p.Tperp/p.Tpar-1); return[['Criterion',d,''],['Status',d>1?'Unstable':'Stable','']]}},
-{id:'inst_emic',cat:'Instabilities',num:'I03',th:'t-inst',nm:'EMIC Threshold',kw:['emic','electromagnetic ion cyclotron'], math:'T<sub>&perp;</sub>/T<sub>&parallel;</sub> > 1 + 0.65 &beta;<sub>&parallel;</sub><sup>-0.40</sup>', in:[{id:'n',sym:'n',lbl:'Density',unit:'cm&#8315;&sup3;',def:5},{id:'Tpar',sym:'T<sub>&parallel;</sub>',lbl:'T par',unit:'eV',def:500},{id:'Tperp',sym:'T<sub>&perp;</sub>',lbl:'T perp',unit:'eV',def:1000},Bi('B','B','Field',2e-4)], fn(p){if(!ok(p.n,p.Tpar,p.Tperp,p.B))return null;const bp=4.03e-11*p.n*p.Tpar/(p.B*p.B),a=p.Tperp/p.Tpar,th=1+0.65*pw(bp,-0.4); return[['T<sub>&perp;</sub>/T<sub>&parallel;</sub>',a,''],['Threshold',th,''],['Status',a>th?'Unstable':'Stable','']]}}
+{id:'fce',cat:'Frequencies',num:'F01',th:'t-freq',nm:'Electron Gyrofrequency',kw:['cyclotron','gyro','electron','fce'],math:'f<sub>ce</sub> = |e|B/(2&pi;m<sub>e</sub>)',src:'NRL 2023 p.28 · CODATA 2022',in:[Bi('B','B','Field magnitude',5e-5)],fn(p){if(!ok(p.B))return null;const w=Physics.electronGyroAngular(Physics.conversions.gaussToTesla(p.B));return[['f<sub>ce</sub>',w/(2*PI),'Hz'],['&omega;<sub>ce</sub>',w,'rad/s']]}},
+{id:'fci',cat:'Frequencies',num:'F02',th:'t-freq',nm:'Ion Gyrofrequency',kw:['cyclotron','gyro','ion','fci'],math:'f<sub>ci</sub> = Z|e|B/(2&pi;&mu;m<sub>p</sub>)',src:'NRL 2023 p.28 · CODATA 2022',in:[Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const w=Physics.ionGyroAngular(Physics.conversions.gaussToTesla(p.B),p.Z,p.mu);return[['f<sub>ci</sub>',w/(2*PI),'Hz'],['&omega;<sub>ci</sub>',w,'rad/s']]}catch{return null}}},
+{id:'fpe',cat:'Frequencies',num:'F03',th:'t-freq',nm:'Electron Plasma Frequency',kw:['plasma frequency','langmuir','fpe'],math:'f<sub>pe</sub> = (1/2&pi;)&radic;(n<sub>e</sub>e&sup2;/&epsilon;<sub>0</sub>m<sub>e</sub>)',src:'NRL 2023 p.28 · CODATA 2022',in:[{id:'ne',sym:'n<sub>e</sub>',lbl:'Electron density',unit:'cm&#8315;&sup3;',def:5}],fn(p){try{const w=Physics.electronPlasmaAngular(Physics.conversions.perCcToPerM3(p.ne));return[['f<sub>pe</sub>',w/(2*PI),'Hz'],['&omega;<sub>pe</sub>',w,'rad/s']]}catch{return null}}},
+{id:'fpi',cat:'Frequencies',num:'F04',th:'t-freq',nm:'Ion Plasma Frequency',kw:['plasma frequency','ion','fpi'],math:'f<sub>pi</sub> = (1/2&pi;)&radic;(n<sub>i</sub>Z&sup2;e&sup2;/&epsilon;<sub>0</sub>m<sub>i</sub>)',src:'NRL 2023 p.28 · CODATA 2022',in:[{id:'ni',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const w=Physics.ionPlasmaAngular(Physics.conversions.perCcToPerM3(p.ni),p.Z,p.mu);return[['f<sub>pi</sub>',w/(2*PI),'Hz'],['&omega;<sub>pi</sub>',w,'rad/s']]}catch{return null}}},
+{id:'fLH',cat:'Frequencies',num:'F05',th:'t-freq',nm:'Cold-Plasma Lower Hybrid Frequency',kw:['lower hybrid','fLH','cold plasma'],math:'&omega;<sub>LH</sub> = &radic;[&omega;<sub>ci</sub>&omega;<sub>ce</sub>/(1+&omega;<sub>ce</sub>&sup2;/&omega;<sub>pe</sub>&sup2;)]',src:'Cold-plasma approximation',scope:'Cold, magnetized, single-ion plasma',in:[Bi('B','B','Field magnitude',5e-5),{id:'ne',sym:'n<sub>e</sub>',lbl:'Electron density',unit:'cm&#8315;&sup3;',def:5},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const B=Physics.conversions.gaussToTesla(p.B),ne=Physics.conversions.perCcToPerM3(p.ne),w=Physics.lowerHybridAngular(B,ne,p.Z,p.mu),wci=Physics.ionGyroAngular(B,p.Z,p.mu);return[['f<sub>LH</sub>',w/(2*PI),'Hz'],['f<sub>LH</sub>/f<sub>ci</sub>',w/wci,'']]}catch{return null}}},
+{id:'lD',cat:'Lengths',num:'L01',th:'t-len',nm:'Electron Debye Length',kw:['debye','shielding'],math:'&lambda;<sub>De</sub> = &radic;(&epsilon;<sub>0</sub>k<sub>B</sub>T<sub>e</sub>/n<sub>e</sub>e&sup2;)',src:'NRL 2023 p.28 · CODATA 2022',in:[{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'n',sym:'n<sub>e</sub>',lbl:'Electron density',unit:'cm&#8315;&sup3;',def:5}],fn(p){try{const l=Physics.electronDebyeLength(p.Te,Physics.conversions.perCcToPerM3(p.n));return[['&lambda;<sub>De</sub>',l*100,'cm'],['N<sub>D</sub>',(4*PI/3)*p.n*pw(l*100,3),'']]}catch{return null}}},
+{id:'rci',cat:'Lengths',num:'L02',th:'t-len',nm:'Ion Thermal Gyroradius',kw:['larmor','gyroradius','ion','rhoi'],math:'&rho;<sub>i</sub> = &radic;(k<sub>B</sub>T<sub>i</sub>/m<sub>i</sub>)/&Omega;<sub>ci</sub>',src:'NRL 2023 p.28; v<sub>Ti</sub>=&radic;(kT<sub>i</sub>/m<sub>i</sub>)',in:[{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temperature',unit:'eV',def:10},Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const r=Physics.ionGyroradius(p.Ti,Physics.conversions.gaussToTesla(p.B),p.Z,p.mu);return[['&rho;<sub>i</sub>',r*100,'cm'],['&rho;<sub>i</sub>',r/1000,'km']]}catch{return null}}},
+{id:'dil',cat:'Lengths',num:'L03',th:'t-len',nm:'Ion Inertial Length',kw:['inertial','skin depth','ion','di'],math:'d<sub>i</sub> = c/&omega;<sub>pi</sub>',src:'NRL 2023 p.28 · CODATA 2022',in:[{id:'ni',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const d=Physics.ionInertialLength(Physics.conversions.perCcToPerM3(p.ni),p.Z,p.mu);return[['d<sub>i</sub>',d*100,'cm'],['d<sub>i</sub>',d/1000,'km']]}catch{return null}}},
+{id:'vA',cat:'Velocities',num:'V01',th:'t-vel',nm:'Alfvén Speed',kw:['alfven','alfvén','alfvén speed','vA','mhd'],math:'v<sub>A</sub> = B/&radic;(&mu;<sub>0</sub>n<sub>i</sub>m<sub>i</sub>)',src:'NRL 2023 p.29 · CODATA 2022',scope:'Classical, non-relativistic, single-ion mass density',in:[Bi('B','B','Field magnitude',5e-5),{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const v=Physics.alfvenSpeed(Physics.conversions.gaussToTesla(p.B),Physics.conversions.perCcToPerM3(p.n),p.mu);return[['v<sub>A</sub>',v*100,'cm/s'],['v<sub>A</sub>',v/1000,'km/s'],['v<sub>A</sub>/c',v/C_SI,'']]}catch{return null}}},
+{id:'Cs',cat:'Velocities',num:'V02',th:'t-vel',nm:'Ion Sound Speed',kw:['sound speed','Cs','acoustic'],math:'C<sub>s</sub> = &radic;(&gamma;Zk<sub>B</sub>T<sub>e</sub>/m<sub>i</sub>)',src:'NRL 2023 p.29',scope:'Electron-pressure ion sound speed; T<sub>i</sub> contribution omitted',in:[{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1},{id:'gamma',sym:'&gamma;',lbl:'Adiabatic index',unit:'',def:1}],fn(p){try{const v=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,p.gamma);return[['C<sub>s</sub>',v*100,'cm/s'],['C<sub>s</sub>',v/1000,'km/s']]}catch{return null}}},
+{id:'beta',cat:'Dimensionless',num:'D01',th:'t-dim',nm:'Total Single-Ion Plasma Beta',kw:['beta','thermal pressure','total beta'],math:'&beta;<sub>tot</sub> = 2&mu;<sub>0</sub>(n<sub>e</sub>kT<sub>e</sub>+n<sub>i</sub>kT<sub>i</sub>)/B&sup2;',src:'NRL 2023 p.29 · quasi-neutral n<sub>e</sub>=Zn<sub>i</sub>',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temperature',unit:'eV',def:10},Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true}],fn(p){try{const ni=Physics.conversions.perCcToPerM3(p.n),B=Physics.conversions.gaussToTesla(p.B),be=Physics.speciesBeta(p.Z*ni,p.Te,B),bi=Physics.speciesBeta(ni,p.Ti,B);return[['&beta;<sub>e</sub>',be,''],['&beta;<sub>i</sub>',bi,''],['&beta;<sub>tot</sub>',be+bi,'']]}catch{return null}}},
+{id:'betae',cat:'Dimensionless',num:'D02',th:'t-dim',nm:'Electron Beta and Alfvén Regime',kw:['electron beta','betae','KAW regime'],math:'&beta;<sub>e</sub> = 2&mu;<sub>0</sub>n<sub>e</sub>kT<sub>e</sub>/B&sup2;',src:'NRL 2023 p.29; regime criterion is asymptotic',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const ne=p.Z*Physics.conversions.perCcToPerM3(p.n),be=Physics.speciesBeta(ne,p.Te,Physics.conversions.gaussToTesla(p.B)),me=Physics.electronIonMassRatio(p.mu),reg=Physics.kawRegime(be,p.mu);return[['&beta;<sub>e</sub>',be,''],['m<sub>e</sub>/m<sub>i</sub>',me,''],['&beta;<sub>e</sub>/(m<sub>e</sub>/m<sub>i</sub>)',reg.ratio,''],['Asymptotic regime',reg.label,'']]}catch{return null}}},
+{id:'Mach',cat:'Dimensionless',num:'D03',th:'t-dim',nm:'Alfvén and Ion-Sound Mach Numbers',kw:['mach','alfven mach','sonic mach'],math:'M<sub>A</sub>=V/v<sub>A</sub>, M<sub>s</sub>=V/C<sub>s</sub>',src:'Speeds use NRL 2023 conventions',in:[{id:'V',sym:'V',lbl:'Flow speed',unit:'km/s',def:400},Bi('B','B','Field magnitude',5e-5),{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1},{id:'gamma',sym:'&gamma;',lbl:'Sound adiabatic index',unit:'',def:1}],fn(p){try{if(!ok(p.V))return null;const vA=Physics.alfvenSpeed(Physics.conversions.gaussToTesla(p.B),Physics.conversions.perCcToPerM3(p.n),p.mu),cs=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,p.gamma),v=p.V*1000;return[['M<sub>A</sub>',v/vA,''],['M<sub>s</sub>',v/cs,'']]}catch{return null}}},
+{id:'crosshel',cat:'Dimensionless',num:'D04',th:'t-dim',nm:'Aligned Scalar Cross Helicity',kw:['cross helicity','residual energy','elsasser','sigma_c'],math:'&sigma;<sub>c</sub> = 2&delta;v &delta;v<sub>A</sub>/(&delta;v&sup2;+&delta;v<sub>A</sub>&sup2;)',src:'Scalar, collinear projection; use vector averages for research products',scope:'Signed fluctuations are required; this is not a vector time-series estimator',in:[{id:'dv',sym:'&delta;v',lbl:'Signed velocity fluctuation',unit:'km/s',def:30,signed:true},{id:'dB',sym:'&delta;B',lbl:'Signed magnetic fluctuation',unit:'nT',def:3,signed:true},{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{if(!finite(p.dv,p.dB))return null;const dv=p.dv*1000,dvA=Physics.alfvenEquivalentVelocity(p.dB*1e-9,Physics.conversions.perCcToPerM3(p.n),p.mu),den=dv*dv+dvA*dvA;if(den===0)return null;return[['&delta;v<sub>A</sub>',dvA/1000,'km/s'],['&sigma;<sub>c</sub>',2*dv*dvA/den,''],['&sigma;<sub>r</sub>',(dv*dv-dvA*dvA)/den,'']]}catch{return null}}},
+{id:'kaw_regime',cat:'KAW',num:'K01',th:'t-kaw',nm:'Kinetic vs Inertial Alfvén Limit',kw:['kaw','kinetic alfven','inertial alfven','IAW'],math:'&beta;<sub>e</sub>/(m<sub>e</sub>/m<sub>i</sub>) &gg; 1 &rarr; kinetic; &ll; 1 &rarr; inertial',src:'Asymptotic Alfvén-wave regime criterion',scope:'A regime condition does not by itself identify an observed wave mode',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const ni=Physics.conversions.perCcToPerM3(p.n),be=Physics.speciesBeta(p.Z*ni,p.Te,Physics.conversions.gaussToTesla(p.B)),me=Physics.electronIonMassRatio(p.mu),reg=Physics.kawRegime(be,p.mu);return[['&beta;<sub>e</sub>',be,''],['m<sub>e</sub>/m<sub>i</sub>',me,''],['Regime ratio',reg.ratio,''],['Asymptotic limit',reg.label,'']]}catch{return null}}},
+{id:'kaw_rhos',cat:'KAW',num:'K02',th:'t-kaw',nm:'Ion-Sound, Gyro, and Inertial Scales',kw:['rhos','spectral break','KAW scale'],math:'&rho;<sub>s</sub> = C<sub>s</sub>/&Omega;<sub>ci</sub>',src:'NRL thermal convention; &gamma;=1 for &rho;<sub>s</sub>',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temperature',unit:'eV',def:10},Bi('B','B','Field magnitude',5e-5),{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{const B=Physics.conversions.gaussToTesla(p.B),ni=Physics.conversions.perCcToPerM3(p.n),wci=Physics.ionGyroAngular(B,p.Z,p.mu),rs=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,1)/wci,ri=Physics.ionGyroradius(p.Ti,B,p.Z,p.mu),di=Physics.ionInertialLength(ni,p.Z,p.mu);return[['&rho;<sub>s</sub>',rs*100,'cm'],['&rho;<sub>i</sub>',ri*100,'cm'],['d<sub>i</sub>',di*100,'cm'],['&rho;<sub>s</sub>/d<sub>i</sub>',rs/di,'']]}catch{return null}}},
+{id:'kaw_disp',cat:'KAW',num:'K03',th:'t-kaw',nm:'Reduced Two-Fluid KAW Dispersion',kw:['kaw dispersion','phase velocity'],math:'&omega; = |k<sub>&parallel;</sub>|v<sub>A</sub>&radic;(1+k<sub>&perp;</sub>&sup2;&rho;<sub>s</sub>&sup2;)',src:'Reduced low-frequency, anisotropic two-fluid approximation',scope:'Not a general kinetic dispersion solver',in:[{id:'kpar',sym:'k<sub>&parallel;</sub>',lbl:'Parallel wavenumber magnitude',unit:'cm&#8315;&sup1;',def:1e-6},{id:'kperp',sym:'k<sub>&perp;</sub>',lbl:'Perpendicular wavenumber',unit:'cm&#8315;&sup1;',def:1e-4},{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field magnitude',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{if(!ok(p.kpar,p.kperp))return null;const B=Physics.conversions.gaussToTesla(p.B),ni=Physics.conversions.perCcToPerM3(p.n),vA=Physics.alfvenSpeed(B,ni,p.mu),rs=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,1)/Physics.ionGyroAngular(B,p.Z,p.mu),kr=p.kperp*100*rs,d=sq(1+kr*kr),w=p.kpar*100*vA*d;return[['k<sub>&perp;</sub>&rho;<sub>s</sub>',kr,''],['&omega;',w,'rad/s'],['f',w/(2*PI),'Hz'],['v<sub>ph,&parallel;</sub>',vA*d/1000,'km/s']]}catch{return null}}},
+{id:'kaw_taylor',cat:'KAW',num:'K04',th:'t-kaw',nm:'Taylor-Shifted Kinetic-Scale Frequencies',kw:['taylor hypothesis','spectral break','convected frequency'],math:'f<sub>sc</sub>(l) = V<sub>sw</sub>/(2&pi;l)',src:'Taylor frozen-flow mapping',scope:'Assumes structures are convected past the observer and V<sub>sw</sub> dominates intrinsic phase speed',in:[{id:'Vsw',sym:'V<sub>sw</sub>',lbl:'Flow speed',unit:'km/s',def:400},{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field magnitude',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'Ti',sym:'T<sub>i</sub>',lbl:'Ion temperature',unit:'eV',def:10},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{if(!ok(p.Vsw))return null;const B=Physics.conversions.gaussToTesla(p.B),ni=Physics.conversions.perCcToPerM3(p.n),V=p.Vsw*1000,wci=Physics.ionGyroAngular(B,p.Z,p.mu),ri=Physics.ionGyroradius(p.Ti,B,p.Z,p.mu),rs=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,1)/wci,di=Physics.ionInertialLength(ni,p.Z,p.mu);return[['f(&rho;<sub>i</sub>)',V/(2*PI*ri),'Hz'],['f(&rho;<sub>s</sub>)',V/(2*PI*rs),'Hz'],['f(d<sub>i</sub>)',V/(2*PI*di),'Hz']]}catch{return null}}},
+{id:'kaw_Landau',cat:'KAW',num:'K05',th:'t-kaw',nm:'Electron Landau-Resonance Accessibility',kw:['landau damping','landau resonance','resonance','dissipation'],math:'x<sub>e</sub> = v<sub>ph,&parallel;</sub>/v<sub>Te</sub>, &nbsp; f<sub>M</sub>(x<sub>e</sub>)/f<sub>M</sub>(0)=exp(-x<sub>e</sub>&sup2;/2)',src:'Landau resonance condition &omega;=k<sub>&parallel;</sub>v<sub>&parallel;</sub>',scope:'Reports resonance location in a Maxwellian only; it does not calculate &gamma;/&omega;',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},Bi('B','B','Field magnitude',5e-5),{id:'Te',sym:'T<sub>e</sub>',lbl:'Electron temperature',unit:'eV',def:12},{id:'kperp',sym:'k<sub>&perp;</sub>',lbl:'Perpendicular wavenumber',unit:'cm&#8315;&sup1;',def:1e-4},{id:'Z',sym:'Z',lbl:'Charge state',unit:'',def:1,integer:true},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{if(!ok(p.kperp))return null;const B=Physics.conversions.gaussToTesla(p.B),ni=Physics.conversions.perCcToPerM3(p.n),vA=Physics.alfvenSpeed(B,ni,p.mu),rs=Physics.ionSoundSpeed(p.Te,p.Z,p.mu,1)/Physics.ionGyroAngular(B,p.Z,p.mu),vTe=Physics.electronThermalSpeed(p.Te),vph=vA*sq(1+(p.kperp*100*rs)**2),x=vph/vTe;return[['v<sub>ph,&parallel;</sub>',vph/1000,'km/s'],['v<sub>Te</sub>',vTe/1000,'km/s'],['x<sub>e</sub>',x,''],['Maxwellian factor',ex(-x*x/2),''],['Interpretation',x<3?'Resonance lies within 3 v<sub>Te</sub>':'Resonance lies beyond 3 v<sub>Te</sub>','']]}catch{return null}}},
+{id:'kaw_walen',cat:'KAW',num:'K06',th:'t-kaw',nm:'Scalar Walén Ratio',kw:['walen','walén','walén test','alfvenicity'],math:'R<sub>W</sub> = &delta;v/(&delta;B/&radic;(&mu;<sub>0</sub>&rho;))',src:'Scalar projection diagnostic',scope:'A proper Walén test requires vector components, frame selection, and regression with uncertainty',in:[{id:'dv',sym:'&delta;v',lbl:'Signed velocity fluctuation',unit:'km/s',def:30,signed:true},{id:'dB',sym:'&delta;B',lbl:'Signed magnetic fluctuation',unit:'nT',def:3,signed:true},{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'mu',sym:'&mu;',lbl:'Ion mass',unit:'m<sub>p</sub>',def:1}],fn(p){try{if(!finite(p.dv,p.dB)||p.dB===0)return null;const dvA=Physics.alfvenEquivalentVelocity(p.dB*1e-9,Physics.conversions.perCcToPerM3(p.n),p.mu)/1000,slope=p.dv/dvA;return[['&delta;v<sub>A</sub>',dvA,'km/s'],['R<sub>W</sub>',slope,''],['|R<sub>W</sub>-sign|',ab(ab(slope)-1),'']]}catch{return null}}},
+{id:'inst_firehose',cat:'Instabilities',num:'I01',th:'t-inst',nm:'Classical Fluid Firehose Criterion',kw:['firehose','anisotropy'],math:'&beta;<sub>&parallel;i</sub> - &beta;<sub>&perp;i</sub> > 2',src:'CGL single-species fluid threshold',scope:'Necessary simplified criterion, not a kinetic growth-rate calculation',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:5},{id:'Tpar',sym:'T<sub>&parallel;i</sub>',lbl:'Parallel ion temperature',unit:'eV',def:20},{id:'Tperp',sym:'T<sub>&perp;i</sub>',lbl:'Perpendicular ion temperature',unit:'eV',def:10},Bi('B','B','Field magnitude',5e-5)],fn(p){try{const n=Physics.conversions.perCcToPerM3(p.n),B=Physics.conversions.gaussToTesla(p.B),bp=Physics.speciesBeta(n,p.Tpar,B),bperp=Physics.speciesBeta(n,p.Tperp,B),criterion=bp-bperp;return[['&beta;<sub>&parallel;i</sub>',bp,''],['&beta;<sub>&perp;i</sub>',bperp,''],['Criterion',criterion,''],['Margin to threshold',criterion-2,''],['Fluid criterion',criterion>2?'Exceeded':'Not exceeded','']]}catch{return null}}},
+{id:'inst_mirror',cat:'Instabilities',num:'I02',th:'t-inst',nm:'Single-Species Mirror Criterion',kw:['mirror mode','magnetosheath'],math:'&beta;<sub>&perp;i</sub>(T<sub>&perp;i</sub>/T<sub>&parallel;i</sub>-1) > 1',src:'Simplified long-wavelength single-species threshold',scope:'Multi-species and finite-Larmor-radius corrections are omitted',in:[{id:'n',sym:'n<sub>i</sub>',lbl:'Ion density',unit:'cm&#8315;&sup3;',def:15},{id:'Tpar',sym:'T<sub>&parallel;i</sub>',lbl:'Parallel ion temperature',unit:'eV',def:100},{id:'Tperp',sym:'T<sub>&perp;i</sub>',lbl:'Perpendicular ion temperature',unit:'eV',def:300},Bi('B','B','Field magnitude',2.5e-4)],fn(p){try{const n=Physics.conversions.perCcToPerM3(p.n),B=Physics.conversions.gaussToTesla(p.B),bperp=Physics.speciesBeta(n,p.Tperp,B),anis=p.Tperp/p.Tpar,criterion=bperp*(anis-1);return[['&beta;<sub>&perp;i</sub>',bperp,''],['T<sub>&perp;i</sub>/T<sub>&parallel;i</sub>',anis,''],['Criterion',criterion,''],['Margin to threshold',criterion-1,''],['Simplified criterion',criterion>1?'Exceeded':'Not exceeded','']]}catch{return null}}},
+{id:'inst_emic',cat:'Instabilities',num:'I03',th:'t-inst',nm:'Proton EMIC 1%-Growth Contour',kw:['emic','electromagnetic ion cyclotron'],math:'T<sub>&perp;p</sub>/T<sub>&parallel;p</sub> = 1+0.65&beta;<sub>&parallel;p</sub><sup>-0.40</sup>',src:'Gary et al. (1994), DOI 10.1029/93JA03583',scope:'Fit for &gamma;<sub>max</sub>/&Omega;<sub>p</sub>=10<sup>-2</sup> in the cited homogeneous bi-Maxwellian proton model; not a universal marginal boundary',in:[{id:'n',sym:'n<sub>p</sub>',lbl:'Proton density',unit:'cm&#8315;&sup3;',def:5},{id:'Tpar',sym:'T<sub>&parallel;p</sub>',lbl:'Parallel proton temperature',unit:'eV',def:500},{id:'Tperp',sym:'T<sub>&perp;p</sub>',lbl:'Perpendicular proton temperature',unit:'eV',def:1000},Bi('B','B','Field magnitude',2e-4)],fn(p){try{const n=Physics.conversions.perCcToPerM3(p.n),B=Physics.conversions.gaussToTesla(p.B),bp=Physics.speciesBeta(n,p.Tpar,B),anis=p.Tperp/p.Tpar,threshold=1+0.65*pw(bp,-0.4);return[['&beta;<sub>&parallel;p</sub>',bp,''],['T<sub>&perp;p</sub>/T<sub>&parallel;p</sub>',anis,''],['1% growth contour',threshold,''],['Margin',anis-threshold,''],['Relative to fit',anis>threshold?'Above contour':'Below contour','']]}catch{return null}}}
 ];
 
 const CALC_PRESETS=[
-{id:'psbl',cls:'ppsbl',mission:'MMS',env:'PSBL',params:{n:0.3,Te:500,Ti:2000,B:2e-4,mu:1,Vsw:600},chips:['n=0.3','B=20nT','Te=500eV'],ids:['kaw_regime','kaw_rhos','betae','inst_emic','lD']},
-{id:'msh',cls:'pmsh',mission:'MMS',env:'Magnetosheath',params:{n:15,Te:50,Ti:200,B:2.5e-4,mu:1,Tpar:100,Tperp:300},chips:['n=15','B=25nT'],ids:['kaw_regime','inst_mirror','kaw_Landau','beta']},
-{id:'sw',cls:'psw',mission:'Wind',env:'Solar Wind 1AU',params:{n:5,Te:12,Ti:10,B:5e-5,mu:1,Vsw:400,Tpar:20,Tperp:10},chips:['n=5','B=5nT','Te=12eV'],ids:['kaw_regime','kaw_taylor','crosshel','inst_firehose','beta']},
-{id:'psp',cls:'ppsp',mission:'PSP',env:'0.3 AU',params:{n:300,Te:50,Ti:30,B:5e-3,mu:1,Vsw:300},chips:['n=300','B=500nT'],ids:['kaw_regime','kaw_rhos','kaw_taylor','lD','beta']},
-{id:'l1',cls:'pl1',mission:'Aditya-L1',env:'L1 Point',params:{n:6,Te:10,Ti:8,B:5e-5,mu:1,Vsw:400},chips:['n=6','B=5nT'],ids:['kaw_regime','kaw_taylor','betae','betai','vA']},
+{id:'psbl',cls:'ppsbl',mission:'MMS',env:'PSBL',params:{n:0.3,Te:500,Ti:2000,B:2e-4,Z:1,mu:1,Vsw:600},chips:['nᵢ=0.3','B=20 nT','Te=500 eV'],ids:['kaw_regime','kaw_rhos','betae','inst_emic','lD']},
+{id:'msh',cls:'pmsh',mission:'MMS',env:'Magnetosheath',params:{n:15,Te:50,Ti:200,B:2.5e-4,Z:1,mu:1,Tpar:100,Tperp:300},chips:['nᵢ=15','B=25 nT'],ids:['kaw_regime','inst_mirror','kaw_Landau','beta']},
+{id:'sw',cls:'psw',mission:'Wind',env:'Solar Wind 1 AU',params:{n:5,Te:12,Ti:10,B:5e-5,Z:1,mu:1,Vsw:400,Tpar:20,Tperp:10},chips:['nᵢ=5','B=5 nT','Te=12 eV'],ids:['kaw_regime','kaw_taylor','crosshel','inst_firehose','beta']},
+{id:'psp',cls:'ppsp',mission:'PSP',env:'0.3 AU',params:{n:300,Te:50,Ti:30,B:5e-3,Z:1,mu:1,Vsw:300},chips:['nᵢ=300','B=500 nT'],ids:['kaw_regime','kaw_rhos','kaw_taylor','lD','beta']},
+{id:'l1',cls:'pl1',mission:'Aditya-L1',env:'L1 Point',params:{n:6,Te:10,Ti:8,B:5e-5,Z:1,mu:1,Vsw:400},chips:['nᵢ=6','B=5 nT'],ids:['kaw_regime','kaw_taylor','betae','beta','vA']},
 ];
 
-const HINTS=['KAW dispersion','plasma beta','Debye length','Alfven velocity','Taylor hypothesis','Walen test','Landau damping','cross helicity','gyrofrequency','sound speed','mirror mode','firehose','EMIC','Mach number'];
-const KAW_H=new Set(['KAW dispersion','Taylor hypothesis','Walen test','Landau damping','cross helicity']);
+const HINTS=['KAW dispersion','plasma beta','Debye length','Alfvén speed','Taylor hypothesis','Walén test','Landau resonance','cross helicity','gyrofrequency','sound speed','mirror mode','firehose','EMIC','Mach number'];
+const KAW_H=new Set(['KAW dispersion','Taylor hypothesis','Walén test','Landau resonance','cross helicity']);
 const INST_H=new Set(['mirror mode','firehose','EMIC']);
 
 function searchDB(q){
@@ -879,12 +934,14 @@ function showWS(){
   document.getElementById('land').style.display='none';
   document.getElementById('ws').style.display='block';
   document.getElementById('hdrSW').style.display='block';
+  document.getElementById('hpillClear').style.display='inline-block';
   updCnt();
 }
 function showLand(){
   document.getElementById('land').style.display='flex';
   document.getElementById('ws').style.display='none';
   document.getElementById('hdrSW').style.display='none';
+  document.getElementById('hpillClear').style.display='none';
 }
 function clearWS(){
   cards=[];ctr=0;document.getElementById('wsc').innerHTML='';
@@ -908,11 +965,11 @@ function remSet(cid,sid){const card=cards.find(c=>c.cid===cid);if(!card||card.se
 function copyRes(cid){
   const card=cards.find(c=>c.cid===cid);if(!card)return;const f=card.f;let txt=`${f.nm} (${f.num})\n`;
   card.sets.forEach(s=>{
-    txt+=`Set ${s.sid}: `;f.in.forEach(i=>{txt+=`${i.id}=${s.vals[i.id]} `;});txt+='\n';
+    txt+=`Set ${s.sid}: `;f.in.forEach(i=>{txt+=`${i.id}=${toDisp(i,s.vals[i.id])}${dispU(i)?` ${dispU(i)}`:''} `;});txt+='\n';
     let r=null;try{const pm={};f.in.forEach(i=>{pm[i.id]=parseFloat(s.vals[i.id])});r=f.fn(pm);}catch{}
     if(r)r.forEach(([l,v,u])=>{txt+=`  ${l.replace(/<[^>]+>/g,'')} = ${typeof v==='string'?v:isFinite(v)?v.toPrecision(5):'--'} ${u}\n`;});
   });
-  navigator.clipboard.writeText(txt).then(()=>toast('Copied')).catch(()=>{});
+  copyText(txt).then(()=>toast('Copied')).catch(()=>toast('Copy failed'));
 }
 function latexRes(cid){
   const card=cards.find(c=>c.cid===cid);if(!card)return;const f=card.f,s=card.sets[0];
@@ -920,15 +977,15 @@ function latexRes(cid){
   const cl=t=>t.replace(/<sub>/g,'_{').replace(/<\/sub>/g,'}').replace(/<sup>/g,'^{').replace(/<\/sup>/g,'}').replace(/&[^;]+;/g,'');
   let tx=`% ${f.nm} (${f.num})\n\\begin{tabular}{lrl}\\hline\nParameter & Value & Unit\\\\\\hline\n`;
   r.forEach(([l,v,u])=>{tx+=`$${cl(l)}$ & ${typeof v==='string'?v:isFinite(v)?v.toPrecision(5):'--'} & ${cl(u)}\\\\\\n`;});
-  tx+='\\hline\\end{tabular}';navigator.clipboard.writeText(tx).then(()=>toast('LaTeX copied')).catch(()=>{});
+  tx+='\\hline\\end{tabular}';copyText(tx).then(()=>toast('LaTeX copied')).catch(()=>toast('Copy failed'));
 }
 
 function renderCards(){document.getElementById('wsc').innerHTML=cards.map(c=>buildCard(c)).join('');updCnt();}
 function buildCard(c){
   const{f,cid,sets}=c;
   return`<div class="fc ${f.th}" id="wc-${cid}"><div class="fch"><span class="fcn">${f.num}</span><span class="fcna">${f.nm}</span>
-    <div class="fca"><button class="fcb" onclick="copyRes(${cid})">Copy</button><button class="fcb ltx" onclick="latexRes(${cid})">LaTeX</button><button class="fcb" onclick="addSet(${cid})">+</button><button class="fcb xb" onclick="remCard(${cid})">&times;</button></div></div>
-    <div class="fcf"><div class="fcm">${f.math}</div></div>
+    <div class="fca"><button class="fcb" onclick="copyRes(${cid})" title="Copy results">Copy</button><button class="fcb ltx" onclick="latexRes(${cid})" title="Copy as LaTeX">LaTeX</button><button class="fcb" onclick="addSet(${cid})" title="Add comparison set">+</button><button class="fcb xb" onclick="remCard(${cid})" title="Close formula">&times;</button></div></div>
+    <div class="fcf"><div class="fcm">${f.math}</div>${f.src?`<div class="fcmeta"><strong>Basis:</strong> ${f.src}</div>`:''}${f.scope?`<div class="fcmeta"><strong>Scope:</strong> ${f.scope}</div>`:''}</div>
     <div class="fccls">${sets.map(s=>buildCol(f,cid,s,sets.length>1)).join('')}${sets.length>=2?buildDelta(f,cid,sets):''}</div>
     <div class="fcft"><button class="fcas" onclick="addSet(${cid})">+ Compare</button><span class="fcfi">${f.cat}</span><button class="fcca" onclick="latexRes(${cid})">LaTeX</button></div></div>`;
 }
@@ -937,7 +994,7 @@ function buildCol(f,cid,s,sr){
   return`<div class="fccl"><div class="fcsl"><span class="fcsn" style="color:${C[s.sid]||'var(--acc)'}">${s.sid}</span>${sr?`<span class="fcsrm" onclick="remSet(${cid},'${s.sid}')">&times;</span>`:''}</div>
     <div class="fcin">${f.in.map(i=>{const dv=toDisp(i,s.vals[i.id]??i.def),ul=dispU(i);
       return`<div class="ig"><div class="il"><span class="isym">${i.sym}</span><span style="color:var(--t2);font-size:.72rem">${i.lbl}</span>${ul?`<span class="iun">[${ul}]</span>`:''}</div>
-      <input type="number" value="${dv}" step="any" oninput="onIC(${cid},'${s.sid}','${i.id}',this.value)"></div>`;}).join('')}</div>
+      <input type="number" value="${dv}" step="${i.integer?'1':'any'}" ${i.signed?'':'min="0"'} aria-label="${i.lbl.replace(/<[^>]*>/g,'')}" oninput="onIC(${cid},'${s.sid}','${i.id}',this.value)"></div>`;}).join('')}</div>
     <div class="fcrs" id="rs-${cid}-${s.sid}"><div class="rph">...</div></div></div>`;
 }
 function buildDelta(f,cid,sets){
@@ -952,15 +1009,16 @@ function onIC(cid,sid,iid,val){
   const card=cards.find(c=>c.cid===cid);if(!card)return;
   const s=card.sets.find(s=>s.sid===sid);if(!s)return;
   const inp=card.f.in.find(i=>i.id===iid);
-  s.vals[iid]=inp?toInt(inp,parseFloat(val)):parseFloat(val);
+  const parsed=val.trim()===''?NaN:Number(val);
+  s.vals[iid]=inp?toInt(inp,parsed):parsed;
   calcCard(card);saveHash();
 }
 function calcCard(card){
   if(!card)return;const{f,cid,sets}=card,allR=[];
   sets.forEach(s=>{
-    let r=null;try{const pm={};f.in.forEach(i=>{pm[i.id]=parseFloat(s.vals[i.id])??NaN});r=f.fn(pm);}catch{}allR.push(r);
+    let r=null;try{const pm={};f.in.forEach(i=>{pm[i.id]=Number(s.vals[i.id])});r=f.fn(pm);}catch{}allR.push(r);
     const p=document.getElementById(`rs-${cid}-${s.sid}`);if(!p)return;
-    if(!r){p.innerHTML='<div class="rerr">Check inputs</div>';return;}
+    if(!r){p.innerHTML='<div class="rerr">Enter valid values in the stated physical range.</div>';return;}
     p.innerHTML=r.map(([l,v,u])=>`<div class="rrow"><span class="rl">${l}</span><span class="rv">${typeof v==='string'?v:fmt(v)}<span class="ru">${u}</span></span></div>`).join('');
   });
   if(sets.length>=2){
@@ -976,22 +1034,35 @@ function calcCard(card){
   }
 }
 
-// Validation Modal Logic (Calculator tab)
+// Independent rounded-coefficient benchmark from NRL Plasma Formulary 2023,
+// pp. 28–29. The application values come from SI definitions + CODATA 2022.
+function nrlReferenceRows(p,q){
+  const BG=p.B*1e-5,ni=p.n,ne=p.Z*ni,Z=p.Z,mu=p.mu;
+  return[
+    {name:'Electron gyrofrequency f<sub>ce</sub>',formula:'2.80×10⁶ B',actual:q.fce,reference:2.80e6*BG,unit:'Hz',scale:1},
+    {name:'Ion gyrofrequency f<sub>ci</sub>',formula:'1.52×10³ ZB/μ',actual:q.fci,reference:1.52e3*Z/mu*BG,unit:'Hz',scale:1},
+    {name:'Electron plasma f<sub>pe</sub>',formula:'8.98×10³√nₑ',actual:q.fpe,reference:8.98e3*sq(ne),unit:'Hz',scale:1},
+    {name:'Ion plasma f<sub>pi</sub>',formula:'2.10×10² Z√(nᵢ/μ)',actual:q.fpi,reference:2.10e2*Z*sq(ni/mu),unit:'Hz',scale:1},
+    {name:'Electron Debye length λ<sub>De</sub>',formula:'7.43×10²√(Te/nₑ)',actual:q.lDe,reference:7.43e2*sq(p.Te/ne)*1e-2,unit:'m',scale:1},
+    {name:'Ion gyroradius ρ<sub>i</sub>',formula:'1.02×10²√(μTi)/(ZB)',actual:q.ri,reference:1.02e2*sq(mu*p.Ti)/(Z*BG)*1e-2,unit:'km',scale:1e-3},
+    {name:'Ion inertial length d<sub>i</sub>',formula:'2.28×10⁷√(μ/nᵢ)/Z',actual:q.di,reference:2.28e7*sq(mu/ni)/Z*1e-2,unit:'km',scale:1e-3},
+    {name:'Alfvén speed v<sub>A</sub>',formula:'2.18×10¹¹ B/√(μnᵢ)',actual:q.vA,reference:2.18e11*BG/sq(mu*ni)*1e-2,unit:'km/s',scale:1e-3},
+    {name:'Ion sound speed C<sub>s</sub>',formula:'9.79×10⁵√(ZTe/μ)',actual:q.csIA,reference:9.79e5*sq(Z*p.Te/mu)*1e-2,unit:'km/s',scale:1e-3},
+    {name:'Electron beta β<sub>e</sub>',formula:'4.03×10⁻¹¹ nₑTe/B²',actual:q.betaE,reference:4.03e-11*ne*p.Te/(BG*BG),unit:'',scale:1},
+    {name:'Ion beta β<sub>i</sub>',formula:'4.03×10⁻¹¹ nᵢTi/B²',actual:q.betaI,reference:4.03e-11*ni*p.Ti/(BG*BG),unit:'',scale:1},
+    {name:'Electron thermal speed v<sub>Te</sub>',formula:'4.19×10⁷√Te',actual:q.vTe,reference:4.19e7*sq(p.Te)*1e-2,unit:'km/s',scale:1e-3},
+  ];
+}
+function relDiff(actual,reference){return ab((actual-reference)/reference)}
 function openValidation(){
   document.getElementById('valModal').classList.add('open');
-  const B=5e-5,n=5,Te=12,Ti=10;
-  const rows=[['f<sub>pe</sub>','8.98e3 n<sup>1/2</sup>',8.98e3*sq(n),20082,'Hz'],['f<sub>ci</sub>','1.52e3 B',1.52e3*B,7.6e-2,'Hz'],
-    ['&lambda;<sub>D</sub>','743(T/n)<sup>1/2</sup>',743*sq(Te/n),1150,'cm'],['r<sub>i</sub>','102 T<sub>i</sub><sup>1/2</sup>/B',102*sq(Ti)/B,6.45e6,'cm'],
-    ['d<sub>i</sub>','2.28e7/n<sup>1/2</sup>',2.28e7/sq(n),1.02e7,'cm'],['v<sub>A</sub>','2.18e11 B/n<sup>1/2</sup>',2.18e11*pw(n,-.5)*B,4.876e6,'cm/s'],
-    ['C<sub>s</sub>','9.79e5 T<sub>e</sub><sup>1/2</sup>',9.79e5*sq(Te),3.391e6,'cm/s'],['&beta;<sub>e</sub>','4.03e-11 nTe/B&sup2;',4.03e-11*n*Te/(B*B),0.9672,''],
-    ['&beta;<sub>i</sub>','4.03e-11 nTi/B&sup2;',4.03e-11*n*Ti/(B*B),0.8060,''],['&rho;<sub>s</sub>','102.2 Te<sup>1/2</sup>/B',102.2*sq(Te)/B,7.083e6,'cm'],
-    ['M<sub>A</sub>','V/vA',400e5/(2.18e11*pw(n,-.5)*B),8.204,'']];
-  const nrl=[20082,.0760,1150,6.449e6,1.019e7,4.876e6,3.391e6,0.9672,0.8060,7.083e6,8.204];
-  const tb=document.querySelector('#vtbl tbody');tb.innerHTML='';
-  rows.forEach((r,i)=>{
-    const pf=r[2],nr=nrl[i],pct=ab((pf-nr)/nr)*100;
-    tb.innerHTML+=`<tr><td>${r[0]}</td><td style="font-size:.66rem;color:var(--t2)">${r[1]}</td><td>${parseFloat(pf.toPrecision(4))}</td><td>${parseFloat(nr.toPrecision(4))}</td><td style="color:${pct<0.5?'var(--grn)':'var(--err)'}">&#10003;</td></tr>`;
-  });
+  const p={n:5,B:5,Te:12,Ti:10,Vsw:400,Z:1,mu:1},q=plasma(p),rows=nrlReferenceRows(p,q);
+  const tb=document.querySelector('#vtbl tbody');
+  tb.innerHTML=rows.map(r=>{
+    const diff=relDiff(r.actual,r.reference),pass=diff<0.005;
+    return`<tr><td>${r.name}</td><td style="font-size:.66rem;color:var(--t2)">${r.formula}</td><td>${FMT(r.actual*r.scale)} ${r.unit}</td><td>${FMT(r.reference*r.scale)} ${r.unit}</td><td style="color:${pass?'var(--grn)':'var(--err)'}">${pass?'PASS':'CHECK'}<br><span style="font-size:.58rem">${(diff*100).toFixed(3)}%</span></td></tr>`;
+  }).join('');
+  document.querySelector('#valModal .modal-x')?.focus();
 }
 function closeModal(){document.getElementById('valModal').classList.remove('open');}
 document.getElementById('valModal').addEventListener('click',e=>{if(e.target.classList.contains('modal-bg'))closeModal();});
@@ -1002,7 +1073,7 @@ function saveHash(){
   history.replaceState(null,'',`#${encodeURIComponent(s)}`);
 }
 function loadHash(){
-  const h=decodeURIComponent(location.hash.slice(1));if(!h)return;
+  let h='';try{h=decodeURIComponent(location.hash.slice(1))}catch{return}if(!h||h.length>10000)return;
   h.split(';').forEach((seg,i)=>{
     const[fid,vs]=seg.split('|');if(!fid)return;const v={};
     if(vs)vs.split(',').forEach(kv=>{const[k,val]=kv.split(':');v[k]=parseFloat(val);});
@@ -1015,18 +1086,43 @@ function buildLanding(){
   document.getElementById('cpls').innerHTML=cats.map(c=>{
     const cnt=DB.filter(f=>f.cat===c).length;
     const isK=c==='KAW',isI=c==='Instabilities';
-    return`<div class="cpl${isK?' kpl':isI?' ipl':''}" onclick="fillS('${c}')">${c} <span class="cpl-ct">${cnt}</span></div>`;
+    return`<button type="button" class="cpl${isK?' kpl':isI?' ipl':''}" onclick="fillS('${c}')">${c} <span class="cpl-ct">${cnt}</span></button>`;
   }).join('');
-  document.getElementById('pgrid').innerHTML=CALC_PRESETS.map(pr=>`<div class="pcard ${pr.cls}" onclick="loadPreset('${pr.id}')"><div class="pmis">${pr.mission}</div><div class="penv">${pr.env}</div>
-    <div class="pchips">${pr.chips.map(c=>`<span class="pchip">${c}</span>`).join('')}</div><div class="pload">Load ${pr.ids.length}</div></div>`).join('');
-  document.getElementById('hchps').innerHTML=HINTS.map(h=>`<div class="hchp${KAW_H.has(h)?' kch':INST_H.has(h)?' ich':''}" onclick="fillS('${h}')">${h}</div>`).join('');
+  document.getElementById('pgrid').innerHTML=CALC_PRESETS.map(pr=>`<button type="button" class="pcard ${pr.cls}" onclick="loadPreset('${pr.id}')"><span class="pmis">${pr.mission}</span><span class="penv" style="display:block">${pr.env}</span>
+    <span class="pchips">${pr.chips.map(c=>`<span class="pchip">${c}</span>`).join('')}</span><span class="pload" style="display:block">Load ${pr.ids.length}</span></button>`).join('');
+  document.getElementById('hchps').innerHTML=HINTS.map(h=>`<button type="button" class="hchp${KAW_H.has(h)?' kch':INST_H.has(h)?' ich':''}" onclick="fillS('${h}')">${h}</button>`).join('');
 }
 function fillS(q){const i=document.getElementById('landI');i.value=q;i.focus();onSI(i,'landD');}
 
 
-// ── 3. V2 SI PHYSICS ENGINE & SUPPLEMENTARY LOGIC ──
-const EC=1.602176634e-19, ME=9.1093837015e-31, MP=1.67262192369e-27;
-const MU0=4*Math.PI*1e-7, EPS0=8.8541878128e-12, C_SI=2.99792458e8;
+// ── 3. KINETIC SCALE RULER ──
+function buildScaleRuler(q){
+  const bar=document.getElementById('kscale-bar');
+  const legend=document.getElementById('kscale-legend');
+  if(!bar||!legend||!q)return;
+  const scales=[
+    {id:'lDe', v:q.lDe,       lbl:'λ<sub>De</sub>', color:'#9b8ec4', unit:'m'},
+    {id:'de',  v:q.de,        lbl:'d<sub>e</sub>',  color:'#6aabb5', unit:'km', sc:1e-3},
+    {id:'rhos',v:q.rhos,      lbl:'ρ<sub>s</sub>',  color:'#62c9a8', unit:'km', sc:1e-3},
+    {id:'ri',  v:q.ri,        lbl:'ρ<sub>i</sub>',  color:'#d4a54a', unit:'km', sc:1e-3},
+    {id:'di',  v:q.di,        lbl:'d<sub>i</sub>',  color:'#c47050', unit:'km', sc:1e-3},
+  ].filter(s=>s.v>0&&isFinite(s.v));
+  if(!scales.length)return;
+  const logs=scales.map(s=>Math.log10(s.v));
+  const mn=Math.min(...logs)-0.5, mx=Math.max(...logs)+0.5, rng=mx-mn||1;
+  const pct=v=>Math.max(2,Math.min(98,(Math.log10(v)-mn)/rng*96+2));
+  const fv=v=>{const a=Math.abs(v);if(a>=1e3)return(v/1e3).toPrecision(3)+' km';if(a>=1)return v.toPrecision(3)+' m';if(a>=1e-3)return(v*1e2).toPrecision(3)+' cm';return v.toExponential(2)+' m';};
+  bar.innerHTML='<div class="kscale-track"></div>';
+  scales.forEach(s=>{
+    const p=pct(s.v);
+    const plain=s.lbl.replace(/<[^>]+>/g,'');
+    bar.innerHTML+=`<div class="kscale-pin" style="left:${p}%" title="${plain}: ${fv(s.v)}" aria-label="${plain}: ${fv(s.v)}">
+      <div class="kscale-dot" style="background:${s.color}22;border-color:${s.color}"></div></div>`;
+  });
+  legend.innerHTML=scales.map(s=>`<div class="kleg"><div class="kleg-dot" style="background:${s.color}22;border-color:${s.color}"></div><span style="color:${s.color}">${s.lbl}</span><span class="kleg-val">${fv(s.v)}</span></div>`).join('');
+}
+
+// ── 4. SUPPLEMENTARY PANELS (all calculations use plasma-physics.js) ──
 
 const STATIC_PRESETS={
   sw:    {n:5,   B:5,    Te:12,  Ti:10,  Vsw:400, Z:1, mu:1},
@@ -1036,49 +1132,38 @@ const STATIC_PRESETS={
 };
 
 function gP(){
+  const read=id=>{
+    const raw=document.getElementById(id).value.trim();
+    return raw===''?NaN:Number(raw);
+  };
   return {
-    n:  +document.getElementById('gn').value  ||5,
-    B:  +document.getElementById('gB').value  ||5,
-    Te: +document.getElementById('gTe').value ||12,
-    Ti: +document.getElementById('gTi').value ||10,
-    Vsw:+document.getElementById('gVsw').value||400,
-    Z:  +document.getElementById('gZ').value  ||1,
-    mu: +document.getElementById('gmu').value ||1,
+    n:read('gn'), B:read('gB'), Te:read('gTe'), Ti:read('gTi'),
+    Vsw:read('gVsw'), Z:read('gZ'), mu:read('gmu'),
   };
 }
 
 function plasma(p){
-  const n=p.n*1e6, B=p.B*1e-9, Te=p.Te*EC, Ti=p.Ti*EC;
-  const Z=p.Z||1, mu=p.mu||1, Vsw=(p.Vsw||0)*1e3;
-  const Oce=EC*B/ME, Oci=Z*EC*B/(mu*MP);
-  const Ope=Math.sqrt(n*EC*EC/(EPS0*ME));
-  const Opi=Math.sqrt(n*Z*Z*EC*EC/(EPS0*mu*MP));
-  const fce=Oce/(2*Math.PI), fci=Oci/(2*Math.PI);
-  const fpe=Ope/(2*Math.PI), fpi=Opi/(2*Math.PI);
-  const fLH=Math.sqrt(Oci*Oce/(1+(Oce/Ope)**2))/(2*Math.PI);
-  const lDe=Math.sqrt(EPS0*Te/(n*EC*EC));
-  const re=Math.sqrt(Te/ME)/Oce;
-  const ri=Math.sqrt(Ti/(mu*MP))/Oci;
-  const de=C_SI/Ope, di=C_SI/Opi;
-  const vA=B/Math.sqrt(MU0*n*mu*MP);
-  const csIA=Math.sqrt(Z*Te/(mu*MP));
-  const csMHD=Math.sqrt(5/3*(Z*Te+Ti)/(mu*MP));
-  const vTe=Math.sqrt(Te/ME), vTi=Math.sqrt(Ti/(mu*MP));
-  const betaI=2*MU0*n*Ti/(B*B), betaE=2*MU0*n*Te/(B*B);
-  const MA=Vsw>0?Vsw/vA:0, MS=Vsw>0?Vsw/csMHD:0;
-  const rhos=csIA/Oci;
-  const fbrk=Vsw>0?Vsw/(2*Math.PI*di):0;
-  const memi=ME/MP;
-  const kawState=betaE>memi*10?'KAW Active':betaE<memi/10?'IAW Regime':'Transition';
-  return {fce,fci,fpe,fpi,fLH,lDe,re,ri,de,di,vA,csIA,csMHD,vTe,vTi,
-          betaI,betaE,MA,MS,rhos,fbrk,memi,kawState,n_si:n,B_si:B,Te_si:Te,Ti_si:Ti};
+  return Physics.plasmaState({
+    niCm3:p.n, BnT:p.B, TeEv:p.Te, TiEv:p.Ti, VswKms:p.Vsw,
+    Z:p.Z, mu:p.mu, gammaSound:1, gammaElectron:5/3, gammaIon:5/3,
+  });
 }
 
-const FMT=(v,d=3)=>{if(!v||isNaN(v)||!isFinite(v))return'—';const a=Math.abs(v);if(a>=1e6||a<1e-4)return v.toExponential(2);if(a>=1000)return v.toFixed(1);if(a>=1)return v.toFixed(d);return v.toPrecision(3);};
+const FMT=(v,d=3)=>{if(!Number.isFinite(v))return'—';if(v===0)return'0';const a=Math.abs(v);if(a>=1e6||a<1e-4)return v.toExponential(2);if(a>=1000)return v.toFixed(1);if(a>=1)return v.toFixed(d);return v.toPrecision(3);};
 const SET=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
 
 function gUpdate(){
-  const p=gP(), q=plasma(p);
+  const p=gP();let q;
+  const err=document.getElementById('g-error');
+  try{
+    q=plasma(p);
+    if(err){err.style.display='none';err.textContent='';}
+  }catch(e){
+    if(err){err.style.display='block';err.textContent=e.message||'Check the global inputs.';}
+    ['lv-fce','lv-fci','lv-fpe','lv-fpi','lv-lh','lv-lde','lv-ri','lv-di','lv-va','lv-cs','lv-csia','lv-csmhd','lv-vte','lv-beta','lv-betai','lv-betae','lv-betatot','lv-kaw','lv-rhos','lv-fbrk'].forEach(id=>SET(id,'—'));
+    return;
+  }
+  buildScaleRuler(q);
   SET('lv-fce',  FMT(q.fce)+' Hz');
   SET('lv-fci',  FMT(q.fci)+' Hz');
   SET('lv-fpe',  FMT(q.fpe/1e3,2)+' kHz');
@@ -1092,16 +1177,17 @@ function gUpdate(){
   SET('lv-csia', FMT(q.csIA/1e3,1)+' km/s');
   SET('lv-csmhd',FMT(q.csMHD/1e3,1)+' km/s');
   SET('lv-vte',  FMT(q.vTe/1e6,2)+'×10⁶ m/s');
-  SET('lv-beta', 'βtot='+FMT(q.betaI+q.betaE,3));
+  SET('lv-beta', 'βtot='+FMT(q.betaTotal,3));
   SET('lv-betai',FMT(q.betaI,4));
   SET('lv-betae',FMT(q.betaE,4));
-  SET('lv-betatot',FMT(q.betaI+q.betaE,4));
-  SET('lv-kaw',  `βe=${FMT(q.betaE,3)} → ${q.kawState}`);
+  SET('lv-betatot',FMT(q.betaTotal,4));
+  SET('lv-kaw',  `βe/(me/mi)=${FMT(q.kawRatio,3)} → ${q.kawState}`);
   SET('lv-rhos', FMT(q.rhos/1e3,2)+' km');
   SET('lv-fbrk', FMT(q.fbrk,4)+' Hz');
 
   const sv=document.getElementById('fr-sidebar-vals');
-  if(sv) sv.innerHTML=`n = <span style="color:var(--plasma)">${p.n}</span> cm⁻³<br/>B = <span style="color:var(--plasma)">${p.B}</span> nT<br/>Te = <span style="color:var(--plasma)">${p.Te}</span> eV<br/>Ti = <span style="color:var(--plasma)">${p.Ti}</span> eV<br/>βi = <span style="color:var(--plasma)">${FMT(q.betaI,3)}</span><br/>vA = <span style="color:var(--plasma)">${FMT(q.vA/1e3,1)}</span> km/s`;
+  if(sv) sv.innerHTML=`nᵢ = <span style="color:var(--plasma)">${p.n}</span> cm⁻³<br/>nₑ = <span style="color:var(--plasma)">${p.Z*p.n}</span> cm⁻³<br/>B = <span style="color:var(--plasma)">${p.B}</span> nT<br/>Te = <span style="color:var(--plasma)">${p.Te}</span> eV<br/>Ti = <span style="color:var(--plasma)">${p.Ti}</span> eV<br/>βi = <span style="color:var(--plasma)">${FMT(q.betaI,3)}</span><br/>vA = <span style="color:var(--plasma)">${FMT(q.vA/1e3,1)}</span> km/s`;
+  if(typeof activeTab!=='undefined'&&activeTab==='val')buildValidation();
 }
 
 function loadStaticPreset(k,btn){
@@ -1118,68 +1204,28 @@ function loadStaticPreset(k,btn){
   gUpdate();
 }
 
-let valBuilt=false;
 function buildValidation(){
-  if(valBuilt)return; valBuilt=true;
-  const p=gP(),q=plasma(p);
-  const nrl={
-    vA:   2.181e6*p.B*1e-9/Math.sqrt(MU0*(p.n*1e6)*MP),
-    fci:  EC*(p.B*1e-9)/(2*Math.PI*MP),
-    fpe:  Math.sqrt((p.n*1e6)*EC*EC/(EPS0*ME))/(2*Math.PI),
-    lDe:  Math.sqrt(EPS0*(p.Te*EC)/((p.n*1e6)*EC*EC)),
-    di:   C_SI/Math.sqrt((p.n*1e6)*EC*EC/(EPS0*MP)),
-    de:   C_SI/Math.sqrt((p.n*1e6)*EC*EC/(EPS0*ME)),
-    ri:   Math.sqrt((p.Ti*EC)/MP)/(EC*(p.B*1e-9)/MP),
-    betaI:2*MU0*(p.n*1e6)*(p.Ti*EC)/((p.B*1e-9)**2),
-    betaE:2*MU0*(p.n*1e6)*(p.Te*EC)/((p.B*1e-9)**2),
-    vTe:  Math.sqrt((p.Te*EC)/ME),
-  };
-  const rows=[
-    ['Alfvén speed vA',    'B/√(μ₀ρ)',          q.vA,    nrl.vA,    true,true,'km/s',1e-3],
-    ['Ion gyrofreq. fci',  'eB/(2πmᵢ)',          q.fci,   nrl.fci,   true,true,'Hz',  1],
-    ['Electron plasma fpe','√(ne²/ε₀mₑ)/2π',    q.fpe,   nrl.fpe,   true,true,'Hz',  1],
-    ['Debye length λDe',   '√(ε₀kTe/ne²)',       q.lDe,   nrl.lDe,   true,true,'m',   1],
-    ['Ion inertial di',    'c/ωpi',               q.di,    nrl.di,    true,true,'km',  1e-3],
-    ['Electron inert. de', 'c/ωpe',               q.de,    nrl.de,    true,true,'m',   1],
-    ['Ion gyroradius ρi',  'vthi/Ωci',            q.ri,    nrl.ri,    true,true,'km',  1e-3],
-    ['Proton beta βi',     '2μ₀nkTi/B²',         q.betaI, nrl.betaI, true,true,'',   1],
-    ['Electron beta βe',   '2μ₀nkTe/B²',         q.betaE, nrl.betaE, true,true,'',   1],
-    ['Electron vTe',       '√(kTe/me)',           q.vTe,   nrl.vTe,   true,true,'km/s',1e-3],
-    ['Sound spd cs(MHD)',  '√(γ(Te+Ti)/mi)',      q.csMHD, 'derived', true,true,'km/s',1e-3],
-    ['Lower hybrid fLH',   '√(ΩciΩce/(1+…))',    q.fLH,   'derived', true,true,'Hz',  1],
-    ['Magnetosonic vms',   '√(vA²+cs²)',          Math.sqrt(q.vA**2+q.csMHD**2),'derived',true,true,'km/s',1e-3],
-    ['Ion acoustic ρs',    'csIA/Ωci',            q.rhos,  'derived', true,true,'km',  1e-3],
-  ];
-  let pass=0,checked=0,html='';
-  rows.forEach(([nm,formula,pf,nrl_val,bt,gr,unit,sc])=>{
-    const pfD=(pf*sc).toPrecision(5);
-    let nrlD,status,diff='—';
-    if(nrl_val==='derived'){
-      nrlD='<span class="b-na" style="font-size:.6rem;letter-spacing:.04em">Derived</span>';
-      status='<span class="b-na">B&amp;T ✓</span>';
-    } else {
-      checked++;
-      const err=Math.abs((pf-nrl_val)/nrl_val);
-      nrlD=(nrl_val*sc).toPrecision(5);
-      diff=(err*100).toFixed(4)+'%';
-      if(err<0.003){pass++;status='<span class="b-ok">PASS</span>';}
-      else status='<span class="b-warn">CHECK</span>';
-    }
-    html+=`<tr><td class="td-name">${nm}</td><td class="td-pf" style="font-family:var(--mono);font-size:.66rem">${formula}</td><td class="td-pf">${pfD} ${unit}</td><td class="td-nrl">${nrlD}</td><td style="text-align:center">${bt?'<span style="color:var(--grn)">✓</span>':'—'}</td><td style="text-align:center">${gr?'<span style="color:var(--grn)">✓</span>':'—'}</td><td class="td-diff">${diff}</td><td>${status}</td></tr>`;
-  });
-  document.getElementById('val-tbody').innerHTML=html;
-  SET('sc-pass',pass);SET('sc-tot',rows.length);
-  SET('sc-pct',pass===checked?'>99.9%':Math.round(pass/checked*100)+'%');
+  const p=gP();let q;
+  try{q=plasma(p)}catch{return}
+  const rows=nrlReferenceRows(p,q),tol=0.005;
+  let pass=0;
+  document.getElementById('val-tbody').innerHTML=rows.map(r=>{
+    const diff=relDiff(r.actual,r.reference),ok=diff<tol;if(ok)pass++;
+    return`<tr><td class="td-name">${r.name}</td><td class="td-pf" style="font-family:var(--mono);font-size:.66rem">${r.formula}</td><td class="td-pf">${FMT(r.actual*r.scale)} ${r.unit}</td><td class="td-nrl">${FMT(r.reference*r.scale)} ${r.unit}</td><td>${(diff*100).toFixed(3)}%</td><td><span class="${ok?'b-ok':'b-warn'}">${ok?'PASS':'CHECK'}</span></td></tr>`;
+  }).join('');
+  SET('sc-pass',pass);SET('sc-tot',rows.length);SET('sc-pct',Math.round(pass/rows.length*100)+'%');
 
+  const BG=p.B*1e-5,miG=p.mu*MP*1e3,eStat=EC*C_SI*10,cCm=C_SI*100;
+  const teErg=p.Te*EC*1e7,tiErg=p.Ti*EC*1e7;
   const ucases=[
-    {nm:'Alfvén speed',   si:()=>plasma({n:5,B:5,Te:12,Ti:10,Vsw:0}).vA/1e3,      unit:'km/s'},
-    {nm:'Debye length',   si:()=>plasma({n:5,B:5,Te:12,Ti:10,Vsw:0}).lDe,          unit:'m'},
-    {nm:'Ion gyrofreq.',  si:()=>plasma({n:5,B:5,Te:12,Ti:0.001,Vsw:0}).fci,       unit:'Hz'},
-    {nm:'Plasma beta βi', si:()=>plasma({n:5,B:5,Te:12,Ti:10,Vsw:0}).betaI,        unit:''},
+    {nm:'Alfvén speed',si:q.vA/1e3,cgs:BG/sq(4*PI*p.n*miG)*1e-5,unit:'km/s'},
+    {nm:'Debye length',si:q.lDe,cgs:sq(teErg/(4*PI*(p.Z*p.n)*eStat*eStat))*1e-2,unit:'m'},
+    {nm:'Ion gyrofrequency',si:q.fci,cgs:p.Z*eStat*BG/(miG*cCm)/(2*PI),unit:'Hz'},
+    {nm:'Ion plasma beta',si:q.betaI,cgs:8*PI*p.n*tiErg/(BG*BG),unit:''},
   ];
   document.getElementById('unit-cards').innerHTML=ucases.map(t=>{
-    const v=t.si();
-    return`<div class="card" style="--c1:var(--acc);--c2:var(--grn)"><div class="card-head"><div class="card-title">${t.nm}</div></div><div class="card-body"><div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;line-height:2.1"><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">SI result</span><span style="color:var(--acc)">${v.toPrecision(5)} ${t.unit}</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">CGS (converted)</span><span style="color:var(--acc)">${v.toPrecision(5)} ${t.unit}</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">Difference</span><span style="color:var(--grn)">&lt;0.01% ✓</span></div></div></div></div>`;
+    const diff=relDiff(t.si,t.cgs),ok=diff<1e-6;
+    return`<div class="card" style="--c1:var(--acc);--c2:var(--grn)"><div class="card-head"><div class="card-title">${t.nm}</div></div><div class="card-body"><div style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;line-height:2.1"><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">SI definition</span><span style="color:var(--acc)">${t.si.toPrecision(6)} ${t.unit}</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">Gaussian CGS</span><span style="color:var(--acc)">${t.cgs.toPrecision(6)} ${t.unit}</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--t3)">Relative difference</span><span style="color:${ok?'var(--grn)':'var(--err)'}">${(diff*100).toExponential(2)}% ${ok?'✓':'CHECK'}</span></div></div></div></div>`;
   }).join('');
 
   const ec=[
@@ -1203,39 +1249,34 @@ function showStab(id,btn){
 }
 
 function weCompute(){
-  const n1=+(document.getElementById('we-n1')?.value||15);
-  const B1=+(document.getElementById('we-B1')?.value||40);
-  const Ti1=+(document.getElementById('we-Ti1')?.value||300);
-  const Te1=+(document.getElementById('we-Te1')?.value||30);
-  const n2=+(document.getElementById('we-n2')?.value||1);
-  const B2=+(document.getElementById('we-B2')?.value||55);
-  const Ti2=+(document.getElementById('we-Ti2')?.value||1000);
-  const Te2=+(document.getElementById('we-Te2')?.value||100);
-
-  const q1=plasma({n:n1,B:B1,Te:Te1,Ti:Ti1,Vsw:0});
-  const q2=plasma({n:n2,B:B2,Te:Te2,Ti:Ti2,Vsw:0});
-
-  const pub1={vA:{v:220,t:.40},cs:{v:290,t:.40},di:{v:60,t:.40},de:{v:1.4,t:.45},rhoI:{v:70,t:.50},betaI:{v:2.2,t:.60},fci:{v:0.61,t:.40},lDe:{v:18,t:.50}};
-  const pub2={vA:{v:1200,t:.45},cs:{v:700,t:.45},di:{v:230,t:.45},de:{v:5.4,t:.50},rhoI:{v:900,t:.60},betaI:{v:0.5,t:.60},fci:{v:0.84,t:.45},lDe:{v:40,t:.55}};
-
-  function buildWeTable(tbody,q,pub){
-    const rows=[
-      ['vA (km/s)', (q.vA/1e3).toFixed(1),   pub.vA],
-      ['cs (km/s)', (q.csMHD/1e3).toFixed(1), pub.cs],
-      ['di (km)',   (q.di/1e3).toFixed(1),    pub.di],
-      ['de (km)',   (q.de/1e3).toFixed(3),    pub.de],
-      ['ρi (km)',   (q.ri/1e3).toFixed(1),    pub.rhoI],
-      ['βi',        q.betaI.toFixed(3),        pub.betaI],
-      ['fci (Hz)',  q.fci.toFixed(3),          pub.fci],
-      ['λDe (m)',   q.lDe.toFixed(1),          pub.lDe],
-    ];
-    document.getElementById(tbody).innerHTML=rows.map(([nm,pf,ref])=>{
-      const err=Math.abs((parseFloat(pf)-ref.v)/ref.v),ok=err<=ref.t;
-      return`<tr><td class="wt-name">${nm}</td><td class="wt-pf">${pf}</td><td class="wt-pub">~${ref.v}</td><td style="text-align:center;color:${ok?'var(--grn)':'var(--warm)'}">${ok?'✓':'~'}</td></tr>`;
-    }).join('');
+  const read=id=>{const raw=document.getElementById(id)?.value.trim()??'';return raw===''?NaN:Number(raw)};
+  const n1=read('we-n1'),B1=read('we-B1'),Ti1=read('we-Ti1'),Te1=read('we-Te1');
+  const n2=read('we-n2'),B2=read('we-B2'),Ti2=read('we-Ti2'),Te2=read('we-Te2');
+  let q1,q2;
+  try{
+    q1=plasma({n:n1,B:B1,Te:Te1,Ti:Ti1,Vsw:0,Z:1,mu:1});
+    q2=plasma({n:n2,B:B2,Te:Te2,Ti:Ti2,Vsw:0,Z:1,mu:1});
+  }catch(e){
+    const msg=`<tr><td colspan="4" style="color:var(--err)">${e.message||'Check inputs'}</td></tr>`;
+    document.getElementById('we-t1').innerHTML=msg;document.getElementById('we-t2').innerHTML=msg;return;
   }
-  buildWeTable('we-t1',q1,pub1);
-  buildWeTable('we-t2',q2,pub2);
+
+  function buildWeTable(tbody,q){
+    const rows=[
+      ['vA', q.vA/1e3, 'km/s'],
+      ['cs (MHD)', q.csMHD/1e3, 'km/s'],
+      ['di', q.di/1e3, 'km'],
+      ['de', q.de/1e3, 'km'],
+      ['ρi', q.ri/1e3, 'km'],
+      ['βi', q.betaI, ''],
+      ['fci', q.fci, 'Hz'],
+      ['λDe', q.lDe, 'm'],
+    ];
+    document.getElementById(tbody).innerHTML=rows.map(([nm,value,unit])=>
+      `<tr><td class="wt-name">${nm}</td><td class="wt-pf">${FMT(value,4)}</td><td class="wt-pub">${unit}</td><td style="font-size:.6rem;color:var(--t3)">SI/CODATA</td></tr>`).join('');
+  }
+  buildWeTable('we-t1',q1);
+  buildWeTable('we-t2',q2);
 
   SET('we-di',   (q1.di/1e3).toFixed(1));
   SET('we-de',   (q1.de/1e3).toFixed(3));
@@ -1284,8 +1325,8 @@ function ftoggle(hd){
   const bd=hd.parentElement.querySelector('.fcard-bd');
   if(bd)bd.classList.toggle('open');
 }
-function frScroll(id,a){
-  event.preventDefault();
+function frScroll(id,a,evt){
+  if(evt)evt.preventDefault();
   const target=document.getElementById(id);
   const scrollArea=document.getElementById('panel-frm');
   if(target&&scrollArea){
@@ -1333,6 +1374,9 @@ function showMainTab(id,btn){
 function navToCalc(){showMainTab('calc',document.getElementById('mtab-calc'));}
 
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('valModal').classList.contains('open')){
+    e.preventDefault();closeModal();return;
+  }
   if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&activeTab==='calc'){
     e.preventDefault();
     const t=cards.length?document.getElementById('hdrI'):document.getElementById('landI');
@@ -1344,6 +1388,7 @@ document.addEventListener('keydown',e=>{
 window.addEventListener('DOMContentLoaded',()=>{
   buildLanding();
   loadHash();
+  gUpdate(); // populate live values + kinetic scale ruler immediately
   // Init default view
   document.getElementById('panel-calc').style.display='flex';
   ['val','wex','frm'].forEach(id=>{ document.getElementById('panel-'+id).style.display='none'; });
@@ -1352,6 +1397,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('hpillClear').style.display='none';
   document.getElementById('oCnt').style.display='none';
   document.getElementById('hdrSW').style.display='none';
+  document.documentElement.dataset.plasmaformReady='true';
+  document.documentElement.dataset.formulaCount=String(DB.length);
+  document.documentElement.dataset.physicsConstants='CODATA-2022';
 });
 </script>
 </body>
