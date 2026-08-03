@@ -169,11 +169,7 @@ main>section{display:none}main>section.visible{display:block;animation:fadeUp .4
 .stat-card{cursor:pointer;transition:transform .15s,box-shadow .15s}.stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px -10px rgba(22,50,74,.22)}
 .activity-highlight{background:#fff;border:1px solid var(--clr-border);border-radius:10px;padding:14px}
 .activity-status{display:inline-block;margin-top:2px;padding:2px 8px;border-radius:999px;background:var(--clr-accent);color:white;font-size:.68rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
-.activity-status.secondary{background:#fff;color:var(--clr-muted);border:1px solid var(--clr-border);font-weight:600}
 #mobile-menu{max-height:0;overflow:hidden;transition:max-height .3s ease}#mobile-menu.open{max-height:680px}
-/* Soft accent glow in the hero, kept very subtle */
-#home>.card:first-child{position:relative;overflow:hidden}
-#home>.card:first-child::after{content:'';position:absolute;top:-45%;right:-8%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(14,124,134,.12),transparent 70%);pointer-events:none}
 /* Visible focus ring for keyboard navigation */
 a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid var(--clr-accent);outline-offset:3px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
@@ -186,6 +182,7 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 .highlight-grid>article{height:100%}
 .mission-card{position:relative}
 .small-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--clr-accent-deep)}
+.theme-label{display:inline-block;background:#e9eef0;color:var(--clr-primary);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:5px}
 .panel{background:#fff;border:1px solid var(--clr-border)}
 .pub-badge.quiet{background:#fff;color:var(--clr-muted);border:1px solid var(--clr-border);font-weight:600}
 .key-result{padding:.8rem .95rem;border-radius:8px;background:var(--clr-tag-bg);font-size:.9rem}
@@ -213,7 +210,7 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8" id="main-content">
 <section class="visible space-y-8" id="home">
 <div class="card p-6 sm:p-8">
-<div class="flex flex-col md:flex-row gap-6 md:gap-10 items-start relative z-10">
+<div class="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
 <div class="flex-shrink-0 mx-auto md:mx-0">
 <img alt="Portrait of Mani Kumar Chettri" class="w-40 h-40 rounded-lg object-cover shadow-sm border" src="mani.png" style="border-color:var(--clr-border)"/>
 </div>
@@ -224,7 +221,7 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <p class="mt-4 leading-relaxed text-base sm:text-lg lead">I study how turbulent energy reaches kinetic scales and is dissipated in collisionless space plasmas. My work combines high-resolution spacecraft observations with pseudospectral simulations of nonlinear plasma models, focusing on kinetic Alfvén waves in Earth's magnetosphere and the solar wind.</p>
 <div class="mt-4 text-sm leading-6" style="color:var(--clr-muted)">
 <p><span class="font-semibold" style="color:var(--clr-primary)">Expected PhD completion:</span> First quarter of 2027</p>
-<p><span class="font-semibold" style="color:var(--clr-primary)">Available for postdoctoral positions:</span> Early 2027 onward</p>
+<p><span class="font-semibold" style="color:var(--clr-primary)">Available for postdoctoral appointments:</span> From early 2027</p>
 </div>
 <div class="mt-5 flex flex-wrap gap-2">
 <a class="btn-primary" href="#publications" onclick="showPage('publications')">View publications</a>
@@ -262,8 +259,8 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <div class="flex flex-wrap items-end justify-between gap-3"><div><h2 class="section-title">Recent Updates</h2><hr class="section-rule mb-0"/></div><a class="text-sm font-semibold" href="#activities" onclick="showPage('activities')" style="color:var(--clr-accent)">All talks &amp; training →</a></div>
 <div class="space-y-3 text-base mt-5">
 <div class="activity-highlight"><div class="flex flex-wrap items-center gap-2"><span class="activity-status">Published</span><span class="text-xs" style="color:var(--clr-muted)">August 2026</span></div><p class="font-semibold mt-2">First-author paper on KAW turbulence in the outer PSBL</p><p class="text-sm mt-1" style="color:var(--clr-muted)">Out now in the Journal of Atmospheric and Solar-Terrestrial Physics, September 2026 issue (Article 106920).</p></div>
-<div class="activity-highlight"><div class="flex flex-wrap items-center gap-2"><span class="activity-status secondary">Workshop</span><span class="text-xs" style="color:var(--clr-muted)">6–15 July 2026</span></div><p class="font-semibold mt-2">13th Aditya-L1 Support Cell Workshop</p><p class="text-sm mt-1" style="color:var(--clr-muted)">Ten days of training on Aditya-L1 data products at ARIES, Nainital.</p></div>
-<div class="activity-highlight"><div class="flex flex-wrap items-center gap-2"><span class="activity-status secondary">Poster</span><span class="text-xs" style="color:var(--clr-muted)">29 June–3 July 2026</span></div><p class="font-semibold mt-2">52nd EPS Conference on Plasma Physics, Edinburgh</p><p class="text-sm mt-1" style="color:var(--clr-muted)">Presented work on ponderomotive density-cavity generation through KAW–slow-mode coupling.</p></div>
+<div class="activity-highlight"><div class="flex flex-wrap items-center gap-2"><span class="activity-status">Workshop</span><span class="text-xs" style="color:var(--clr-muted)">6–15 July 2026</span></div><p class="font-semibold mt-2">13th Aditya-L1 Support Cell Workshop</p><p class="text-sm mt-1" style="color:var(--clr-muted)">Ten days of training on Aditya-L1 data products at ARIES, Nainital.</p></div>
+<div class="activity-highlight"><div class="flex flex-wrap items-center gap-2"><span class="activity-status">Poster</span><span class="text-xs" style="color:var(--clr-muted)">29 June–3 July 2026</span></div><p class="font-semibold mt-2">52nd EPS Conference on Plasma Physics, Edinburgh</p><p class="text-sm mt-1" style="color:var(--clr-muted)">Presented work on ponderomotive density-cavity generation through KAW–slow-mode coupling.</p></div>
 </div>
 </div>
 <div class="card p-6 sm:p-8">
@@ -275,9 +272,9 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 </div>
 </div>
 <div class="card p-6 sm:p-8" style="border-color:var(--clr-accent)">
-<h2 class="section-title">Looking for a postdoctoral position</h2>
+<h2 class="section-title">Postdoctoral positions and research collaborations</h2>
 <hr class="section-rule"/>
-<p class="text-base sm:text-lg lead">I expect to complete my PhD in the first quarter of 2027, and I am looking for a group working on kinetic-scale turbulence or wave&#8211;particle interactions, from either the observational or the simulation side. I am glad to discuss possible projects or joint fellowship applications.</p>
+<p class="text-base sm:text-lg lead">I expect to complete my PhD in the first quarter of 2027, and I am looking for a group working on kinetic-scale turbulence or wave&#8211;particle interactions, from either the observational or the simulation side. I am glad to discuss possible projects, collaborations, or joint fellowship applications.</p>
 <div class="mt-5 flex flex-wrap gap-2">
 <a class="btn-primary" href="mailto:mkchettri8@gmail.com">Email me</a>
 <a class="btn-secondary" href="mani_CV.pdf" rel="noopener noreferrer" target="_blank">Download CV ↗</a>
@@ -294,10 +291,12 @@ a:focus-visible,button:focus-visible,.stat-card:focus-visible{outline:2px solid 
 <div class="card p-6 sm:p-8">
 <h3 class="text-xl font-bold mb-5" style="color:var(--clr-primary)">Core Research Themes</h3>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-<article class="panel p-5 rounded-lg"><p class="small-label">01 · Magnetosphere</p><h4 class="text-lg font-bold mt-1">KAW turbulence in boundary layers</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Spectral evolution, electric-to-magnetic fluctuation ratios, magnetic compressibility, and parallel electric fields in the plasma sheet boundary layer and magnetosheath.</p></article>
-<article class="panel p-5 rounded-lg"><p class="small-label">02 · Nonlinear dynamics</p><h4 class="text-lg font-bold mt-1">Wave coupling and density structuring</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Modified Zakharov and NLSE-type descriptions of KAW coupling to ion-acoustic or slow-mode fluctuations, including ponderomotive density cavities and spectral redistribution.</p></article>
-<article class="panel p-5 rounded-lg"><p class="small-label">03 · Solar wind</p><h4 class="text-lg font-bold mt-1">Turbulence across heliocentric regimes</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Comparing numerical models against Wind and Parker Solar Probe measurements, and against Aditya-L1 data as it becomes available, to study beta dependence and kinetic-scale dissipation.</p></article>
-<article class="panel p-5 rounded-lg"><p class="small-label">04 · Plasma instabilities</p><h4 class="text-lg font-bold mt-1">Relativistic and collisionless instabilities</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Secondary work on Weibel and two-stream instabilities across astrophysical and laboratory plasma conditions.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">01 · Magnetosphere</span></p><h4 class="text-lg font-bold mt-3">KAW turbulence in boundary layers</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Spectral evolution, electric-to-magnetic fluctuation ratios, magnetic compressibility, and parallel electric fields in the plasma sheet boundary layer and magnetosheath.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">02 · Nonlinear dynamics</span></p><h4 class="text-lg font-bold mt-3">Wave coupling and density structuring</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Modified Zakharov and NLSE-type descriptions of KAW coupling to ion-acoustic or slow-mode fluctuations, including ponderomotive density cavities and spectral redistribution.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">03 · Solar wind</span></p><h4 class="text-lg font-bold mt-3">Turbulence across heliocentric regimes</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Comparing numerical models against Wind and Parker Solar Probe measurements, and against Aditya-L1 data as it becomes available, to study beta dependence and kinetic-scale dissipation.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">04 · Plasma instabilities</span></p><h4 class="text-lg font-bold mt-3">Relativistic and collisionless instabilities</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Secondary work on Weibel and two-stream instabilities across astrophysical and laboratory plasma conditions.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">05 · Magnetic reconnection</span></p><h4 class="text-lg font-bold mt-3">Energy conversion and particle energisation</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">How reconnection releases magnetic energy and energises particles, and how that activity connects to the kinetic-scale turbulence observed in the same magnetotail boundary regions.</p></article>
+<article class="panel p-5 rounded-lg"><p><span class="theme-label">06 · Solar activity</span></p><h4 class="text-lg font-bold mt-3">Flare modelling with Aditya-L1</h4><p class="text-sm mt-2" style="color:var(--clr-muted)">Building X-ray light curves with GOES for event context, then fitting time-resolved spectra to follow how temperature, emission measure, and elemental abundances evolve through the rise, peak, and decay of a flare.</p></article>
 </div>
 </div>
 <div class="card p-6 sm:p-8">
